@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reFrame - Say it better</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Book+Antiqua&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
+            background: #FF7F50;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tagline {
+            font-size: 24px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .mission {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #FF7F50;
+        }
+
+        .button {
+            width: 100%;
+            padding: 18px;
+            background: #FF7F50;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 127, 80, 0.4);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .output-section.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .output-box {
+            background: #FFF5F0;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #FF7F50;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .copy-button {
+            padding: 12px 24px;
+            background: white;
+            color: #FF7F50;
+            border: 2px solid #FF7F50;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .copy-button:hover {
+            background: #FF7F50;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #FF7F50;
+            font-weight: 600;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c33;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .info-box {
+            background: #FFF5F0;
+            border: 2px solid #FF7F50;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            color: #FF7F50;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">reFrame</div>
+            <div class="tagline">Say it better.</div>
+            <div class="mission">WE say it better, together.</div>
+        </div>
+
+        <div class="card">
+            <div class="info-box">
+                <h3>📝 How to Use reFrame</h3>
+                <p>Type your raw, honest thoughts below. Whether you're hurt, angry, frustrated, or confused - we'll help you express it in a way that builds connection instead of conflict. This is your space to be real.</p>
+            </div>
+
+            <div id="errorMessage" style="display: none;" class="error"></div>
+
+            <div class="section">
+                <label>What do you want to say?</label>
+                <textarea id="inputText" placeholder="Be honest about how you're feeling. Type the message you want to send - we'll help you say it in a way that opens dialogue instead of closing it.
+
+Example: 'You never listen to me and I'm sick of repeating myself. You clearly don't care about what I have to say.'"></textarea>
+            </div>
+
+            <div class="section">
+                <button class="button" id="reframeBtn" onclick="reframeMessage()">
+                    reFrame This Message
+                </button>
+            </div>
+
+            <div id="loadingIndicator" class="loading" style="display: none;">
+                ✨ Reframing your message with empathy and clarity...
+            </div>
+
+            <div id="outputSection" class="output-section section">
+                <label>Your reFramed Message</label>
+                <div id="outputText" class="output-box"></div>
+                <button class="copy-button" onclick="copyOutput()">📋 Copy to Clipboard</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            Made with ❤️ for better conversations<br>
+            Life is about relationships.
+        </div>
+    </div>
+
+    <script>
+        function showError(message, show = true) {
+            const errorDiv = document.getElementById('errorMessage');
+            if (show) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            } else {
+                errorDiv.style.display = 'none';
+            }
+        }
+
+        async function reframeMessage() {
+            const inputText = document.getElementById('inputText').value.trim();
+            
+            if (!inputText) {
+                showError('Please enter a message to reframe');
+                return;
+            }
+
+            showError('', false);
+            
+            const button = document.getElementById('reframeBtn');
+            const loading = document.getElementById('loadingIndicator');
+            const outputSection = document.getElementById('outputSection');
+            
+            button.disabled = true;
+            loading.style.display = 'block';
+            outputSection.classList.remove('visible');
+
+            try {
+                // Call our Netlify serverless function
+                const response = await fetch('/.netlify/functions/reframe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: inputText })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to reframe message');
+                }
+
+                const data = await response.json();
+                const reframedText = data.reframed;
+
+                document.getElementById('outputText').textContent = reframedText;
+                outputSection.classList.add('visible');
+
+            } catch (error) {
+                showError(`Error: ${error.message}. Please try again or contact support if the problem persists.`);
+            } finally {
+                button.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        function copyOutput() {
+            const outputText = document.getElementById('outputText').textContent;
+            navigator.clipboard.writeText(outputText).then(() => {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Allow Enter key to submit (with Shift+Enter for new line)
+        document.getElementById('inputText').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                reframeMessage();
+            }
+        });
+    </script>
+</body>
+</html>
