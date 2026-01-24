@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>reFrame - Say it better</title>
+    <meta name="description" content="Transform emotionally charged messages into dignity-first communication. Break generational cycles. Model what you want to pass on.">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Book+Antiqua&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
         
         * {
             margin: 0;
@@ -14,61 +15,164 @@
         }
 
         body {
-            font-family: 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
+            font-family: 'Libre Baskerville', 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
             background: #FF7F50;
-            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 40px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-            margin-top: 40px;
+        .nav-logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #FF7F50;
+            letter-spacing: -0.5px;
         }
 
-        .header {
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FF7F50;
+        }
+
+        .nav-links .cta {
+            background: #FF7F50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .nav-links .cta:hover {
+            background: #E66F40;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 40px;
             text-align: center;
             color: white;
-            margin-bottom: 40px;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .logo {
-            font-size: 56px;
+        .hero h1 {
+            font-size: 64px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             letter-spacing: -1px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        .tagline {
-            font-size: 24px;
+        .hero .tagline {
+            font-size: 32px;
+            margin-bottom: 15px;
             opacity: 0.95;
-            font-weight: 400;
         }
 
-        .mission {
-            font-size: 16px;
+        .hero .mission {
+            font-size: 20px;
             opacity: 0.9;
-            margin-top: 15px;
             font-style: italic;
+            margin-bottom: 40px;
+        }
+
+        .hero .principles {
+            font-size: 18px;
+            line-height: 1.8;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .hero .cta-button {
+            display: inline-block;
+            background: white;
+            color: #FF7F50;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .hero .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Tool Section */
+        .tool-section {
+            background: white;
+            padding: 80px 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            color: #FF7F50;
+            margin-bottom: 40px;
         }
 
         .card {
             background: white;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .info-box {
+            background: #FFF5F0;
+            border: 2px solid #FF7F50;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            color: #FF7F50;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .info-box p {
+            color: #666;
+            line-height: 1.6;
         }
 
         .section {
             margin-bottom: 30px;
-        }
-
-        .section:last-child {
-            margin-bottom: 0;
         }
 
         label {
@@ -184,78 +288,186 @@
             border-left: 4px solid #c33;
         }
 
-        .footer {
+        .reminder {
             text-align: center;
+            color: #666;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
             color: white;
-            margin-top: 40px;
-            opacity: 0.9;
+            padding: 60px 40px 40px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: #FF7F50;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
             font-size: 14px;
         }
 
-        .info-box {
-            background: #FFF5F0;
-            border: 2px solid #FF7F50;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .info-box h3 {
+        .footer-section a:hover {
             color: #FF7F50;
-            margin-bottom: 10px;
         }
 
-        .info-box p {
-            color: #666;
-            line-height: 1.6;
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                font-size: 14px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero .tagline {
+                font-size: 24px;
+            }
+
+            .hero .principles {
+                font-size: 16px;
+            }
+
+            .tool-section {
+                padding: 40px 20px;
+            }
+
+            .card {
+                padding: 25px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">reFrame</div>
-            <div class="tagline">Say it better.</div>
-            <div class="mission">WE say it better, together.</div>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-logo">reFrame</div>
+        <div class="nav-links">
+            <a href="#tool">Try It</a>
+            <a href="manifesto.html">Manifesto</a>
+            <a href="about.html">About</a>
+            <a href="#tool" class="cta">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>reFrame</h1>
+        <div class="tagline">Say it better.</div>
+        <div class="mission">WE say it better, together.</div>
+        
+        <div class="principles">
+            Pause. Regulate. Protect dignity.<br>
+            Transform conflict into connection.<br>
+            Model what you want to pass on.
         </div>
 
-        <div class="card">
-            <div class="info-box">
-                <h3>📝 How to Use reFrame</h3>
-                <p>Type your raw, honest thoughts below. Whether you're hurt, angry, frustrated, or confused - we'll help you express it in a way that builds connection instead of conflict. This is your space to be real.</p>
-            </div>
+        <a href="#tool" class="cta-button">Start reFraming</a>
+    </section>
 
-            <div id="errorMessage" style="display: none;" class="error"></div>
+    <!-- Tool Section -->
+    <section class="tool-section" id="tool">
+        <div class="container">
+            <h2 class="section-title">Transform Your Message</h2>
+            
+            <div class="card">
+                <div class="info-box">
+                    <h3>📝 How to Use reFrame</h3>
+                    <p>Type your raw, honest thoughts below. Whether you're hurt, angry, frustrated, or confused - we'll help you express it in a way that builds connection instead of conflict. This is your space to be real.</p>
+                </div>
 
-            <div class="section">
-                <label>What do you want to say?</label>
-                <textarea id="inputText" placeholder="Be honest about how you're feeling. Type the message you want to send - we'll help you say it in a way that opens dialogue instead of closing it.
+                <div id="errorMessage" style="display: none;" class="error"></div>
+
+                <div class="section">
+                    <label>What do you want to say?</label>
+                    <textarea id="inputText" placeholder="Be honest about how you're feeling. Type the message you want to send - we'll help you say it in a way that opens dialogue instead of closing it.
 
 Example: 'You never listen to me and I'm sick of repeating myself. You clearly don't care about what I have to say.'"></textarea>
-            </div>
+                </div>
 
-            <div class="section">
-                <button class="button" id="reframeBtn" onclick="reframeMessage()">
-                    reFrame This Message
-                </button>
-            </div>
+                <div class="section">
+                    <button class="button" id="reframeBtn" onclick="reframeMessage()">
+                        reFrame This Message
+                    </button>
+                </div>
 
-            <div id="loadingIndicator" class="loading" style="display: none;">
-                ✨ Reframing your message with empathy and clarity...
-            </div>
+                <div id="loadingIndicator" class="loading" style="display: none;">
+                    ✨ Reframing your message with dignity and clarity...
+                </div>
 
-            <div id="outputSection" class="output-section section">
-                <label>Your reFramed Message</label>
-                <div id="outputText" class="output-box"></div>
-                <button class="copy-button" onclick="copyOutput()">📋 Copy to Clipboard</button>
+                <div id="outputSection" class="output-section section">
+                    <label>Your reFramed Message</label>
+                    <div id="outputText" class="output-box"></div>
+                    <button class="copy-button" onclick="copyOutput()">📋 Copy to Clipboard</button>
+                    <div class="reminder">Remember: Repair is a responsibility, not a weakness.</div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div class="footer">
-            Made with ❤️ for better conversations<br>
-            Life is about relationships.
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>reFrame</h3>
+                <p>Breaking generational cycles of dysfunction, one conversation at a time.</p>
+                <p style="margin-top: 20px; font-style: italic;">Life is about relationships.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Learn More</h3>
+                <a href="manifesto.html">The Manifesto</a>
+                <a href="about.html">About reFrame</a>
+                <a href="#tool">Try the Tool</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Core Principles</h3>
+                <p>Regulation over reaction</p>
+                <p>Dignity first</p>
+                <p>Disagreement ≠ hate</p>
+                <p>Repair is responsibility</p>
+            </div>
         </div>
-    </div>
+        
+        <div class="footer-bottom">
+            Made with ❤️ for better conversations | © 2026 reFrame | wereframe.com
+        </div>
+    </footer>
 
     <script>
         function showError(message, show = true) {
@@ -287,7 +499,6 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             outputSection.classList.remove('visible');
 
             try {
-                // Call our Netlify serverless function
                 const response = await fetch('/.netlify/functions/reframe', {
                     method: 'POST',
                     headers: {
@@ -327,12 +538,22 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             });
         }
 
-        // Allow Enter key to submit (with Shift+Enter for new line)
         document.getElementById('inputText').addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 reframeMessage();
             }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
         });
     </script>
 </body>
