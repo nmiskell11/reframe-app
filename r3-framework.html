@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The R³ Framework | reFrame</title>
+    <meta name="description" content="The R³ Framework: REGULATED, RESPECTFUL, REPAIRABLE - The foundation of dignity-first communication that breaks generational cycles.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Libre Baskerville', 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
+            background: white;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        nav {
+            background: #FF7F50;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            color: white;
+            padding: 100px 40px 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .hero .tagline {
+            font-size: 36px;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+
+        .hero .subtitle {
+            font-size: 22px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .intro {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #555;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .r-section {
+            margin-bottom: 80px;
+            padding: 50px;
+            border-radius: 20px;
+            background: #FFF5F0;
+            border: 3px solid #FF7F50;
+        }
+
+        .r-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .r-number {
+            font-size: 72px;
+            font-weight: 700;
+            color: #FF7F50;
+            line-height: 1;
+        }
+
+        .r-title {
+            flex: 1;
+        }
+
+        .r-title h2 {
+            font-size: 42px;
+            color: #FF7F50;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .r-title .subtitle {
+            font-size: 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .r-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .r-content .principle {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #FF7F50;
+        }
+
+        .r-content .principle strong {
+            color: #FF7F50;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .r-content .example {
+            background: rgba(255, 127, 80, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .r-content .example strong {
+            font-style: normal;
+            color: #FF7F50;
+        }
+
+        .why-section {
+            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            color: white;
+            padding: 60px 40px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .why-section h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .why-section p {
+            font-size: 20px;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+
+        .together-section {
+            background: #f9f9f9;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .together-section h2 {
+            font-size: 36px;
+            color: #FF7F50;
+            margin-bottom: 20px;
+        }
+
+        .together-section p {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 15px;
+        }
+
+        .cycle {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cycle-item {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #FF7F50;
+        }
+
+        .cycle-item .arrow {
+            font-size: 32px;
+            color: #FF7F50;
+            margin: 10px 0;
+        }
+
+        .cycle-item h4 {
+            color: #FF7F50;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .cycle-item p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #FF7F50;
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 0 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        footer a {
+            color: #FF7F50;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero .tagline {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+
+            .r-section {
+                padding: 30px 20px;
+            }
+
+            .r-number {
+                font-size: 48px;
+            }
+
+            .r-title h2 {
+                font-size: 32px;
+            }
+
+            .cycle {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="nav-logo">reFrame</a>
+        <div class="nav-links">
+            <a href="index.html#tool">Try It</a>
+            <a href="manifesto.html">Manifesto</a>
+            <a href="about.html">About</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>The R³ Framework</h1>
+        <div class="tagline">REGULATED · RESPECTFUL · REPAIRABLE</div>
+        <p class="subtitle">The foundation of dignity-first communication that breaks generational cycles</p>
+    </div>
+
+    <div class="container">
+        <div class="intro">
+            <strong>R³ is not a set of rules. It's a way of being.</strong><br><br>
+            These three pillars transform how we handle conflict, express emotions, and build relationships worth inheriting.
+        </div>
+
+        <!-- R1: REGULATED -->
+        <div class="r-section">
+            <div class="r-header">
+                <div class="r-number">R¹</div>
+                <div class="r-title">
+                    <h2>REGULATED</h2>
+                    <p class="subtitle">Strong feelings are safe</p>
+                </div>
+            </div>
+            <div class="r-content">
+                <p>Regulation doesn't mean suppressing emotions. It means <strong>pausing before reacting</strong>, recognizing that strong emotions are signals, not commands.</p>
+
+                <div class="principle">
+                    <strong>What It Means:</strong>
+                    People pause when heated. Emotions are named, not weaponized. No one is punished for feeling.
+                </div>
+
+                <p><strong>Why It Matters:</strong> When we react from heightened emotion, we say things we regret. We escalate instead of resolve. We damage instead of connect.</p>
+
+                <p>Being regulated means taking the breath between stimulus and response. It means saying "I'm too upset to talk well right now. Let me calm down and come back."</p>
+
+                <div class="example">
+                    <strong>Example:</strong><br>
+                    Instead of immediately firing back when hurt, you say: "I need a moment to process this. Can we talk in 10 minutes?"
+                </div>
+
+                <p><strong>What Children Learn:</strong> "Disagreement isn't dangerous. I won't be abandoned or attacked for having feelings. Big emotions are manageable."</p>
+
+                <div class="principle">
+                    <strong>The Key Insight:</strong>
+                    Being calm is not being passive. It is being responsible.
+                </div>
+            </div>
+        </div>
+
+        <!-- R2: RESPECTFUL -->
+        <div class="r-section">
+            <div class="r-header">
+                <div class="r-number">R²</div>
+                <div class="r-title">
+                    <h2>RESPECTFUL</h2>
+                    <p class="subtitle">Dignity intact even when we disagree</p>
+                </div>
+            </div>
+            <div class="r-content">
+                <p>Respect means <strong>separating the person from the position</strong>. You can fiercely oppose someone's idea while still seeing them as fully human.</p>
+
+                <div class="principle">
+                    <strong>What It Means:</strong>
+                    No name-calling. No character assassination. No humiliation. Argue ideas without attacking worth.
+                </div>
+
+                <p><strong>Why It Matters:</strong> When dignity is threatened, people shut down. Even if you're right, if you attack their character, they can't hear you.</p>
+
+                <p>Being respectful means saying "I see it differently" instead of "That's stupid." It means protecting their humanity even when you're hurt or angry.</p>
+
+                <div class="example">
+                    <strong>Example:</strong><br>
+                    Instead of "You're so selfish," you say: "When plans change without discussion, I feel like my needs aren't being considered. That's hard for me."
+                </div>
+
+                <p><strong>What Children Learn:</strong> "I can be wrong and still worthy. People can disagree with me without rejecting me. My value isn't conditional on being right."</p>
+
+                <div class="principle">
+                    <strong>The Key Insight:</strong>
+                    If dignity is lost, nothing meaningful can be built.
+                </div>
+            </div>
+        </div>
+
+        <!-- R3: REPAIRABLE -->
+        <div class="r-section">
+            <div class="r-header">
+                <div class="r-number">R³</div>
+                <div class="r-title">
+                    <h2>REPAIRABLE</h2>
+                    <p class="subtitle">Mistakes don't end relationships</p>
+                </div>
+            </div>
+            <div class="r-content">
+                <p>Repair is what happens after you mess up. And you <em>will</em> mess up. The question is: <strong>will you return to fix it?</strong></p>
+
+                <div class="principle">
+                    <strong>What It Means:</strong>
+                    Apologies without defensiveness. Ownership of impact. Reconnection after rupture.
+                </div>
+
+                <p><strong>Why It Matters:</strong> Relationships aren't defined by never making mistakes. They're defined by what happens after mistakes.</p>
+
+                <p>Being repairable means asking "Did this strengthen or weaken our relationship?" not "Who was right?" It means saying "I handled that poorly. I'm sorry. Let me try again."</p>
+
+                <div class="example">
+                    <strong>Example:</strong><br>
+                    After snapping at your partner, instead of defending yourself, you say: "That came out harsher than I intended. I was stressed, but that's not an excuse. I'm sorry. Can we start over?"
+                </div>
+
+                <p><strong>What Children Learn:</strong> "I don't have to be perfect to belong. Mistakes are for learning, not punishment. Relationships can handle rupture because repair is always possible."</p>
+
+                <div class="principle">
+                    <strong>The Key Insight:</strong>
+                    Mistakes are inevitable. Repair is a choice.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Together Section -->
+    <div class="why-section">
+        <h2>Why All Three Matter</h2>
+        <p>You can't just pick one. Each pillar supports the others:</p>
+        <p><strong>REGULATED</strong> without RESPECTFUL becomes cold detachment.</p>
+        <p><strong>RESPECTFUL</strong> without REPAIRABLE means unaddressed hurt festers.</p>
+        <p><strong>REPAIRABLE</strong> without REGULATED means repeating the same destructive patterns.</p>
+        <p style="margin-top: 30px; font-size: 24px; font-weight: 600;">Together, they create communication worth inheriting.</p>
+    </div>
+
+    <!-- The R³ Loop Section -->
+    <div class="together-section">
+        <h2>The R³ Loop</h2>
+        <p>This is how R³ becomes a way of life, not just a technique:</p>
+
+        <div class="cycle">
+            <div class="cycle-item">
+                <h4>Tension Arises</h4>
+                <p>Conflict, disagreement, or hurt occurs</p>
+                <div class="arrow">↓</div>
+            </div>
+            <div class="cycle-item">
+                <h4>Pause & Regulate</h4>
+                <p>Take a breath. Recognize emotions as signals.</p>
+                <div class="arrow">↓</div>
+            </div>
+            <div class="cycle-item">
+                <h4>Speak with Dignity</h4>
+                <p>Respectful, clear communication</p>
+                <div class="arrow">↓</div>
+            </div>
+            <div class="cycle-item">
+                <h4>Repair When Needed</h4>
+                <p>Own mistakes. Reconnect after rupture.</p>
+                <div class="arrow">↓</div>
+            </div>
+            <div class="cycle-item">
+                <h4>Trust Increases</h4>
+                <p>The relationship strengthens</p>
+                <div class="arrow">↓</div>
+            </div>
+            <div class="cycle-item">
+                <h4>Future Conflict Feels Safer</h4>
+                <p>You've proven you can handle it together</p>
+                <div class="arrow">↻</div>
+            </div>
+        </div>
+
+        <p style="margin-top: 30px; font-weight: 600;">That loop repeats across families, classrooms, teams, and nations. That's how humanity changes.</p>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <h2>Ready to Practice R³?</h2>
+        <p>Start using the R³ Framework today. Model communication worth inheriting.</p>
+        <a href="index.html#tool" class="cta-button">Try reFrame Now</a>
+        <a href="manifesto.html" class="cta-button secondary">Read the Manifesto</a>
+    </div>
+
+    <footer>
+        <p>Made with ❤️ for better conversations | <a href="index.html">reFrame</a> | Life is about relationships.</p>
+    </footer>
+</body>
+</html>
