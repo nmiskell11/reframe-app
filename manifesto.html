@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The reFrame Manifesto</title>
+    <meta name="description" content="A generational commitment to dignity, disagreement, and connection.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Libre Baskerville', 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
+            background: white;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        nav {
+            background: #FF7F50;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            color: white;
+            padding: 80px 40px 60px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .hero .subtitle {
+            font-size: 24px;
+            opacity: 0.95;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .intro {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .principle {
+            margin-bottom: 50px;
+            padding-bottom: 50px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .principle:last-of-type {
+            border-bottom: none;
+        }
+
+        .principle-number {
+            display: inline-block;
+            background: #FF7F50;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .principle h2 {
+            font-size: 28px;
+            color: #FF7F50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .principle p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        .principle .emphasis {
+            font-style: italic;
+            color: #666;
+            border-left: 3px solid #FF7F50;
+            padding-left: 20px;
+            margin: 20px 0;
+        }
+
+        .north-star {
+            background: #FFF5F0;
+            border: 3px solid #FF7F50;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .north-star h2 {
+            font-size: 32px;
+            color: #FF7F50;
+            margin-bottom: 20px;
+        }
+
+        .north-star .quote {
+            font-size: 24px;
+            line-height: 1.6;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .north-star p {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .rejection-builds {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .column h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #FF7F50;
+        }
+
+        .column ul {
+            list-style: none;
+        }
+
+        .column li {
+            padding: 10px 0;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .column li:before {
+            content: "×";
+            color: #c33;
+            font-weight: 700;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .column.builds li:before {
+            content: "✓";
+            color: #4a9d5f;
+        }
+
+        .closing {
+            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .closing h2 {
+            font-size: 36px;
+            margin-bottom: 25px;
+        }
+
+        .closing p {
+            font-size: 20px;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .closing .final-line {
+            font-size: 24px;
+            font-weight: 700;
+            font-style: italic;
+            margin-top: 30px;
+        }
+
+        .actions {
+            background: #f9f9f9;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .actions h3 {
+            font-size: 28px;
+            color: #FF7F50;
+            margin-bottom: 30px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons a {
+            display: inline-block;
+            padding: 15px 35px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .action-buttons .primary {
+            background: #FF7F50;
+            color: white;
+        }
+
+        .action-buttons .secondary {
+            background: white;
+            color: #FF7F50;
+            border: 2px solid #FF7F50;
+        }
+
+        .action-buttons a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        footer a {
+            color: #FF7F50;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero .subtitle {
+                font-size: 18px;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+
+            .principle h2 {
+                font-size: 24px;
+            }
+
+            .principle p {
+                font-size: 16px;
+            }
+
+            .rejection-builds {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons a {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="nav-logo">reFrame</a>
+        <div class="nav-links">
+            <a href="index.html#tool">Try It</a>
+            <a href="about.html">About</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>The reFrame Manifesto</h1>
+        <p class="subtitle">A Generational Commitment to Dignity, Disagreement, and Connection</p>
+    </div>
+
+    <div class="container">
+        <div class="intro">
+            These are not rules. They are practices.<br>
+            Not perfection. Growth.<br>
+            Not theory. Life.
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">1</div>
+            <h2>We choose regulation over reaction</h2>
+            <p>We pause before we speak. We do not let fear, anger, or urgency decide our words. Strong emotions are signals, not commands.</p>
+            <p class="emphasis">Being calm is not being passive. It is being responsible.</p>
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">2</div>
+            <h2>We protect human dignity first</h2>
+            <p>No belief, mistake, or disagreement makes someone disposable. We argue ideas without attacking worth. We refuse language that humiliates, shames, or dehumanizes.</p>
+            <p class="emphasis">If dignity is lost, nothing meaningful can be built.</p>
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">3</div>
+            <h2>Disagreement is not hate</h2>
+            <p>Difference is not danger. Opposing views are not personal attacks. We resist the urge to turn conflict into identity warfare.</p>
+            <p class="emphasis">We can be opposed and still connected.</p>
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">4</div>
+            <h2>We speak from experience, not accusation</h2>
+            <p>We describe impact, not intent. We own our feelings without assigning motives. We trade "you are" for "this affects me."</p>
+            <p class="emphasis">Truth lands better when it is lived, not weaponized.</p>
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">5</div>
+            <h2>We hold boundaries without hostility</h2>
+            <p>We state what we need and what we will stand for. We do not threaten, manipulate, or coerce. Boundaries are acts of clarity, not punishment.</p>
+            <p class="emphasis">Clear limits make relationships safer, not smaller.</p>
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">6</div>
+            <h2>Repair is a responsibility, not a weakness</h2>
+            <p>When harm occurs, we acknowledge it. We apologize without defensiveness. We prioritize reconnection over being right.</p>
+            <p class="emphasis">Mistakes are inevitable. Repair is a choice.</p>
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">7</div>
+            <h2>Humility is strength</h2>
+            <p>We admit when we are wrong. We allow our thinking to evolve. Certainty never outranks curiosity.</p>
+            <p class="emphasis">Growth requires room to change.</p>
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">8</div>
+            <h2>We model what we want to pass on</h2>
+            <p>We understand that others are watching — especially children. We teach conflict through example, not lectures. We choose behaviors worth inheriting.</p>
+            <p class="emphasis">What we practice becomes culture.</p>
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">9</div>
+            <h2>Belonging is not conditional</h2>
+            <p>No one must earn dignity through agreement. People matter before positions. Connection survives difference.</p>
+            <p class="emphasis">Exile solves nothing. Belonging heals.</p>
+        </div>
+
+        <div class="principle">
+            <div class="principle-number">10</div>
+            <h2>We commit to the long game</h2>
+            <p>We choose relationships over wins. We choose repair over rupture. We choose humanity over ego.</p>
+            <p class="emphasis">This is how trust compounds across generations.</p>
+        </div>
+
+        <div class="north-star">
+            <h2>Our North Star</h2>
+            <p class="quote">Protect dignity. Regulate emotion. Repair when broken.</p>
+            <p>Everything else is negotiable.</p>
+        </div>
+
+        <div class="rejection-builds">
+            <div class="column">
+                <h3>What This Manifesto Rejects</h3>
+                <ul>
+                    <li>Shame as a teaching tool</li>
+                    <li>Power as the goal</li>
+                    <li>Silence as peace</li>
+                    <li>Winning as connection</li>
+                </ul>
+            </div>
+            <div class="column builds">
+                <h3>What This Manifesto Builds</h3>
+                <ul>
+                    <li>Resilient families</li>
+                    <li>Courageous dialogue</li>
+                    <li>Healthy disagreement</li>
+                    <li>A culture where conflict deepens connection</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="closing">
+        <h2>A Closing Commitment</h2>
+        <p>We will mess this up. We will say things poorly. We will feel triggered, tired, and human.</p>
+        <p>And when we do — we will return to repair.</p>
+        <p class="final-line">Because that is how humanity gets better.</p>
+    </div>
+
+    <div class="actions">
+        <h3>Ready to Live the Manifesto?</h3>
+        <div class="action-buttons">
+            <a href="index.html#tool" class="primary">Try reFrame</a>
+            <a href="#" onclick="window.print(); return false;" class="secondary">Print This Manifesto</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made with ❤️ for better conversations | <a href="index.html">reFrame</a> | Life is about relationships.</p>
+    </footer>
+</body>
+</html>
