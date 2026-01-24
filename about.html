@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About reFrame</title>
+    <meta name="description" content="Breaking generational cycles of dysfunction through dignity-first communication.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Libre Baskerville', 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
+            background: white;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        nav {
+            background: #FF7F50;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            color: white;
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero .subtitle {
+            font-size: 24px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section h2 {
+            font-size: 36px;
+            color: #FF7F50;
+            margin-bottom: 20px;
+        }
+
+        .section p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .section .quote {
+            font-size: 20px;
+            font-style: italic;
+            color: #666;
+            border-left: 4px solid #FF7F50;
+            padding-left: 25px;
+            margin: 30px 0;
+        }
+
+        .highlight-box {
+            background: #FFF5F0;
+            border: 2px solid #FF7F50;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .highlight-box h3 {
+            color: #FF7F50;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .highlight-box p {
+            color: #555;
+            font-size: 18px;
+        }
+
+        .framework {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .framework-item {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #FF7F50;
+        }
+
+        .framework-item h4 {
+            color: #FF7F50;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .framework-item p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #FF7F50;
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        footer a {
+            color: #FF7F50;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+
+            .section h2 {
+                font-size: 28px;
+            }
+
+            .framework {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="nav-logo">reFrame</a>
+        <div class="nav-links">
+            <a href="index.html#tool">Try It</a>
+            <a href="manifesto.html">Manifesto</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>About reFrame</h1>
+        <p class="subtitle">We're breaking generational cycles of dysfunction through dignity-first communication.</p>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2>The Problem We're Solving</h2>
+            <p>Children don't inherit beliefs — they inherit nervous systems.</p>
+            <p>When parents model reactive, dignity-threatening communication, children learn that conflict equals danger. This cycle repeats across generations, creating polarization, broken families, and a society that can't disagree without dehumanizing.</p>
+            <p class="quote">"How we feel and act is not a function of what others are saying or doing but a function of the story we tell ourselves about what they are saying or doing."</p>
+            <p>Research confirms what many intuitively know: avoiding conflict actually damages relationships MORE than addressing it constructively. Yet most people lack the skills to navigate difficult conversations when emotions run high.</p>
+        </div>
+
+        <div class="section">
+            <h2>Our Philosophy</h2>
+            <p>reFrame is built on a simple but powerful framework:</p>
+            
+            <div class="framework">
+                <div class="framework-item">
+                    <h4>REGULATED</h4>
+                    <p>Pause when heated. Strong emotions are signals, not commands. Being calm is being responsible.</p>
+                </div>
+                <div class="framework-item">
+                    <h4>RESPECTFUL</h4>
+                    <p>Protect dignity first. Separate person from position. No character assassination or humiliation.</p>
+                </div>
+                <div class="framework-item">
+                    <h4>REPAIRABLE</h4>
+                    <p>Mistakes don't end relationships. Apologize without defensiveness. Prioritize reconnection over being right.</p>
+                </div>
+            </div>
+
+            <p>This isn't about suppressing emotions or "being nice." It's about expressing yourself in ways that actually land—that strengthen relationships instead of destroying them.</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>The Generational Impact</h3>
+            <p>When children repeatedly see calm during conflict, respect under pressure, and repair after harm, their baseline becomes curiosity over fear, dialogue over dominance, and connection over control.</p>
+            <p style="margin-top: 15px;">They grow up and parent the same way, lead the same way, and disagree without enemies.</p>
+            <p style="margin-top: 15px; font-weight: 600;">That's how humanity changes — quietly, locally, repeatedly.</p>
+        </div>
+
+        <div class="section">
+            <h2>How It Works</h2>
+            <p>reFrame is an AI-powered communication coach that helps you live dignity-first principles in real conversations.</p>
+            <p><strong>Type your raw, emotional message.</strong> We don't judge. We understand you're hurt, angry, or frustrated.</p>
+            <p><strong>Get a reframed version.</strong> Your feelings are preserved, but expressed in a way that opens dialogue instead of closing it.</p>
+            <p><strong>Learn over time.</strong> With each use, you internalize healthier patterns. The tool becomes less necessary as the skills become natural.</p>
+            <p class="quote">Think of reFrame as training wheels for healthy communication. Eventually, you won't need us—and that's the goal.</p>
+        </div>
+
+        <div class="section">
+            <h2>Research-Backed Approach</h2>
+            <p>Our framework is grounded in decades of research:</p>
+            <p><strong>Conflict Resolution Research (NIH):</strong> Avoiding conflict forces people to suppress needs, harming relationships more than constructive engagement.</p>
+            <p><strong>Psychological Safety (Harvard):</strong> Teams with high psychological safety show better performance and lower conflict.</p>
+            <p><strong>Observational Learning (Bandura):</strong> Children learn behaviors by watching parents model them, not through lectures.</p>
+            <p>We're not inventing new psychology. We're making proven principles accessible in the moments you need them most.</p>
+        </div>
+
+        <div class="section">
+            <h2>Our Vision</h2>
+            <p>In 10 years, reFrame is how families navigate disagreements. How companies build psychological safety. How individuals break cycles they inherited.</p>
+            <p>Communication becomes something we actively learn and practice, not just react from.</p>
+            <p>Relationships strengthen instead of fracture. Conflicts become opportunities for connection.</p>
+            <p class="quote">"We're not eliminating disagreement. We're eliminating the conditions that turn disagreement into hatred."</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Life Is About Relationships</h3>
+            <p>This simple truth guides everything we build. Your relationships with your partner, children, family, friends, and colleagues shape the quality of your life.</p>
+            <p style="margin-top: 15px;">When we improve how we communicate in conflict, we don't just solve problems—we deepen connections.</p>
+            <p style="margin-top: 15px;">That's what reFrame is for.</p>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <h2>Ready to Break the Cycle?</h2>
+        <p>Start reframing your conversations today. Model what you want to pass on.</p>
+        <a href="index.html#tool" class="cta-button">Try reFrame Now</a>
+    </div>
+
+    <footer>
+        <p>Made with ❤️ for better conversations | <a href="index.html">reFrame</a> | Life is about relationships.</p>
+    </footer>
+</body>
+</html>
