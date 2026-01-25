@@ -219,6 +219,7 @@ exports.handler = async (event) => {
 // RUN RFD™ DETECTION (unless user is re-submitting after seeing warning)
     let rfdResult = null;
     if (!skipRFD) {
+      console.log('Running RFD detection...');
       rfdResult = await detectRedFlags(message, context);
       console.log('RFD Result:', JSON.stringify(rfdResult, null, 2));
       
