@@ -721,63 +721,26 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
     </footer>
 
     <script>
-        // Core app functionality - works without Supabase
-        console.log('reFrame script loaded');
+        // CRITICAL: Core functionality FIRST, analytics LAST
+        // This ensures the app works even if analytics fails
 
-        let supabase = null;
-        let currentSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        console.log('reFrame initializing...');
 
-        // Try to load Supabase async (won't break if blocked)
-        (function() {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-            script.async = true;
-            script.onload = function() {
-                // Replace with your actual Supabase credentials
-                const SUPABASE_URL = 'https://cutsoiagnbsudklstlln.supabase.co';
-                const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1dHNvaWFnbmJzdWRrbHN0bGxuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTU3MjEsImV4cCI6MjA4NDkzMTcyMX0.qsiqYbwQRoNRHY5cgJl6UNGnN-fZ78uCHo4fkVZaei0';
-                
-                if (SUPABASE_URL !== 'https://cutsoiagnbsudklstlln.supabase.co' && window.supabase) {
-                    try {
-                        supabase = window.supabase.createClient(https://cutsoiagnbsudklstlln.supabase.co, eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1dHNvaWFnbmJzdWRrbHN0bGxuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTU3MjEsImV4cCI6MjA4NDkzMTcyMX0.qsiqYbwQRoNRHY5cgJl6UNGnN-fZ78uCHo4fkVZaei0);
-                        console.log('Analytics enabled');
-                    } catch (e) {
-                        console.log('Analytics disabled:', e);
-                    }
-                }
-            };
-            script.onerror = function() {
-                console.log('Analytics not available (CDN blocked)');
-            };
-            document.head.appendChild(script);
-        })();
+        // Session ID for analytics (if enabled later)
+        const currentSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
-        // Analytics helper (safe even if Supabase isn't loaded)
-        async function trackEvent(eventType, eventData) {
-            if (!supabase) return;
-            try {
-                await supabase.from('reframe_analytics').insert([{
-                    session_id: currentSessionId,
-                    event_type: eventType,
-                    event_data: eventData,
-                    timestamp: new Date().toISOString(),
-                    user_agent: navigator.userAgent,
-                    screen_width: window.innerWidth,
-                    screen_height: window.innerHeight
-                }]);
-            } catch (err) {
-                console.log('Analytics error (ignored):', err);
-            }
-        }
+        // ============================================
+        // CORE FUNCTIONALITY (Works without analytics)
+        // ============================================
 
         // Toggle context section
         const contextHeader = document.getElementById('contextHeader');
         const contextSection = document.getElementById('contextSection');
 
         contextHeader.addEventListener('click', function() {
+            console.log('Toggling context');
             contextHeader.classList.toggle('expanded');
             contextSection.classList.toggle('expanded');
-            trackEvent('context_toggle', { expanded: contextHeader.classList.contains('expanded') });
         });
 
         function showError(message, show = true) {
@@ -791,6 +754,8 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         }
 
         async function reframeMessage() {
+            console.log('reframeMessage called');
+            
             const inputText = document.getElementById('inputText').value.trim();
             
             if (!inputText) {
@@ -812,14 +777,8 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             loading.style.display = 'block';
             outputSection.classList.remove('visible');
 
-            const requestStartTime = Date.now();
-            trackEvent('reframe_requested', {
-                relationship_type: relationshipType,
-                has_context: !!contextText,
-                input_length: inputText.length
-            });
-
             try {
+                console.log('Calling API...');
                 const response = await fetch('/.netlify/functions/reframe', {
                     method: 'POST',
                     headers: {
@@ -832,6 +791,8 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                         sessionId: currentSessionId
                     })
                 });
+
+                console.log('Response received:', response.status);
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -850,31 +811,25 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                     btn.classList.remove('selected');
                 });
 
-                trackEvent('reframe_completed', {
-                    relationship_type: relationshipType,
-                    has_context: !!contextText,
-                    output_length: reframedText.length,
-                    processing_time_ms: Date.now() - requestStartTime
-                });
+                console.log('Reframe successful');
 
             } catch (error) {
+                console.error('Reframe error:', error);
                 showError(`Error: ${error.message}. Please try again or contact support if the problem persists.`);
-                trackEvent('reframe_error', {
-                    error_message: error.message,
-                    relationship_type: relationshipType
-                });
             } finally {
                 button.disabled = false;
                 loading.style.display = 'none';
             }
         }
 
+        // Attach button event
         document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
 
         // R³ Feedback System
         document.querySelectorAll('.feedback-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const feedbackType = this.getAttribute('data-feedback');
+                console.log('Feedback:', feedbackType);
                 
                 document.querySelectorAll('.feedback-btn').forEach(b => {
                     b.classList.remove('selected');
@@ -882,12 +837,6 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 this.classList.add('selected');
                 
                 document.getElementById('feedbackThanks').classList.add('visible');
-
-                const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
-                trackEvent('user_feedback', {
-                    feedback_type: feedbackType,
-                    relationship_type: relationshipType
-                });
 
                 if (feedbackType === 'feels_right') {
                     setTimeout(() => {
@@ -899,12 +848,14 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                         document.getElementById('feedbackThanks').textContent = 'Feel free to adjust your message and try again! 💪';
                     }, 1000);
                 } else if (feedbackType === 'explain') {
-                    showExplanation(relationshipType);
+                    showExplanation();
                 }
             });
         });
 
-        function showExplanation(relationshipType) {
+        function showExplanation() {
+            const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
+            
             const explanations = {
                 romantic_partner: "This reframe uses vulnerable 'I' statements to share feelings without blame. It creates space for connection by expressing needs clearly while protecting both people's dignity.",
                 parent: "This reframe balances respect for your parent with your adult boundaries. It acknowledges the relationship while clearly stating your perspective.",
@@ -930,7 +881,6 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
 
         document.getElementById('copyBtn').addEventListener('click', function() {
             const outputText = document.getElementById('outputText').textContent;
-            const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
             
             navigator.clipboard.writeText(outputText).then(() => {
                 const button = this;
@@ -939,11 +889,6 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 setTimeout(() => {
                     button.textContent = originalText;
                 }, 2000);
-
-                trackEvent('output_copied', {
-                    relationship_type: relationshipType,
-                    output_length: outputText.length
-                });
             });
         });
 
@@ -952,14 +897,6 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 e.preventDefault();
                 reframeMessage();
             }
-        });
-
-        document.querySelectorAll('input[name="relationship"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                trackEvent('relationship_selected', {
-                    relationship_type: e.target.value
-                });
-            });
         });
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -974,9 +911,15 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             });
         });
 
-        trackEvent('page_load', { page: 'index' });
+        console.log('✅ Core functionality loaded');
 
-        console.log('All event listeners attached');
+        // ============================================
+        // OPTIONAL ANALYTICS (Loaded last, can fail safely)
+        // ============================================
+
+        // Analytics will be added here later when ready
+        // For now, the site works perfectly without it
+
     </script>
 </body>
 </html>
