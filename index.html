@@ -31,7 +31,6 @@
             line-height: 1.6;
         }
 
-        /* Navigation */
         nav {
             background: #FF7F50;
             padding: 20px 40px;
@@ -76,7 +75,6 @@
             font-weight: 600;
         }
 
-        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
             color: white;
@@ -120,7 +118,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* Tool Section */
         .tool-section {
             padding: 60px 40px;
             background: #fafafa;
@@ -191,7 +188,6 @@
             font-style: italic;
         }
 
-        /* Relationship selector styles */
         .relationship-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -254,7 +250,6 @@
             min-height: 100px;
         }
 
-        /* Collapsible section */
         .collapsible-header {
             display: flex;
             align-items: center;
@@ -343,7 +338,6 @@
             white-space: pre-wrap;
         }
 
-        /* R³ Feedback System */
         .feedback-section {
             margin-top: 20px;
             padding: 20px;
@@ -448,7 +442,6 @@
             margin-top: 20px;
         }
 
-        /* Footer */
         footer {
             background: #333;
             color: white;
@@ -491,7 +484,6 @@
             font-size: 14px;
         }
 
-        /* Mobile Responsive */
         @media (max-width: 768px) {
             nav {
                 padding: 15px 20px;
@@ -537,7 +529,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
         <div class="nav-logo">reFrame</div>
         <div class="nav-links">
@@ -550,7 +541,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
         <h1>reFrame</h1>
         <div class="tagline">Say it better.</div>
@@ -569,7 +559,6 @@
         <a href="#tool" class="cta-button">Start reFraming</a>
     </section>
 
-    <!-- Tool Section -->
     <section class="tool-section" id="tool">
         <div class="container">
             <h2 class="section-title">Transform Your Message</h2>
@@ -582,7 +571,6 @@
 
                 <div id="errorMessage" style="display: none;" class="error"></div>
 
-                <!-- Relationship Type Selector -->
                 <div class="section">
                     <label>Who are you talking to? <span class="optional">(helps us personalize tone)</span></label>
                     <div class="relationship-grid">
@@ -633,7 +621,6 @@
                     </div>
                 </div>
 
-                <!-- Context Input (Collapsible) -->
                 <div class="section">
                     <div class="collapsible-header" id="contextHeader">
                         <span class="arrow">▶</span>
@@ -647,7 +634,6 @@ Or describe the situation: 'My boss criticized my presentation in front of the w
                     </div>
                 </div>
 
-                <!-- Original Message Input -->
                 <div class="section">
                     <label>What do you want to say?</label>
                     <textarea id="inputText" placeholder="Be honest about how you're feeling. Type the message you want to send - we'll help you say it in a way that opens dialogue instead of closing it.
@@ -670,7 +656,6 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                     <div id="outputText" class="output-box"></div>
                     <button class="copy-button" id="copyBtn">📋 Copy to Clipboard</button>
                     
-                    <!-- R³ Feedback System -->
                     <div class="feedback-section" id="feedbackSection">
                         <h4>How does this reframe feel?</h4>
                         <div class="feedback-buttons">
@@ -698,7 +683,6 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -737,16 +721,63 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
     </footer>
 
     <script>
+        // Core app functionality - works without Supabase
         console.log('reFrame script loaded');
+
+        let supabase = null;
+        let currentSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+        // Try to load Supabase async (won't break if blocked)
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+            script.async = true;
+            script.onload = function() {
+                // Replace with your actual Supabase credentials
+                const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+                const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+                
+                if (SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE' && window.supabase) {
+                    try {
+                        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                        console.log('Analytics enabled');
+                    } catch (e) {
+                        console.log('Analytics disabled:', e);
+                    }
+                }
+            };
+            script.onerror = function() {
+                console.log('Analytics not available (CDN blocked)');
+            };
+            document.head.appendChild(script);
+        })();
+
+        // Analytics helper (safe even if Supabase isn't loaded)
+        async function trackEvent(eventType, eventData) {
+            if (!supabase) return;
+            try {
+                await supabase.from('reframe_analytics').insert([{
+                    session_id: currentSessionId,
+                    event_type: eventType,
+                    event_data: eventData,
+                    timestamp: new Date().toISOString(),
+                    user_agent: navigator.userAgent,
+                    screen_width: window.innerWidth,
+                    screen_height: window.innerHeight
+                }]);
+            } catch (err) {
+                console.log('Analytics error (ignored):', err);
+            }
+        }
 
         // Toggle context section
         const contextHeader = document.getElementById('contextHeader');
         const contextSection = document.getElementById('contextSection');
 
         contextHeader.addEventListener('click', function() {
-            console.log('Context header clicked');
             contextHeader.classList.toggle('expanded');
             contextSection.classList.toggle('expanded');
+            trackEvent('context_toggle', { expanded: contextHeader.classList.contains('expanded') });
         });
 
         function showError(message, show = true) {
@@ -760,8 +791,6 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         }
 
         async function reframeMessage() {
-            console.log('reframeMessage called');
-            
             const inputText = document.getElementById('inputText').value.trim();
             
             if (!inputText) {
@@ -776,19 +805,21 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             const outputSection = document.getElementById('outputSection');
             const feedbackSection = document.getElementById('feedbackSection');
             
-            // Get context inputs
             const contextText = document.getElementById('contextText').value.trim();
             const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
-            
-            console.log('Relationship:', relationshipType);
-            console.log('Has context:', !!contextText);
             
             button.disabled = true;
             loading.style.display = 'block';
             outputSection.classList.remove('visible');
 
+            const requestStartTime = Date.now();
+            trackEvent('reframe_requested', {
+                relationship_type: relationshipType,
+                has_context: !!contextText,
+                input_length: inputText.length
+            });
+
             try {
-                console.log('Calling API...');
                 const response = await fetch('/.netlify/functions/reframe', {
                     method: 'POST',
                     headers: {
@@ -797,11 +828,10 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                     body: JSON.stringify({ 
                         message: inputText,
                         context: contextText || null,
-                        relationshipType: relationshipType
+                        relationshipType: relationshipType,
+                        sessionId: currentSessionId
                     })
                 });
-
-                console.log('Response status:', response.status);
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -809,38 +839,43 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 }
 
                 const data = await response.json();
-                console.log('Got reframe:', data);
                 const reframedText = data.reframed;
 
                 document.getElementById('outputText').textContent = reframedText;
                 outputSection.classList.add('visible');
 
-                // Reset feedback section
                 feedbackSection.classList.remove('hidden');
                 document.getElementById('feedbackThanks').classList.remove('visible');
                 document.querySelectorAll('.feedback-btn').forEach(btn => {
                     btn.classList.remove('selected');
                 });
 
+                trackEvent('reframe_completed', {
+                    relationship_type: relationshipType,
+                    has_context: !!contextText,
+                    output_length: reframedText.length,
+                    processing_time_ms: Date.now() - requestStartTime
+                });
+
             } catch (error) {
-                console.error('Error:', error);
                 showError(`Error: ${error.message}. Please try again or contact support if the problem persists.`);
+                trackEvent('reframe_error', {
+                    error_message: error.message,
+                    relationship_type: relationshipType
+                });
             } finally {
                 button.disabled = false;
                 loading.style.display = 'none';
             }
         }
 
-        // Attach event listener to button
         document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
 
         // R³ Feedback System
         document.querySelectorAll('.feedback-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const feedbackType = this.getAttribute('data-feedback');
-                console.log('Feedback:', feedbackType);
                 
-                // Visual feedback
                 document.querySelectorAll('.feedback-btn').forEach(b => {
                     b.classList.remove('selected');
                 });
@@ -848,7 +883,12 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 
                 document.getElementById('feedbackThanks').classList.add('visible');
 
-                // Handle different feedback types
+                const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
+                trackEvent('user_feedback', {
+                    feedback_type: feedbackType,
+                    relationship_type: relationshipType
+                });
+
                 if (feedbackType === 'feels_right') {
                     setTimeout(() => {
                         document.getElementById('feedbackSection').classList.add('hidden');
@@ -859,14 +899,12 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                         document.getElementById('feedbackThanks').textContent = 'Feel free to adjust your message and try again! 💪';
                     }, 1000);
                 } else if (feedbackType === 'explain') {
-                    showExplanation();
+                    showExplanation(relationshipType);
                 }
             });
         });
 
-        function showExplanation() {
-            const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
-            
+        function showExplanation(relationshipType) {
             const explanations = {
                 romantic_partner: "This reframe uses vulnerable 'I' statements to share feelings without blame. It creates space for connection by expressing needs clearly while protecting both people's dignity.",
                 parent: "This reframe balances respect for your parent with your adult boundaries. It acknowledges the relationship while clearly stating your perspective.",
@@ -892,6 +930,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
 
         document.getElementById('copyBtn').addEventListener('click', function() {
             const outputText = document.getElementById('outputText').textContent;
+            const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
             
             navigator.clipboard.writeText(outputText).then(() => {
                 const button = this;
@@ -900,6 +939,11 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 setTimeout(() => {
                     button.textContent = originalText;
                 }, 2000);
+
+                trackEvent('output_copied', {
+                    relationship_type: relationshipType,
+                    output_length: outputText.length
+                });
             });
         });
 
@@ -910,7 +954,14 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             }
         });
 
-        // Smooth scroll for anchor links
+        document.querySelectorAll('input[name="relationship"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                trackEvent('relationship_selected', {
+                    relationship_type: e.target.value
+                });
+            });
+        });
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -922,6 +973,8 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 }
             });
         });
+
+        trackEvent('page_load', { page: 'index' });
 
         console.log('All event listeners attached');
     </script>
