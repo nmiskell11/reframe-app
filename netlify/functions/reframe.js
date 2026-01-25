@@ -220,6 +220,7 @@ exports.handler = async (event) => {
     let rfdResult = null;
     if (!skipRFD) {
       rfdResult = await detectRedFlags(message, context);
+      console.log('RFD Result:', JSON.stringify(rfdResult, null, 2));
       
       // If red flags detected, return warning BEFORE reframing
       if (rfdResult.hasRedFlags) {
