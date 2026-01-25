@@ -484,6 +484,215 @@
             font-size: 14px;
         }
 
+        /* RFD™ Modal Styles */
+        .rfd-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            animation: fadeIn 0.3s;
+        }
+
+        .rfd-modal-overlay.visible {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rfd-modal {
+            background: white;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .rfd-header {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 16px 16px 0 0;
+            text-align: center;
+        }
+
+        .rfd-header .flag-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .rfd-header h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .rfd-header .tagline {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .rfd-body {
+            padding: 30px;
+        }
+
+        .rfd-severity {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .rfd-severity.high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .rfd-severity.medium {
+            background: #fed7aa;
+            color: #9a3412;
+        }
+
+        .rfd-severity.low {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .rfd-patterns {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .rfd-patterns h4 {
+            color: #dc2626;
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rfd-patterns ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .rfd-patterns li {
+            padding: 4px 0;
+            color: #7f1d1d;
+            font-size: 15px;
+        }
+
+        .rfd-patterns li:before {
+            content: "⚠️ ";
+            margin-right: 8px;
+        }
+
+        .rfd-explanation {
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .rfd-suggestion {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .rfd-suggestion h4 {
+            color: #16a34a;
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rfd-suggestion p {
+            color: #14532d;
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .rfd-footer {
+            background: #fafafa;
+            padding: 20px 30px;
+            border-radius: 0 0 16px 16px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .rfd-button {
+            flex: 1;
+            min-width: 140px;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-family: inherit;
+        }
+
+        .rfd-button.primary {
+            background: #16a34a;
+            color: white;
+        }
+
+        .rfd-button.primary:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+
+        .rfd-button.secondary {
+            background: white;
+            color: #666;
+            border: 2px solid #e0e0e0;
+        }
+
+        .rfd-button.secondary:hover {
+            border-color: #999;
+        }
+
+        .rfd-learn-more {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .rfd-learn-more a {
+            color: #FF7F50;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .rfd-learn-more a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
             nav {
                 padding: 15px 20px;
@@ -525,6 +734,32 @@
             .feedback-btn {
                 width: 100%;
             }
+
+            .rfd-modal {
+                width: 95%;
+                max-height: 90vh;
+            }
+
+            .rfd-header {
+                padding: 20px;
+            }
+
+            .rfd-header h2 {
+                font-size: 22px;
+            }
+
+            .rfd-body {
+                padding: 20px;
+            }
+
+            .rfd-footer {
+                padding: 15px 20px;
+                flex-direction: column;
+            }
+
+            .rfd-button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -533,7 +768,7 @@
         <div class="nav-logo">reFrame</div>
         <div class="nav-links">
             <a href="#tool">Try It</a>
-            <a href="r3-framework.html">R³ Framework</a>
+            <a href="r3-framework.html">RÂ³ Framework</a>
             <a href="manifesto.html">Manifesto</a>
             <a href="about.html">About</a>
             <a href="faq.html">FAQ</a>
@@ -546,8 +781,8 @@
         <div class="tagline">Say it better.</div>
         
         <div class="principles" style="margin-top: 30px;">
-            <strong>Built on the R³ Framework:</strong><br>
-            REGULATED · RESPECTFUL · REPAIRABLE
+            <strong>Built on the RÂ³ Framework:</strong><br>
+            REGULATED Â· RESPECTFUL Â· REPAIRABLE
         </div>
         
         <div class="principles" style="font-size: 16px; margin-top: 25px; opacity: 0.9;">
@@ -565,7 +800,7 @@
             
             <div class="card">
                 <div class="info-box">
-                    <h3>📝 How to Use reFrame</h3>
+                    <h3>ðŸ“ How to Use reFrame</h3>
                     <p>Type your raw, honest thoughts below. Whether you're hurt, angry, frustrated, or confused - we'll help you express it in a way that builds connection instead of conflict. For best results, tell us who you're talking to and provide context about what they said.</p>
                 </div>
 
@@ -576,54 +811,54 @@
                     <div class="relationship-grid">
                         <div class="relationship-option">
                             <input type="radio" id="rel-partner" name="relationship" value="romantic_partner">
-                            <label for="rel-partner">💑 Partner</label>
+                            <label for="rel-partner">ðŸ’‘ Partner</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-parent" name="relationship" value="parent">
-                            <label for="rel-parent">👨‍👩 Parent</label>
+                            <label for="rel-parent">ðŸ‘¨â€ðŸ‘© Parent</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-family" name="relationship" value="family">
-                            <label for="rel-family">👨‍👩‍👧‍👦 Family</label>
+                            <label for="rel-family">ðŸ‘¨â€ðŸ‘©â€ðŸ‘§â€ðŸ‘¦ Family</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-friend" name="relationship" value="friend">
-                            <label for="rel-friend">🤝 Friend</label>
+                            <label for="rel-friend">ðŸ¤ Friend</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-manager" name="relationship" value="manager">
-                            <label for="rel-manager">👔 Manager</label>
+                            <label for="rel-manager">ðŸ‘” Manager</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-report" name="relationship" value="direct_report">
-                            <label for="rel-report">📊 Direct Report</label>
+                            <label for="rel-report">ðŸ“Š Direct Report</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-colleague" name="relationship" value="colleague">
-                            <label for="rel-colleague">💼 Colleague</label>
+                            <label for="rel-colleague">ðŸ’¼ Colleague</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-client" name="relationship" value="client">
-                            <label for="rel-client">🤵 Client</label>
+                            <label for="rel-client">ðŸ¤µ Client</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-neighbor" name="relationship" value="neighbor">
-                            <label for="rel-neighbor">🏘️ Neighbor</label>
+                            <label for="rel-neighbor">ðŸ˜ï¸ Neighbor</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-child" name="relationship" value="child">
-                            <label for="rel-child">👶 Child/Teen</label>
+                            <label for="rel-child">ðŸ‘¶ Child/Teen</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-general" name="relationship" value="general" checked>
-                            <label for="rel-general">👤 General</label>
+                            <label for="rel-general">ðŸ‘¤ General</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="section">
                     <div class="collapsible-header" id="contextHeader">
-                        <span class="arrow">▶</span>
+                        <span class="arrow">â–¶</span>
                         <label style="margin: 0; cursor: pointer;">Add conversation context <span class="optional">(optional but recommended)</span></label>
                     </div>
                     <div class="collapsible-content" id="contextSection">
@@ -648,32 +883,32 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 </div>
 
                 <div id="loadingIndicator" class="loading" style="display: none;">
-                    ✨ Reframing your message with dignity and clarity...
+                    âœ¨ Reframing your message with dignity and clarity...
                 </div>
 
                 <div id="outputSection" class="output-section section">
                     <label>Your reFramed Message</label>
                     <div id="outputText" class="output-box"></div>
-                    <button class="copy-button" id="copyBtn">📋 Copy to Clipboard</button>
+                    <button class="copy-button" id="copyBtn">ðŸ“‹ Copy to Clipboard</button>
                     
                     <div class="feedback-section" id="feedbackSection">
                         <h4>How does this reframe feel?</h4>
                         <div class="feedback-buttons">
                             <button class="feedback-btn" data-feedback="feels_right">
-                                <span>🎯</span>
+                                <span>ðŸŽ¯</span>
                                 <span>This feels right</span>
                             </button>
                             <button class="feedback-btn" data-feedback="try_again">
-                                <span>✏️</span>
+                                <span>âœï¸</span>
                                 <span>Let me try again</span>
                             </button>
                             <button class="feedback-btn" data-feedback="explain">
-                                <span>💡</span>
+                                <span>ðŸ’¡</span>
                                 <span>Show me why this works</span>
                             </button>
                         </div>
                         <div class="feedback-thanks" id="feedbackThanks">
-                            Thank you! Your feedback helps us improve. ✨
+                            Thank you! Your feedback helps us improve. âœ¨
                         </div>
                     </div>
 
@@ -682,6 +917,48 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             </div>
         </div>
     </section>
+
+    <!-- RFD™ Warning Modal -->
+    <div id="rfdModal" class="rfd-modal-overlay">
+        <div class="rfd-modal">
+            <div class="rfd-header">
+                <div class="flag-icon">🚩</div>
+                <h2>RFD™ Alert</h2>
+                <p class="tagline">Red Flag Detection Technology</p>
+            </div>
+            
+            <div class="rfd-body">
+                <span id="rfdSeverity" class="rfd-severity"></span>
+                
+                <div class="rfd-patterns">
+                    <h4>Patterns Detected</h4>
+                    <ul id="rfdPatternsList"></ul>
+                </div>
+                
+                <div class="rfd-explanation">
+                    <p id="rfdExplanation"></p>
+                </div>
+                
+                <div class="rfd-suggestion">
+                    <h4>💡 Healthier Approach</h4>
+                    <p id="rfdSuggestion"></p>
+                </div>
+
+                <div class="rfd-learn-more">
+                    <a href="r3-framework.html" target="_blank">Learn more about healthy communication patterns →</a>
+                </div>
+            </div>
+            
+            <div class="rfd-footer">
+                <button class="rfd-button secondary" id="rfdEdit">
+                    ✏️ Edit My Message
+                </button>
+                <button class="rfd-button primary" id="rfdProceed">
+                    Continue to reFrame
+                </button>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="footer-content">
@@ -703,7 +980,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 <h3>Core Principles</h3>
                 <p>Regulation over reaction</p>
                 <p>Dignity first</p>
-                <p>Disagreement ≠ hate</p>
+                <p>Disagreement â‰  hate</p>
                 <p>Repair is responsibility</p>
             </div>
             
@@ -716,7 +993,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         </div>
         
         <div class="footer-bottom">
-            Made with ❤️ for better conversations | © 2026 reFrame | wereframe.com
+            Made with â¤ï¸ for better conversations | Â© 2026 reFrame | wereframe.com
         </div>
     </footer>
 
@@ -753,8 +1030,8 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             }
         }
 
-        async function reframeMessage() {
-            console.log('reframeMessage called');
+        async function reframeMessage(skipRFD = false) {
+            console.log('reframeMessage called, skipRFD:', skipRFD);
             
             const inputText = document.getElementById('inputText').value.trim();
             
@@ -788,7 +1065,8 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                         message: inputText,
                         context: contextText || null,
                         relationshipType: relationshipType,
-                        sessionId: currentSessionId
+                        sessionId: currentSessionId,
+                        skipRFD: skipRFD
                     })
                 });
 
@@ -800,6 +1078,17 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 }
 
                 const data = await response.json();
+
+                // CHECK FOR RFD ALERT
+                if (data.rfdAlert && data.rfdResult) {
+                    console.log('RFD Alert triggered:', data.rfdResult);
+                    showRFDModal(data.rfdResult);
+                    button.disabled = false;
+                    loading.style.display = 'none';
+                    return;
+                }
+
+                // Normal reframing path
                 const reframedText = data.reframed;
 
                 document.getElementById('outputText').textContent = reframedText;
@@ -822,10 +1111,61 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             }
         }
 
+        // RFD™ Modal Functions
+        function showRFDModal(rfdResult) {
+            const modal = document.getElementById('rfdModal');
+            const severity = document.getElementById('rfdSeverity');
+            const patternsList = document.getElementById('rfdPatternsList');
+            const explanation = document.getElementById('rfdExplanation');
+            const suggestion = document.getElementById('rfdSuggestion');
+
+            // Set severity badge
+            severity.textContent = `${rfdResult.severity} severity`;
+            severity.className = `rfd-severity ${rfdResult.severity}`;
+
+            // List patterns
+            patternsList.innerHTML = '';
+            rfdResult.patterns.forEach(pattern => {
+                const li = document.createElement('li');
+                li.textContent = pattern;
+                patternsList.appendChild(li);
+            });
+
+            // Set explanation and suggestion
+            explanation.textContent = rfdResult.explanation;
+            suggestion.textContent = rfdResult.suggestion;
+
+            // Show modal
+            modal.classList.add('visible');
+        }
+
+        function hideRFDModal() {
+            document.getElementById('rfdModal').classList.remove('visible');
+        }
+
+        // RFD Modal Event Listeners
+        document.getElementById('rfdEdit').addEventListener('click', function() {
+            hideRFDModal();
+            document.getElementById('inputText').focus();
+        });
+
+        document.getElementById('rfdProceed').addEventListener('click', function() {
+            hideRFDModal();
+            // Reframe with RFD bypass
+            reframeMessage(true);
+        });
+
+        // Close modal if clicking outside
+        document.getElementById('rfdModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideRFDModal();
+            }
+        });
+
         // Attach button event
         document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
 
-        // R³ Feedback System
+        // RÂ³ Feedback System
         document.querySelectorAll('.feedback-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const feedbackType = this.getAttribute('data-feedback');
@@ -845,7 +1185,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 } else if (feedbackType === 'try_again') {
                     setTimeout(() => {
                         document.getElementById('inputText').focus();
-                        document.getElementById('feedbackThanks').textContent = 'Feel free to adjust your message and try again! 💪';
+                        document.getElementById('feedbackThanks').textContent = 'Feel free to adjust your message and try again! ðŸ’ª';
                     }, 1000);
                 } else if (feedbackType === 'explain') {
                     showExplanation();
@@ -867,7 +1207,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 client: "This reframe prioritizes customer satisfaction while setting appropriate boundaries. It's professional and solution-focused.",
                 neighbor: "This reframe maintains community harmony while being firm about boundaries. It's friendly but clear.",
                 child: "This reframe teaches emotional regulation through modeling. It's patient, clear, and sets an example of healthy communication.",
-                general: "This reframe follows the R³ Framework: REGULATED (calm approach), RESPECTFUL (protects dignity), REPAIRABLE (leaves room for connection)."
+                general: "This reframe follows the RÂ³ Framework: REGULATED (calm approach), RESPECTFUL (protects dignity), REPAIRABLE (leaves room for connection)."
             };
 
             const explanation = explanations[relationshipType] || explanations.general;
@@ -875,7 +1215,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             document.getElementById('feedbackThanks').innerHTML = `
                 <strong>Why this works:</strong><br>
                 ${explanation}<br><br>
-                <em>Learn more about the <a href="r3-framework.html" style="color: #FF7F50;">R³ Framework</a></em>
+                <em>Learn more about the <a href="r3-framework.html" style="color: #FF7F50;">RÂ³ Framework</a></em>
             `;
         }
 
@@ -885,7 +1225,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             navigator.clipboard.writeText(outputText).then(() => {
                 const button = this;
                 const originalText = button.textContent;
-                button.textContent = '✅ Copied!';
+                button.textContent = 'âœ… Copied!';
                 setTimeout(() => {
                     button.textContent = originalText;
                 }, 2000);
@@ -911,7 +1251,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             });
         });
 
-        console.log('✅ Core functionality loaded');
+        console.log('âœ… Core functionality loaded');
 
         // ============================================
         // OPTIONAL ANALYTICS (Loaded last, can fail safely)
