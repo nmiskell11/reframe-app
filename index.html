@@ -734,12 +734,12 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             script.async = true;
             script.onload = function() {
                 // Replace with your actual Supabase credentials
-                const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
-                const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+                const SUPABASE_URL = 'https://cutsoiagnbsudklstlln.supabase.co';
+                const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1dHNvaWFnbmJzdWRrbHN0bGxuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTU3MjEsImV4cCI6MjA4NDkzMTcyMX0.qsiqYbwQRoNRHY5cgJl6UNGnN-fZ78uCHo4fkVZaei0';
                 
-                if (SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE' && window.supabase) {
+                if (SUPABASE_URL !== 'https://cutsoiagnbsudklstlln.supabase.co' && window.supabase) {
                     try {
-                        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                        supabase = window.supabase.createClient(https://cutsoiagnbsudklstlln.supabase.co, eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1dHNvaWFnbmJzdWRrbHN0bGxuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTU3MjEsImV4cCI6MjA4NDkzMTcyMX0.qsiqYbwQRoNRHY5cgJl6UNGnN-fZ78uCHo4fkVZaei0);
                         console.log('Analytics enabled');
                     } catch (e) {
                         console.log('Analytics disabled:', e);
