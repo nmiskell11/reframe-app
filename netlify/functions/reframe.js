@@ -1,146 +1,206 @@
-exports.handler = async (event, context) => {
+// netlify/functions/reframe.js
+// Enhanced version with Parent relationship, analytics, and feedback support
+
+const Anthropic = require('@anthropic-ai/sdk');
+
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
+
+// Relationship-specific tone adjustments (UPDATED with Parent)
+const RELATIONSHIP_CONTEXTS = {
+  romantic_partner: {
+    tone: "intimate and vulnerable",
+    formality: "casual",
+    notes: "emphasize emotional connection and long-term relationship health. Use 'we' language where appropriate."
+  },
+  parent: {
+    tone: "respectful but clear",
+    formality: "moderate",
+    notes: "balance honoring the parent-child relationship with adult autonomy. Acknowledge their perspective while maintaining boundaries."
+  },
+  family: {
+    tone: "caring but clear",
+    formality: "casual to moderate",
+    notes: "balance family bonds with healthy boundaries. Recognize shared history while addressing current issues."
+  },
+  friend: {
+    tone: "honest and supportive",
+    formality: "casual",
+    notes: "preserve friendship while addressing issues directly. Friends can handle honesty delivered with care."
+  },
+  manager: {
+    tone: "professional and respectful",
+    formality: "formal",
+    notes: "maintain professionalism while being clear about needs and concerns. Focus on solutions and collaboration."
+  },
+  direct_report: {
+    tone: "supportive and constructive",
+    formality: "professional but approachable",
+    notes: "balance authority with empathy and growth mindset. Create psychological safety while addressing performance."
+  },
+  colleague: {
+    tone: "collaborative and respectful",
+    formality: "professional",
+    notes: "maintain working relationship while addressing concerns. Focus on team success and mutual respect."
+  },
+  client: {
+    tone: "professional and solution-oriented",
+    formality: "formal",
+    notes: "prioritize customer satisfaction while setting appropriate boundaries. Be responsive and solution-focused."
+  },
+  neighbor: {
+    tone: "friendly but firm",
+    formality: "casual to moderate",
+    notes: "maintain community harmony while addressing issues. Balance friendliness with clear boundaries."
+  },
+  child: {
+    tone: "patient and teaching-oriented",
+    formality: "simple and clear",
+    notes: "model healthy communication and emotional regulation for learning. Explain feelings and needs age-appropriately."
+  },
+  general: {
+    tone: "respectful and clear",
+    formality: "moderate",
+    notes: "standard dignity-first communication that works in most contexts."
+  }
+};
+
+function buildEnhancedPrompt(message, context, relationshipType) {
+  const relContext = RELATIONSHIP_CONTEXTS[relationshipType] || RELATIONSHIP_CONTEXTS.general;
+  
+  let prompt = `You are reFrame, an AI communication coach built on the R³ Framework: REGULATED, RESPECTFUL, REPAIRABLE.
+
+Your mission: Transform emotionally charged messages into dignity-first communication that strengthens relationships instead of damaging them.
+
+RELATIONSHIP CONTEXT:
+- Speaking to: ${relationshipType.replace('_', ' ')}
+- Appropriate tone: ${relContext.tone}
+- Formality level: ${relContext.formality}
+- Key consideration: ${relContext.notes}
+
+`;
+
+  if (context) {
+    prompt += `CONVERSATION CONTEXT (what they said or the situation):
+${context}
+
+`;
+  }
+
+  prompt += `ORIGINAL MESSAGE (what the user wants to say):
+${message}
+
+R³ FRAMEWORK PRINCIPLES:
+1. REGULATED - Pause before reacting. Process emotions before responding. Strong feelings are signals, not commands.
+2. RESPECTFUL - Protect human dignity even in disagreement. Separate person from position. No attacking worth.
+3. REPAIRABLE - Communicate in ways that leave room for reconnection. Own impact, apologize when needed, prioritize relationship over being right.
+
+REFRAMING GUIDELINES:
+- Keep the user's authentic feelings and needs
+- Use "I" statements ("I feel..." not "You always...")
+- Describe impact without attributing intent
+- Express what you need clearly without demands
+- Show vulnerability appropriately for the relationship type
+- Maintain dignity for both parties
+- Create openings for dialogue
+- Match the ${relContext.formality} formality level
+- Use a ${relContext.tone} tone
+
+${context ? "Consider the conversation context provided when crafting your response. Address what they said directly while reframing the user's reaction constructively." : ""}
+
+Provide ONLY the reframed message - no preamble, no explanation, no quotation marks. Write it ready to send.`;
+
+  return prompt;
+}
+
+exports.handler = async (event) => {
+  // CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  };
+
+  // Handle preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers, body: '' };
+  }
+
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' })
+      headers,
+      body: JSON.stringify({ error: 'Method not allowed' }),
     };
   }
 
   try {
-    const { message } = JSON.parse(event.body);
+    const { message, context, relationshipType = 'general', sessionId } = JSON.parse(event.body);
 
-    if (!message) {
+    if (!message || message.trim().length === 0) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Message is required' })
+        headers,
+        body: JSON.stringify({ error: 'Message is required' }),
       };
     }
 
-    const API_KEY = process.env.ANTHROPIC_API_KEY;
+    // Build enhanced prompt with context
+    const systemPrompt = buildEnhancedPrompt(message, context, relationshipType);
 
-    if (!API_KEY) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: 'API key not configured' })
-      };
-    }
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        messages: [{
+    // Call Claude API
+    const startTime = Date.now();
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [
+        {
           role: 'user',
-         content: `You are helping someone live the reFrame Manifesto - a commitment to dignity-first communication that breaks generational cycles.
-
-THE reFrame MANIFESTO PRINCIPLES:
-
-1. REGULATION OVER REACTION
-- Pause before speaking. Strong emotions are signals, not commands.
-- Model: "I need a moment to collect my thoughts."
-
-2. PROTECT DIGNITY FIRST
-- No disagreement makes someone disposable. Argue ideas, not worth.
-- Never use language that humiliates, shames, or dehumanizes.
-
-3. DISAGREEMENT ≠ HATE
-- Opposing views are not personal attacks. Resist identity warfare.
-- Model: "We can be opposed and still connected."
-
-4. SPEAK FROM EXPERIENCE, NOT ACCUSATION
-- Describe impact, not intent. Own feelings without assigning motives.
-- Trade "you are" for "this affects me."
-
-5. BOUNDARIES WITHOUT HOSTILITY
-- State needs clearly without threats or manipulation.
-- Model: "Clear limits make relationships safer, not smaller."
-
-6. REPAIR IS RESPONSIBILITY
-- Acknowledge harm. Apologize without defensiveness. Prioritize reconnection.
-- Model: "I handled that poorly. Let me try again."
-
-7. HUMILITY IS STRENGTH
-- Admit when wrong. Allow thinking to evolve. Choose curiosity over certainty.
-- Model: "I may be wrong here, but this is how I see it."
-
-8. MODEL WHAT YOU WANT TO PASS ON
-- Others are watching, especially children. Teach through example.
-- Model: "What we practice becomes culture."
-
-9. BELONGING IS NOT CONDITIONAL
-- People matter before positions. Connection survives difference.
-- Model: "Exile solves nothing. Belonging heals."
-
-10. COMMIT TO THE LONG GAME
-- Choose relationships over wins. Repair over rupture. Humanity over ego.
-- Model: "This is how trust compounds across generations."
-
-THE R³ FRAMEWORK:
-- REGULATED: Pause when heated. Name emotions without weaponizing them.
-- RESPECTFUL: Separate person from position. No character assassination.
-- REPAIRABLE: Own impact. Apologize. Reconnect. Mistakes don't end relationships.
-
-OUTPUT REQUIREMENTS:
-1. State observation (facts only)
-2. Own your feeling ("I feel X when...")
-3. Express impact briefly (why it matters)
-4. Protect their dignity (see them as human, not enemy)
-5. State need/want OR invite dialogue
-6. Assume repairability (the relationship can handle this)
-
-TONE:
-- Concise and direct but kind
-- Keep appropriate emotional intensity ("really hurts" is valid)
-- No tentative language ("Can we..." not "I'm wondering if...")
-- Don't make excuses for them or speculate about motives
-- Model humility and both/and thinking
-- Remember: someone may be watching and learning
-
-AVOID:
-❌ "I'm wondering if..."
-❌ Over-explaining emotions
-❌ Always ending with questions
-❌ Weakening language ("sort of," "kind of")
-❌ Attacking the person vs. addressing the position
-❌ Binary either/or thinking
-❌ Language that dehumanizes or shames
-
-NORTH STAR:
-"Protect dignity. Regulate emotion. Repair when broken."
-
-Transform this message into one that lives the manifesto:
-
-"${message}"
-
-Return ONLY the reframed message. No preamble, no explanation.`
-        }]
-      })
+          content: systemPrompt
+        }
+      ],
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error?.message || 'API request failed');
-    }
+    const reframedMessage = response.content[0].text;
+    const apiResponseTime = Date.now() - startTime;
 
-    const data = await response.json();
-    const reframedText = data.content[0].text;
+    // Log analytics data (you can send this to Supabase from the backend too)
+    console.log('Analytics:', {
+      sessionId,
+      relationshipType,
+      hasContext: !!context,
+      inputLength: message.length,
+      outputLength: reframedMessage.length,
+      apiResponseTime,
+      timestamp: new Date().toISOString()
+    });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ reframed: reframedText })
+      headers,
+      body: JSON.stringify({
+        reframed: reframedMessage,
+        relationshipType: relationshipType,
+        usedContext: !!context,
+        metadata: {
+          apiResponseTime: apiResponseTime,
+          inputLength: message.length,
+          outputLength: reframedMessage.length
+        }
+      }),
     };
 
   } catch (error) {
     console.error('Error:', error);
+    
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message })
+      headers,
+      body: JSON.stringify({
+        error: 'Failed to reframe message',
+        details: error.message,
+      }),
     };
   }
 };
