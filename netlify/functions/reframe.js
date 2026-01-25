@@ -1,5 +1,5 @@
 // netlify/functions/reframe.js
-// Enhanced version with Parent relationship, analytics, and feedback support
+// Enhanced with RFD™ (Red Flag Detection) Technology
 
 const Anthropic = require('@anthropic-ai/sdk');
 
@@ -7,7 +7,7 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-// Relationship-specific tone adjustments (UPDATED with Parent)
+// Relationship-specific tone adjustments
 const RELATIONSHIP_CONTEXTS = {
   romantic_partner: {
     tone: "intimate and vulnerable",
@@ -65,7 +65,10 @@ const RELATIONSHIP_CONTEXTS = {
     notes: "standard dignity-first communication that works in most contexts."
   }
 };
+
 // RFD™ DETECTION SYSTEM
+// Based on Gottman Institute's research on relationship-damaging communication patterns
+
 async function detectRedFlags(message, context) {
   const detectionPrompt = `You are RFD™ (Red Flag Detection), a system that identifies potentially harmful communication patterns based on the Gottman Institute's research.
 
@@ -73,19 +76,32 @@ Analyze the following message for these toxic patterns:
 
 THE FOUR HORSEMEN (Gottman Institute):
 1. CRITICISM - Attacking character/personality rather than specific behavior
-2. CONTEMPT - The most destructive. Disrespect, mockery, sarcasm, name-calling
-3. DEFENSIVENESS - Playing victim, making excuses, cross-complaining
+   Examples: "You're so selfish", "You never think of anyone but yourself", "You're a terrible person"
+   vs. Healthy: "I felt hurt when you didn't call" (behavior-specific)
+
+2. CONTEMPT - The most destructive. Disrespect, mockery, sarcasm, name-calling, eye-rolling, sneering
+   Examples: "You're pathetic", "Are you stupid?", mockery, insults, superiority
+   
+3. DEFENSIVENESS - Playing victim, making excuses, cross-complaining, whining
+   Examples: "It's not my fault", "Well YOU do it too", "I wouldn't do that if you didn't..."
+   
 4. STONEWALLING - Withdrawal, silent treatment, shutting down communication
+   Examples: "I'm done talking", "Whatever", refusing to engage, cold shoulder
 
 ADDITIONAL TOXIC PATTERNS:
 5. GASLIGHTING - Denying reality, questioning sanity, rewriting history
+   Examples: "That never happened", "You're crazy", "You're too sensitive", "You're imagining things"
+   
 6. MANIPULATION - Guilt-tripping, emotional blackmail, conditional love/approval
+   Examples: "If you loved me you would...", "After all I've done for you...", "You're making me do this"
+   
 7. THREATS & ULTIMATUMS - Abandonment threats, consequences, controlling behavior
+   Examples: "If you don't... then I'll...", "I'm leaving", "You'll regret this"
 
 ${context ? `CONTEXT (what they said):
 ${context}
 
-This context may help understand if the message is a response to harmful behavior.
+This context may help understand if the message is a response to harmful behavior. Even so, responding with toxic patterns continues the cycle.
 ` : ''}
 
 MESSAGE TO ANALYZE:
@@ -98,21 +114,39 @@ Respond in this EXACT JSON format (no other text):
   "patterns": [list of pattern names detected],
   "explanation": "Brief explanation of what was detected and why it's harmful (2-3 sentences max)",
   "suggestion": "One sentence suggesting a healthier approach"
+}
+
+If NO red flags detected, return:
+{
+  "hasRedFlags": false,
+  "severity": "none",
+  "patterns": [],
+  "explanation": "",
+  "suggestion": ""
 }`;
 
   try {
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 500,
-      messages: [{ role: 'user', content: detectionPrompt }],
+      messages: [
+        {
+          role: 'user',
+          content: detectionPrompt
+        }
+      ],
     });
 
     const resultText = response.content[0].text.trim();
+    
+    // Clean up JSON (remove markdown code blocks if present)
     const cleanedText = resultText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    
     return JSON.parse(cleanedText);
     
   } catch (error) {
     console.error('RFD Detection Error:', error);
+    // Fail open - don't block reframing if detection fails
     return {
       hasRedFlags: false,
       severity: "none",
@@ -122,6 +156,7 @@ Respond in this EXACT JSON format (no other text):
     };
   }
 }
+
 function buildEnhancedPrompt(message, context, relationshipType, rfdResult) {
   const relContext = RELATIONSHIP_CONTEXTS[relationshipType] || RELATIONSHIP_CONTEXTS.general;
   
@@ -136,7 +171,8 @@ RELATIONSHIP CONTEXT:
 - Key consideration: ${relContext.notes}
 
 `;
-// Include RFD context if red flags were detected
+
+  // Include RFD context if red flags were detected
   if (rfdResult && rfdResult.hasRedFlags) {
     prompt += `⚠️ RFD™ DETECTED HARMFUL PATTERNS: ${rfdResult.patterns.join(', ')}
 The user has chosen to proceed with reframing despite these patterns. Your reframe should be ESPECIALLY careful to:
@@ -146,6 +182,7 @@ The user has chosen to proceed with reframing despite these patterns. Your refra
 
 `;
   }
+
   if (context) {
     prompt += `CONVERSATION CONTEXT (what they said or the situation):
 ${context}
@@ -206,9 +243,9 @@ exports.handler = async (event) => {
       context, 
       relationshipType = 'general', 
       sessionId,
-      skipRFD = false 
+      skipRFD = false // Allow bypassing RFD if user already saw warning
     } = JSON.parse(event.body);
-    
+
     if (!message || message.trim().length === 0) {
       return {
         statusCode: 400,
@@ -216,12 +253,11 @@ exports.handler = async (event) => {
         body: JSON.stringify({ error: 'Message is required' }),
       };
     }
-// RUN RFD™ DETECTION (unless user is re-submitting after seeing warning)
+
+    // RUN RFD™ DETECTION (unless user is re-submitting after seeing warning)
     let rfdResult = null;
     if (!skipRFD) {
-      console.log('Running RFD detection...');
       rfdResult = await detectRedFlags(message, context);
-      console.log('RFD Result:', JSON.stringify(rfdResult, null, 2));
       
       // If red flags detected, return warning BEFORE reframing
       if (rfdResult.hasRedFlags) {
@@ -243,10 +279,11 @@ exports.handler = async (event) => {
         };
       }
     }
-    // Build enhanced prompt with context
-   const systemPrompt = buildEnhancedPrompt(message, context, relationshipType, rfdResult);
 
-    // Call Claude API
+    // Build enhanced prompt with context
+    const systemPrompt = buildEnhancedPrompt(message, context, relationshipType, rfdResult);
+
+    // Call Claude API for reframing
     const startTime = Date.now();
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
@@ -262,11 +299,13 @@ exports.handler = async (event) => {
     const reframedMessage = response.content[0].text;
     const apiResponseTime = Date.now() - startTime;
 
-    // Log analytics data (you can send this to Supabase from the backend too)
+    // Log analytics data
     console.log('Analytics:', {
       sessionId,
       relationshipType,
       hasContext: !!context,
+      rfdTriggered: !!rfdResult?.hasRedFlags,
+      rfdPatterns: rfdResult?.patterns || [],
       inputLength: message.length,
       outputLength: reframedMessage.length,
       apiResponseTime,
