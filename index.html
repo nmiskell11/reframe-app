@@ -14,6 +14,9 @@
         gtag('js', new Date());
         gtag('config', 'G-R3PQF5P29J');
     </script>
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
@@ -191,7 +194,7 @@
             font-style: italic;
         }
 
-        /* NEW: Relationship selector styles */
+        /* Relationship selector styles */
         .relationship-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -254,7 +257,7 @@
             min-height: 100px;
         }
 
-        /* NEW: Collapsible section */
+        /* Collapsible section */
         .collapsible-header {
             display: flex;
             align-items: center;
@@ -338,6 +341,69 @@
             border-left: 4px solid #FF7F50;
             margin-bottom: 15px;
             line-height: 1.6;
+        }
+
+        /* NEW: R³ Feedback System */
+        .feedback-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .feedback-section.hidden {
+            display: none;
+        }
+
+        .feedback-section h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .feedback-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .feedback-btn {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-btn:hover {
+            border-color: #FF7F50;
+            transform: translateY(-2px);
+        }
+
+        .feedback-btn.selected {
+            background: #FF7F50;
+            color: white;
+            border-color: #FF7F50;
+        }
+
+        .feedback-thanks {
+            display: none;
+            color: #4a9d5f;
+            font-weight: 600;
+            margin-top: 15px;
+            animation: fadeIn 0.5s;
+        }
+
+        .feedback-thanks.visible {
+            display: block;
         }
 
         .copy-button {
@@ -459,6 +525,14 @@
             .relationship-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .feedback-buttons {
+                flex-direction: column;
+            }
+
+            .feedback-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -508,13 +582,17 @@
 
                 <div id="errorMessage" style="display: none;" class="error"></div>
 
-                <!-- NEW: Relationship Type Selector -->
+                <!-- Relationship Type Selector (UPDATED with Parent) -->
                 <div class="section">
                     <label>Who are you talking to? <span class="optional">(helps us personalize tone)</span></label>
                     <div class="relationship-grid">
                         <div class="relationship-option">
                             <input type="radio" id="rel-partner" name="relationship" value="romantic_partner">
                             <label for="rel-partner">💑 Partner</label>
+                        </div>
+                        <div class="relationship-option">
+                            <input type="radio" id="rel-parent" name="relationship" value="parent">
+                            <label for="rel-parent">👨‍👩 Parent</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-family" name="relationship" value="family">
@@ -555,7 +633,7 @@
                     </div>
                 </div>
 
-                <!-- NEW: Context/Conversation Input (Collapsible) -->
+                <!-- Context Input (Collapsible) -->
                 <div class="section">
                     <div class="collapsible-header" onclick="toggleContext()">
                         <span class="arrow">▶</span>
@@ -591,6 +669,29 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                     <label>Your reFramed Message</label>
                     <div id="outputText" class="output-box"></div>
                     <button class="copy-button" onclick="copyOutput()">📋 Copy to Clipboard</button>
+                    
+                    <!-- NEW: R³ Feedback System -->
+                    <div class="feedback-section" id="feedbackSection">
+                        <h4>How does this reframe feel?</h4>
+                        <div class="feedback-buttons">
+                            <button class="feedback-btn" onclick="submitFeedback('feels_right')" data-feedback="feels_right">
+                                <span>🎯</span>
+                                <span>This feels right</span>
+                            </button>
+                            <button class="feedback-btn" onclick="submitFeedback('try_again')" data-feedback="try_again">
+                                <span>✏️</span>
+                                <span>Let me try again</span>
+                            </button>
+                            <button class="feedback-btn" onclick="submitFeedback('explain')" data-feedback="explain">
+                                <span>💡</span>
+                                <span>Show me why this works</span>
+                            </button>
+                        </div>
+                        <div class="feedback-thanks" id="feedbackThanks">
+                            Thank you! Your feedback helps us improve. ✨
+                        </div>
+                    </div>
+
                     <div class="reminder">Remember: Repair is a responsibility, not a weakness.</div>
                 </div>
             </div>
@@ -636,12 +737,65 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
     </footer>
 
     <script>
+        // Initialize Supabase client
+        // REPLACE THESE with your actual Supabase credentials
+        const SUPABASE_URL = 'https://cutsoiagnbsudklstlln.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1dHNvaWFnbmJzdWRrbHN0bGxuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTU3MjEsImV4cCI6MjA4NDkzMTcyMX0.qsiqYbwQRoNRHY5cgJl6UNGnN-fZ78uCHo4fkVZaei0';
+        
+        let supabase = null;
+        let currentSessionId = null;
+
+        // Initialize Supabase if credentials are provided
+        if (SUPABASE_URL !== 'https://cutsoiagnbsudklstlln.supabase.co') {
+            supabase = window.supabase.createClient(https://cutsoiagnbsudklstlln.supabase.co, eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1dHNvaWFnbmJzdWRrbHN0bGxuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNTU3MjEsImV4cCI6MjA4NDkzMTcyMX0.qsiqYbwQRoNRHY5cgJl6UNGnN-fZ78uCHo4fkVZaei0);
+        }
+
+        // Generate session ID for tracking user journey
+        function generateSessionId() {
+            return 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        currentSessionId = generateSessionId();
+
+        // Analytics tracking function
+        async function trackEvent(eventType, eventData) {
+            if (!supabase) return; // Skip if Supabase not configured
+
+            try {
+                const { data, error } = await supabase
+                    .from('reframe_analytics')
+                    .insert([{
+                        session_id: currentSessionId,
+                        event_type: eventType,
+                        event_data: eventData,
+                        timestamp: new Date().toISOString(),
+                        user_agent: navigator.userAgent,
+                        screen_width: window.innerWidth,
+                        screen_height: window.innerHeight
+                    }]);
+
+                if (error) {
+                    console.error('Analytics error:', error);
+                }
+            } catch (err) {
+                console.error('Failed to track event:', err);
+            }
+        }
+
+        // Track page load
+        trackEvent('page_load', { page: 'index' });
+
         // Toggle context section
         function toggleContext() {
             const header = document.querySelector('.collapsible-header');
             const content = document.getElementById('contextSection');
+            const isExpanding = !header.classList.contains('expanded');
+            
             header.classList.toggle('expanded');
             content.classList.toggle('expanded');
+
+            // Track context section usage
+            trackEvent('context_toggle', { expanded: isExpanding });
         }
 
         function showError(message, show = true) {
@@ -667,6 +821,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             const button = document.getElementById('reframeBtn');
             const loading = document.getElementById('loadingIndicator');
             const outputSection = document.getElementById('outputSection');
+            const feedbackSection = document.getElementById('feedbackSection');
             
             // Get context inputs
             const contextText = document.getElementById('contextText').value.trim();
@@ -676,8 +831,16 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             loading.style.display = 'block';
             outputSection.classList.remove('visible');
 
+            // Track reframe request
+            const requestStartTime = Date.now();
+            trackEvent('reframe_requested', {
+                relationship_type: relationshipType,
+                has_context: !!contextText,
+                input_length: inputText.length,
+                context_length: contextText.length
+            });
+
             try {
-                // Updated API call with context
                 const response = await fetch('/.netlify/functions/reframe', {
                     method: 'POST',
                     headers: {
@@ -686,7 +849,8 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                     body: JSON.stringify({ 
                         message: inputText,
                         context: contextText || null,
-                        relationshipType: relationshipType
+                        relationshipType: relationshipType,
+                        sessionId: currentSessionId
                     })
                 });
 
@@ -697,20 +861,108 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
 
                 const data = await response.json();
                 const reframedText = data.reframed;
+                const processingTime = Date.now() - requestStartTime;
 
                 document.getElementById('outputText').textContent = reframedText;
                 outputSection.classList.add('visible');
 
+                // Reset feedback section
+                feedbackSection.classList.remove('hidden');
+                document.getElementById('feedbackThanks').classList.remove('visible');
+                document.querySelectorAll('.feedback-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+
+                // Track successful reframe
+                trackEvent('reframe_completed', {
+                    relationship_type: relationshipType,
+                    has_context: !!contextText,
+                    output_length: reframedText.length,
+                    processing_time_ms: processingTime
+                });
+
             } catch (error) {
                 showError(`Error: ${error.message}. Please try again or contact support if the problem persists.`);
+                
+                // Track error
+                trackEvent('reframe_error', {
+                    error_message: error.message,
+                    relationship_type: relationshipType
+                });
             } finally {
                 button.disabled = false;
                 loading.style.display = 'none';
             }
         }
 
+        // NEW: R³ Feedback System
+        async function submitFeedback(feedbackType) {
+            const outputText = document.getElementById('outputText').textContent;
+            const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
+            const contextText = document.getElementById('contextText').value.trim();
+
+            // Visual feedback
+            document.querySelectorAll('.feedback-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.closest('.feedback-btn').classList.add('selected');
+            
+            document.getElementById('feedbackThanks').classList.add('visible');
+
+            // Track feedback
+            trackEvent('user_feedback', {
+                feedback_type: feedbackType,
+                relationship_type: relationshipType,
+                has_context: !!contextText,
+                output_length: outputText.length
+            });
+
+            // Handle different feedback types
+            if (feedbackType === 'feels_right') {
+                // User is satisfied - great!
+                setTimeout(() => {
+                    document.getElementById('feedbackSection').classList.add('hidden');
+                }, 2000);
+            } else if (feedbackType === 'try_again') {
+                // User wants to regenerate
+                setTimeout(() => {
+                    document.getElementById('inputText').focus();
+                    document.getElementById('feedbackThanks').textContent = 'Feel free to adjust your message and try again! 💪';
+                }, 1000);
+            } else if (feedbackType === 'explain') {
+                // User wants explanation
+                showExplanation(relationshipType);
+            }
+        }
+
+        function showExplanation(relationshipType) {
+            const explanations = {
+                romantic_partner: "This reframe uses vulnerable 'I' statements to share feelings without blame. It creates space for connection by expressing needs clearly while protecting both people's dignity.",
+                parent: "This reframe balances respect for your parent with your adult boundaries. It acknowledges the relationship while clearly stating your perspective.",
+                family: "This reframe preserves family bonds while addressing the issue directly. It uses language that invites dialogue rather than creates distance.",
+                friend: "This reframe maintains the friendship's honesty while being constructive. Friends can handle direct communication when it's delivered with care.",
+                manager: "This reframe keeps it professional while being clear about your needs. It focuses on solutions and maintains your working relationship.",
+                direct_report: "This reframe balances authority with empathy. It addresses performance while supporting growth and maintaining psychological safety.",
+                colleague: "This reframe keeps things collaborative and respectful. It addresses the issue without creating workplace tension.",
+                client: "This reframe prioritizes customer satisfaction while setting appropriate boundaries. It's professional and solution-focused.",
+                neighbor: "This reframe maintains community harmony while being firm about boundaries. It's friendly but clear.",
+                child: "This reframe teaches emotional regulation through modeling. It's patient, clear, and sets an example of healthy communication.",
+                general: "This reframe follows the R³ Framework: REGULATED (calm approach), RESPECTFUL (protects dignity), REPAIRABLE (leaves room for connection)."
+            };
+
+            const explanation = explanations[relationshipType] || explanations.general;
+            
+            document.getElementById('feedbackThanks').innerHTML = `
+                <strong>Why this works:</strong><br>
+                ${explanation}<br><br>
+                <em>Learn more about the <a href="r3-framework.html" style="color: #FF7F50;">R³ Framework</a></em>
+            `;
+        }
+
         function copyOutput() {
             const outputText = document.getElementById('outputText').textContent;
+            const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
+            
             navigator.clipboard.writeText(outputText).then(() => {
                 const button = event.target;
                 const originalText = button.textContent;
@@ -718,8 +970,23 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 setTimeout(() => {
                     button.textContent = originalText;
                 }, 2000);
+
+                // Track copy event
+                trackEvent('output_copied', {
+                    relationship_type: relationshipType,
+                    output_length: outputText.length
+                });
             });
         }
+
+        // Track relationship selection
+        document.querySelectorAll('input[name="relationship"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                trackEvent('relationship_selected', {
+                    relationship_type: e.target.value
+                });
+            });
+        });
 
         document.getElementById('inputText').addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -735,6 +1002,15 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
+            });
+        });
+
+        // Track time on page
+        let pageLoadTime = Date.now();
+        window.addEventListener('beforeunload', () => {
+            const timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000);
+            trackEvent('page_unload', {
+                time_on_page_seconds: timeOnPage
             });
         });
     </script>
