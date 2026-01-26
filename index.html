@@ -1155,9 +1155,9 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 hideRFDModal();
             }
         });
-        // Attach button event
-        document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
-
+        // Attach button event - NO PARAMETERS, NO PARENTHESES
+document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
+        
         // R³ Feedback System
         document.querySelectorAll('.feedback-btn').forEach(btn => {
             btn.addEventListener('click', function() {
