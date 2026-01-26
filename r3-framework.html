@@ -243,15 +243,104 @@
         }
 
         .cycle-item h4 {
+            font-size: 20px;
             color: #FF7F50;
             margin-bottom: 10px;
-            font-size: 18px;
         }
 
         .cycle-item p {
             font-size: 16px;
             color: #666;
-            line-height: 1.6;
+        }
+
+        /* RFD Section */
+        .rfd-section {
+            background: #fef2f2;
+            padding: 60px 40px;
+            margin: 60px 0;
+            border-top: 4px solid #dc2626;
+            border-bottom: 4px solid #dc2626;
+        }
+
+        .rfd-section .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .rfd-section h2 {
+            font-size: 36px;
+            color: #dc2626;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .rfd-section .tagline {
+            font-size: 20px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .rfd-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .rfd-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #dc2626;
+        }
+
+        .rfd-card h3 {
+            font-size: 24px;
+            color: #dc2626;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rfd-card p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .rfd-card ul {
+            margin: 15px 0 0 20px;
+            color: #666;
+        }
+
+        .rfd-card li {
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        .rfd-example {
+            background: rgba(220, 38, 38, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .rfd-example strong {
+            display: block;
+            color: #dc2626;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rfd-example p {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.7;
         }
 
         .cta-section {
@@ -269,6 +358,9 @@
         .cta-section p {
             font-size: 20px;
             margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .cta-button {
@@ -280,8 +372,8 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 18px;
-            transition: transform 0.2s, box-shadow 0.2s;
             margin: 0 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .cta-button:hover {
@@ -333,6 +425,10 @@
             }
 
             .cycle {
+                grid-template-columns: 1fr;
+            }
+
+            .rfd-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -476,6 +572,48 @@
         <p style="margin-top: 30px; font-size: 24px; font-weight: 600;">Together, they create communication worth inheriting.</p>
     </div>
 
+    <!-- RFD Section -->
+    <div class="rfd-section">
+        <div class="container">
+            <h2>🚩 R³ + RFD™: What to Do + What to Avoid</h2>
+            <p class="tagline">The R³ Framework shows you what healthy communication looks like. RFD™ teaches you what to avoid.</p>
+
+            <div class="rfd-grid">
+                <div class="rfd-card">
+                    <h3>R³ Framework</h3>
+                    <p><strong>Shows you what TO DO:</strong></p>
+                    <ul>
+                        <li>How to regulate your emotions</li>
+                        <li>How to speak with respect</li>
+                        <li>How to repair after conflict</li>
+                        <li>Positive modeling of healthy patterns</li>
+                    </ul>
+                </div>
+
+                <div class="rfd-card">
+                    <h3>🚩 RFD™ Technology</h3>
+                    <p><strong>Shows you what to AVOID:</strong></p>
+                    <ul>
+                        <li>Criticism (character attacks)</li>
+                        <li>Contempt (disrespect, mockery)</li>
+                        <li>Defensiveness (playing victim)</li>
+                        <li>Stonewalling (withdrawal)</li>
+                        <li>Gaslighting, manipulation, threats</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="rfd-example">
+                <strong>How They Work Together:</strong>
+                <p><strong>RFD™</strong> catches toxic patterns before you send them → <strong>R³</strong> shows you a healthier way to express the same feelings → You learn both what to avoid and what to do instead.</p>
+            </div>
+
+            <p style="text-align: center; font-size: 18px; color: #666; margin-top: 30px;">
+                Built on 40+ years of Gottman Institute research, RFD™ detects patterns that predict relationship failure with 90%+ accuracy. When combined with R³, you get a complete learning system for transforming communication.
+            </p>
+        </div>
+    </div>
+
     <!-- The R³ Loop Section -->
     <div class="together-section">
         <h2>The R³ Loop</h2>
@@ -520,13 +658,14 @@
     <!-- CTA Section -->
     <div class="cta-section">
         <h2>Ready to Practice R³?</h2>
-        <p>Start using the R³ Framework today. Model communication worth inheriting.</p>
+        <p>Start using the R³ Framework and RFD™ technology today. Model communication worth inheriting.</p>
         <a href="index.html#tool" class="cta-button">Try reFrame Now</a>
         <a href="manifesto.html" class="cta-button secondary">Read the Manifesto</a>
     </div>
 
     <footer>
         <p>Made with ❤️ for better conversations | <a href="index.html">reFrame</a> | Life is about relationships.</p>
+        <p style="margin-top: 10px; font-size: 14px;"><a href="privacy.html">Privacy Policy</a> | <a href="faq.html">FAQ</a></p>
     </footer>
 </body>
 </html>
