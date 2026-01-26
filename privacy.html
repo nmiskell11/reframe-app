@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy | reFrame</title>
-    <meta name="description" content="reFrame Privacy Policy - How we protect and use your data.">
+    <meta name="description" content="reFrame Privacy Policy - How we protect and use your data, including RFD™ Red Flag Detection.">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
         
@@ -142,6 +142,14 @@
             margin: 20px 0;
         }
 
+        .rfd-highlight {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #dc2626;
+            margin: 25px 0;
+        }
+
         footer {
             background: #333;
             color: white;
@@ -186,7 +194,7 @@
     </div>
 
     <div class="container">
-        <div class="last-updated">Last Updated: January 2026</div>
+        <div class="last-updated">Last Updated: January 26, 2026</div>
 
         <div class="intro">
             <strong>Our Commitment:</strong> We believe privacy is a fundamental right. This policy explains what data we collect, how we use it, and your rights. We're committed to transparency and protecting your information.
@@ -198,6 +206,8 @@
         <p>When you use reFrame, you provide:</p>
         <ul>
             <li><strong>Messages:</strong> The text you enter to be reframed</li>
+            <li><strong>Conversation context (optional):</strong> Additional background information you choose to provide</li>
+            <li><strong>Relationship type:</strong> Your selection of who you're communicating with (e.g., Partner, Manager, Family)</li>
             <li><strong>Email address (optional):</strong> If you sign up for updates or create an account</li>
         </ul>
 
@@ -207,6 +217,7 @@
             <li><strong>Usage data:</strong> Pages visited, time spent, features used</li>
             <li><strong>Device information:</strong> Browser type, device type, operating system</li>
             <li><strong>IP address:</strong> For security and analytics purposes</li>
+            <li><strong>R³ Feedback:</strong> Your selections when rating reframes (e.g., "This feels right" or "Try again")</li>
         </ul>
 
         <h2>How We Use Your Data</h2>
@@ -214,20 +225,65 @@
         <h3>To Provide the Service</h3>
         <ul>
             <li>Process your messages through our AI to generate reframes</li>
-            <li>Improve the quality of reframes</li>
+            <li>Analyze messages for toxic communication patterns using RFD™ (see below)</li>
+            <li>Provide educational warnings when harmful patterns are detected</li>
+            <li>Improve the quality and accuracy of reframes</li>
             <li>Send you product updates (if you opt in)</li>
         </ul>
 
         <h3>To Improve reFrame</h3>
         <ul>
             <li>Analyze usage patterns to understand what features are most helpful</li>
+            <li>Improve RFD™ detection accuracy based on aggregated patterns</li>
             <li>Identify technical issues and bugs</li>
             <li>Develop new features based on user needs</li>
         </ul>
 
         <div class="highlight">
-            <strong>Important:</strong> We do NOT store your personal messages long-term. Messages are processed to provide the reframe and then deleted. We may retain anonymized, aggregated data for product improvement (e.g., "Users reframe messages about relationships 60% of the time") but never individual messages tied to you.
+            <strong>Important:</strong> We do NOT store your personal messages long-term. Messages are processed to provide the reframe and RFD™ analysis, then deleted. We may retain anonymized, aggregated data for product improvement (e.g., "Users reframe messages about workplace relationships 40% of the time" or "Criticism patterns were detected in 15% of messages") but never individual messages tied to you.
         </div>
+
+        <h2>RFD™ Red Flag Detection Technology</h2>
+
+        <div class="rfd-highlight">
+            <p><strong>What is RFD™?</strong></p>
+            <p>RFD™ (Red Flag Detection) is our proprietary technology that analyzes your message for toxic communication patterns before you send it. Built on 40+ years of Gottman Institute research, RFD™ detects patterns like criticism, contempt, defensiveness, stonewalling, gaslighting, manipulation, and threats.</p>
+        </div>
+
+        <h3>How RFD™ Works</h3>
+        <p>When you submit a message to reFrame:</p>
+        <ol style="margin-left: 30px;">
+            <li>Your message is analyzed by our AI to detect harmful communication patterns</li>
+            <li>If toxic patterns are found, you receive an educational warning explaining why the pattern is harmful</li>
+            <li>You choose whether to edit your message or proceed to reframing</li>
+            <li>The analysis is then deleted—we do not store RFD™ results tied to you</li>
+        </ol>
+
+        <h3>What RFD™ Is NOT</h3>
+        <p>It's important to understand what RFD™ does not do:</p>
+        <ul>
+            <li><strong>NOT a diagnosis:</strong> RFD™ identifies communication patterns, not mental health conditions</li>
+            <li><strong>NOT therapy:</strong> RFD™ is educational, not a substitute for professional counseling</li>
+            <li><strong>NOT judgment:</strong> RFD™ doesn't evaluate you as a person—only specific communication patterns</li>
+            <li><strong>NOT blocking:</strong> You always maintain full control. RFD™ informs, you decide</li>
+            <li><strong>NOT stored:</strong> RFD™ analysis is not saved or tracked at an individual level</li>
+        </ul>
+
+        <h3>RFD™ Data Collection</h3>
+        <p>For RFD™ specifically, we collect anonymized, aggregated data only:</p>
+        <ul>
+            <li>Which patterns are most commonly detected (e.g., "Criticism: 20%, Contempt: 5%")</li>
+            <li>What severity levels are triggered (high, medium, low)</li>
+            <li>Whether users choose to edit or proceed after warnings</li>
+            <li>General accuracy metrics to improve detection</li>
+        </ul>
+
+        <p><strong>We do NOT collect:</strong></p>
+        <ul>
+            <li>Your actual message content for RFD™ analysis storage</li>
+            <li>Individual pattern histories tied to you</li>
+            <li>Information about specific relationships or situations</li>
+        </ul>
 
         <h2>What We DON'T Do</h2>
 
@@ -238,6 +294,8 @@
             <li>Use your messages for advertising purposes</li>
             <li>Train AI models on your personal conversations without permission</li>
             <li>Share your information with social media platforms</li>
+            <li>Store RFD™ warnings or patterns tied to your identity</li>
+            <li>Use RFD™ data to make judgments about your relationships or mental health</li>
         </ul>
 
         <h2>Third-Party Services</h2>
@@ -245,7 +303,7 @@
         <p>We use the following trusted third-party services:</p>
 
         <h3>Anthropic (Claude AI)</h3>
-        <p>Your messages are processed through Anthropic's API to generate reframes. Anthropic has strict privacy policies and does not use API data to train their models. Learn more at <a href="https://www.anthropic.com/privacy" style="color: #FF7F50;">anthropic.com/privacy</a>.</p>
+        <p>Your messages are processed through Anthropic's API to generate reframes and perform RFD™ analysis. Anthropic has strict privacy policies and does not use API data to train their models. Your conversations are processed in real-time and not stored by Anthropic. Learn more at <a href="https://www.anthropic.com/privacy" style="color: #FF7F50;">anthropic.com/privacy</a>.</p>
 
         <h3>Netlify (Hosting)</h3>
         <p>Our website is hosted on Netlify's secure infrastructure. They handle basic website operations but do not have access to your messages.</p>
@@ -262,6 +320,7 @@
             <li><strong>Opt out:</strong> Unsubscribe from emails or stop using the service</li>
             <li><strong>Correct:</strong> Update any inaccurate information</li>
             <li><strong>Port:</strong> Request your data in a machine-readable format</li>
+            <li><strong>Transparency:</strong> Ask how RFD™ works or what patterns were detected in your messages</li>
         </ul>
 
         <p>To exercise any of these rights, email us at <a href="mailto:hello@wereframe.com" style="color: #FF7F50;">hello@wereframe.com</a>.</p>
@@ -271,14 +330,27 @@
         <p>We take security seriously:</p>
         <ul>
             <li>All data is transmitted over encrypted connections (HTTPS)</li>
+            <li>Messages are processed in real-time and immediately deleted after reframing</li>
             <li>We use industry-standard security practices</li>
             <li>Access to data is limited to essential personnel only</li>
             <li>We regularly review and update our security measures</li>
+            <li>RFD™ analysis is performed server-side and never stored on your device</li>
         </ul>
 
         <div class="highlight">
             <strong>However:</strong> No system is 100% secure. While we do our best to protect your data, we cannot guarantee absolute security. Use reFrame with the understanding that any data transmitted online carries some risk.
         </div>
+
+        <h2>Limitations of Liability</h2>
+
+        <p>By using reFrame and RFD™, you acknowledge that:</p>
+        <ul>
+            <li>reFrame is an educational tool, not professional therapy or counseling</li>
+            <li>RFD™ detection is based on communication patterns, not mental health diagnosis</li>
+            <li>We are not responsible for the outcomes of conversations, even when using our reframes</li>
+            <li>If you are experiencing abuse, harassment, or safety concerns, please contact appropriate authorities or crisis resources</li>
+            <li>reFrame is not a substitute for professional help in cases of domestic violence, mental health crises, or legal matters</li>
+        </ul>
 
         <h2>Children's Privacy</h2>
 
@@ -300,7 +372,7 @@
 
         <h2>Changes to This Policy</h2>
 
-        <p>We may update this Privacy Policy from time to time. If we make significant changes, we'll notify you via:</p>
+        <p>We may update this Privacy Policy from time to time, including updates to how RFD™ works or what data we collect. If we make significant changes, we'll notify you via:</p>
         <ul>
             <li>A notice on our website</li>
             <li>Email (if you've provided one)</li>
@@ -330,15 +402,27 @@
             <li>Right to object to processing</li>
         </ul>
 
+        <h2>Research and Development</h2>
+
+        <p>We may use anonymized, aggregated data (including RFD™ pattern statistics) for research purposes to:</p>
+        <ul>
+            <li>Improve the accuracy of toxic pattern detection</li>
+            <li>Publish academic research on communication patterns (always anonymized)</li>
+            <li>Partner with research institutions like the Gottman Institute</li>
+            <li>Contribute to the broader understanding of healthy communication</li>
+        </ul>
+
+        <p>This research never includes personally identifiable information or actual message content.</p>
+
         <h2>Contact Us</h2>
 
-        <p>If you have questions about this Privacy Policy or how we handle your data:</p>
+        <p>If you have questions about this Privacy Policy, how we handle your data, or how RFD™ works:</p>
 
         <p><strong>Email:</strong> <a href="mailto:hello@wereframe.com" style="color: #FF7F50;">hello@wereframe.com</a></p>
         <p><strong>Website:</strong> <a href="https://wereframe.com" style="color: #FF7F50;">wereframe.com</a></p>
 
         <div class="highlight" style="margin-top: 40px;">
-            <strong>Our Promise:</strong> We're building reFrame to help people communicate better, not to exploit their data. Your privacy matters to us. If you ever have concerns, please reach out. We're here to help.
+            <strong>Our Promise:</strong> We're building reFrame to help people communicate better, not to exploit their data. Your privacy matters to us. RFD™ exists to educate and empower you, not to judge or surveil you. If you ever have concerns, please reach out. We're here to help.
         </div>
     </div>
 
