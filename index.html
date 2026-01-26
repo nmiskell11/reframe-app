@@ -68,34 +68,6 @@
         }
 
         .nav-links .cta {
-            /* Hamburger Menu Styles */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 5px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: white;
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 3px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
             background: white;
             color: #FF7F50;
             padding: 10px 20px;
@@ -720,38 +692,70 @@
             text-decoration: underline;
         }
         @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-links {
-                position: fixed;
-                right: -100%;
-                top: 68px;
-                flex-direction: column;
-                background-color: #FF7F50;
+            ...existing styles...
+            .feedback-btn {
                 width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.15);
-                padding: 20px 0;
-                gap: 20px;
+            }
+        .rfd-modal {
+                width: 95%;
+                max-height: 90vh;
             }
 
-            .nav-links.active {
-                right: 0;
+            .rfd-header {
+                padding: 20px;
             }
 
-            .nav-links a {
-                font-size: 18px;
+            .rfd-header h2 {
+                font-size: 22px;
             }
 
-            nav {
+            .rfd-body {
+                padding: 20px;
+            }
+
+            .rfd-footer {
                 padding: 15px 20px;
+                flex-direction: column;
             }
 
-            .nav-logo {
+            .rfd-button {
+                width: 100%;
+            }
+            .nav-links {
+                gap: 15px;
+                font-size: 14px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero .tagline {
                 font-size: 24px;
+            }
+
+            .hero .principles {
+                font-size: 16px;
+            }
+
+            .tool-section {
+                padding: 40px 20px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .relationship-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feedback-buttons {
+                flex-direction: column;
+            }
+
+            .feedback-btn {
+                width: 100%;
             }
         }
     </style>
@@ -759,12 +763,7 @@
 <body>
     <nav>
         <div class="nav-logo">reFrame</div>
-        <div class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <div class="nav-links" id="navLinks">
+        <div class="nav-links">
             <a href="#tool">Try It</a>
             <a href="r3-framework.html">R³ Framework</a>
             <a href="manifesto.html">Manifesto</a>
@@ -1254,23 +1253,7 @@ document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
 
         // Analytics will be added here later when ready
         // For now, the site works perfectly without it
-// Mobile hamburger menu toggle
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
 
-        hamburger.addEventListener('click', function() {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-        
     </script>
 </body>
 </html>
