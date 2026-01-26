@@ -1073,6 +1073,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 }
 
                 const data = await response.json();
+console.log('API Response:', JSON.stringify(data, null, 2));
 
                 // CHECK FOR RFD ALERT
                 if (data.rfdAlert && data.rfdResult) {
