@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ | reFrame</title>
-    <meta name="description" content="Frequently asked questions about reFrame and the R³ Framework.">
+    <meta name="description" content="Frequently asked questions about reFrame, R³ Framework, and RFD™ Red Flag Detection.">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
         
@@ -100,6 +100,11 @@
             padding-bottom: 10px;
         }
 
+        .faq-section.rfd h2 {
+            color: #dc2626;
+            border-bottom: 2px solid #dc2626;
+        }
+
         .faq-item {
             margin-bottom: 30px;
             padding: 25px;
@@ -108,10 +113,19 @@
             border-left: 4px solid #FF7F50;
         }
 
+        .faq-item.rfd {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+        }
+
         .faq-item h3 {
             font-size: 20px;
             color: #FF7F50;
             margin-bottom: 12px;
+        }
+
+        .faq-item.rfd h3 {
+            color: #dc2626;
         }
 
         .faq-item p {
@@ -119,6 +133,10 @@
             line-height: 1.7;
             color: #555;
             margin-bottom: 10px;
+        }
+
+        .faq-item strong {
+            color: #333;
         }
 
         .cta-box {
@@ -207,21 +225,22 @@
             <div class="faq-item">
                 <h3>What is reFrame?</h3>
                 <p>reFrame is an AI-powered communication coach that helps you transform emotionally charged messages into dignity-first communication. Type your raw, honest thoughts, and reFrame provides a healthier version that preserves your feelings while building connection instead of conflict.</p>
+                <p>reFrame now includes RFD™ (Red Flag Detection) technology that analyzes your message for toxic patterns before reframing, helping you learn what to avoid in future communications.</p>
             </div>
 
             <div class="faq-item">
                 <h3>How does it work?</h3>
-                <p>Simply type the message you want to send (or wish you hadn't sent) into reFrame. Our AI, built on the R³ Framework (REGULATED, RESPECTFUL, REPAIRABLE), analyzes your message and provides a reframed version that:</p>
-                <p>• Keeps your authentic feelings and needs<br>
-                • Expresses them in a way that opens dialogue<br>
-                • Protects dignity for both parties<br>
-                • Creates space for repair and connection</p>
+                <p>Simply type the message you want to send (or wish you hadn't sent) into reFrame. Here's what happens:</p>
+                <p><strong>1. RFD™ Analysis:</strong> Your message is first analyzed for harmful patterns like criticism, contempt, gaslighting, or manipulation.<br>
+                <strong>2. Warning (if needed):</strong> If toxic patterns are found, you'll see an educational explanation of why they're harmful.<br>
+                <strong>3. Your Choice:</strong> You can edit your message or proceed to reframing.<br>
+                <strong>4. R³ Reframe:</strong> Our AI provides a version that keeps your authentic feelings but expresses them through REGULATED, RESPECTFUL, REPAIRABLE communication.</p>
                 <p>You can then copy the reframed message and use it in your actual conversation.</p>
             </div>
 
             <div class="faq-item">
                 <h3>Is my data private?</h3>
-                <p>Yes. We take privacy seriously. Your messages are processed to provide the reframe, but we don't store your personal conversations long-term. See our <a href="privacy.html" style="color: #FF7F50;">Privacy Policy</a> for full details.</p>
+                <p>Yes. We take privacy seriously. Your messages are processed to provide RFD™ analysis and the reframe, but we don't store your personal conversations long-term. We may retain anonymized, aggregated data (like "15% of messages contained criticism patterns") but never individual messages tied to you. See our <a href="privacy.html" style="color: #FF7F50;">Privacy Policy</a> for full details.</p>
             </div>
 
             <div class="faq-item">
@@ -232,6 +251,68 @@
             <div class="faq-item">
                 <h3>Can I use it on my phone?</h3>
                 <p>Yes! The web version works on any device with a browser. We're also building dedicated mobile apps for iOS and Android that will launch in 2026.</p>
+            </div>
+        </div>
+
+        <!-- About RFD™ Technology -->
+        <div class="faq-section rfd">
+            <h2>🚩 About RFD™ Technology</h2>
+
+            <div class="faq-item rfd">
+                <h3>What is RFD™?</h3>
+                <p>RFD™ (Red Flag Detection) is our proprietary AI-powered system that identifies toxic communication patterns in your message before you send it. It's built on 40+ years of Gottman Institute research on what predicts relationship failure.</p>
+            </div>
+
+            <div class="faq-item rfd">
+                <h3>What patterns does RFD™ detect?</h3>
+                <p>RFD™ looks for seven major toxic patterns:</p>
+                <p>• <strong>Criticism:</strong> Attacking character instead of addressing behavior<br>
+                • <strong>Contempt:</strong> Disrespect, mockery, superiority (most destructive)<br>
+                • <strong>Defensiveness:</strong> Playing victim, making excuses, counter-attacking<br>
+                • <strong>Stonewalling:</strong> Withdrawal, silent treatment, shutting down<br>
+                • <strong>Gaslighting:</strong> Denying reality, questioning someone's sanity<br>
+                • <strong>Manipulation:</strong> Guilt-tripping, emotional blackmail, conditional love<br>
+                • <strong>Threats:</strong> Ultimatums, abandonment threats, controlling behavior</p>
+            </div>
+
+            <div class="faq-item rfd">
+                <h3>How accurate is RFD™?</h3>
+                <p>RFD™ is based on patterns that predict relationship failure with 90%+ accuracy (according to Gottman Institute research). Our AI detection is constantly improving, currently operating at 85-90% accuracy based on user feedback. It's not perfect, but it catches most harmful patterns effectively.</p>
+            </div>
+
+            <div class="faq-item rfd">
+                <h3>What happens if RFD™ detects something in my message?</h3>
+                <p>You'll see a warning modal that shows:</p>
+                <p>• Which pattern(s) were detected<br>
+                • The severity level (low, medium, or high)<br>
+                • An explanation of why the pattern is harmful<br>
+                • A suggestion for a healthier approach</p>
+                <p>You then choose to either edit your message or continue to reframing. Either way, you're learning what to avoid.</p>
+            </div>
+
+            <div class="faq-item rfd">
+                <h3>Can I turn off RFD™?</h3>
+                <p>Not currently—RFD™ is a core part of the learning experience. However, you always have the choice to proceed to reframing after seeing a warning. Think of it like a seatbelt warning in a car: it alerts you, but you maintain control.</p>
+            </div>
+
+            <div class="faq-item rfd">
+                <h3>Is RFD™ judging me?</h3>
+                <p>No! RFD™ doesn't judge you as a person—it identifies communication patterns. We all use these patterns sometimes, especially when hurt or angry. RFD™ is there to help you notice them and learn healthier alternatives. It's education, not judgment.</p>
+            </div>
+
+            <div class="faq-item rfd">
+                <h3>What if RFD™ flags something that isn't actually harmful?</h3>
+                <p>RFD™ aims for high accuracy, but false positives can happen. If you believe a warning was incorrect, you can proceed to reframing. We're continuously improving detection based on feedback. If you notice consistent false positives, please let us know at hello@wereframe.com.</p>
+            </div>
+
+            <div class="faq-item rfd">
+                <h3>Does RFD™ diagnose abuse or mental health issues?</h3>
+                <p><strong>No.</strong> RFD™ identifies communication patterns, not mental health conditions or abuse. If you're experiencing abuse, manipulation, or safety concerns, please contact appropriate authorities or crisis resources. RFD™ is educational—it's not a diagnostic tool or substitute for professional help.</p>
+            </div>
+
+            <div class="faq-item rfd">
+                <h3>Will RFD™ help me recognize when others are being toxic?</h3>
+                <p>Currently, RFD™ analyzes YOUR messages, not others'. However, learning these patterns does help you recognize them in incoming communication. Future features may include detection of patterns in messages you paste from others, but our primary focus is helping you communicate better.</p>
             </div>
         </div>
 
@@ -250,12 +331,19 @@
 
             <div class="faq-item">
                 <h3>How is this different from other communication tools?</h3>
-                <p>Most tools check grammar or tone. reFrame teaches relationship psychology. We're not just making you sound nicer—we're teaching you to communicate in ways that strengthen relationships across generations. The R³ Framework is backed by decades of research on conflict resolution, psychological safety, and observational learning.</p>
+                <p>Most tools check grammar or tone. reFrame teaches relationship psychology through both positive modeling (R³) and pattern detection (RFD™). We're not just making you sound nicer—we're teaching you to communicate in ways that strengthen relationships across generations. The R³ Framework is backed by decades of research on conflict resolution, psychological safety, and observational learning.</p>
             </div>
 
             <div class="faq-item">
                 <h3>Do I need to understand R³ to use reFrame?</h3>
-                <p>Not at all! You can use reFrame without knowing anything about R³. Just type your message and get a better version. Over time, you'll naturally start noticing the patterns and internalizing the framework. Think of it as training wheels—you benefit immediately, and the learning happens organically.</p>
+                <p>Not at all! You can use reFrame without knowing anything about R³. Just type your message and get a better version. RFD™ will teach you what to avoid, and R³ will show you what to do instead. Over time, you'll naturally start noticing the patterns and internalizing the framework. Think of it as training wheels—you benefit immediately, and the learning happens organically.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do R³ and RFD™ work together?</h3>
+                <p><strong>RFD™ teaches what to avoid</strong> (criticism, contempt, etc.)<br>
+                <strong>R³ teaches what to do instead</strong> (regulated, respectful, repairable communication)</p>
+                <p>Together, they create a complete learning system: identify harmful patterns, then replace them with healthy ones.</p>
             </div>
         </div>
 
@@ -276,7 +364,7 @@
 
             <div class="faq-item">
                 <h3>Can I use this for work emails?</h3>
-                <p>Absolutely! reFrame works for professional communication too. Many users find it helpful for giving feedback, addressing conflicts with colleagues, or navigating difficult conversations with managers or clients.</p>
+                <p>Absolutely! reFrame works for professional communication too. Many users find it helpful for giving feedback, addressing conflicts with colleagues, or navigating difficult conversations with managers or clients. RFD™ is particularly valuable at work—catching contempt or threats before you send them to your boss could save your career.</p>
             </div>
 
             <div class="faq-item">
@@ -291,7 +379,13 @@
 
             <div class="faq-item">
                 <h3>How often should I use it?</h3>
-                <p>As often as you need! Some people use it daily, others weekly. Over time, you'll likely need it less as the R³ patterns become natural to you. That's the goal—we want you to outgrow the tool.</p>
+                <p>As often as you need! Some people use it daily, others weekly. Over time, you'll likely need it less as the R³ patterns become natural to you and you learn to avoid RFD™ triggers. That's the goal—we want you to outgrow the tool.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What should I do if RFD™ keeps flagging my messages?</h3>
+                <p>First, recognize that this is valuable feedback! If RFD™ consistently finds patterns in your communication, that's an opportunity to learn. Pay attention to which patterns appear most often—that's where you can focus your growth. Over time, you should see fewer warnings as you internalize healthier communication habits.</p>
+                <p>If patterns persist despite effort, consider working with a therapist or communication coach. RFD™ can identify issues, but professional support helps address their roots.</p>
             </div>
         </div>
 
@@ -301,8 +395,9 @@
 
             <div class="faq-item">
                 <h3>What's the science behind this?</h3>
-                <p>The R³ Framework is built on decades of research:</p>
-                <p>• <strong>Conflict Resolution (NIH):</strong> Avoiding conflict harms relationships more than addressing it constructively<br>
+                <p>The R³ Framework and RFD™ are built on decades of research:</p>
+                <p>• <strong>Gottman Institute (40+ years):</strong> RFD™ patterns predict relationship failure with 90%+ accuracy<br>
+                • <strong>Conflict Resolution (NIH):</strong> Avoiding conflict harms relationships more than addressing it constructively<br>
                 • <strong>Psychological Safety (Harvard):</strong> Teams with high psychological safety show better performance<br>
                 • <strong>Observational Learning (Bandura):</strong> Children learn behaviors by watching parents model them<br>
                 • <strong>Repair Research (Gottman):</strong> Successful relationships are repair-rich, not conflict-free</p>
@@ -310,12 +405,12 @@
 
             <div class="faq-item">
                 <h3>Why "generational cycles"?</h3>
-                <p>Children don't inherit beliefs—they inherit nervous systems. When they watch how parents handle conflict during the first 10 years of life, those patterns become their blueprint. By modeling R³ communication, you're teaching the next generation how to navigate disagreement healthily. That's how cycles break.</p>
+                <p>Children don't inherit beliefs—they inherit nervous systems. When they watch how parents handle conflict during the first 10 years of life, those patterns become their blueprint. By modeling R³ communication and avoiding RFD™ patterns, you're teaching the next generation how to navigate disagreement healthily. That's how cycles break.</p>
             </div>
 
             <div class="faq-item">
                 <h3>Is this just therapy?</h3>
-                <p>No, reFrame is not therapy and doesn't replace professional mental health support. Think of it as a communication coach—we help you express yourself better in specific moments. Therapy addresses deeper patterns, trauma, and mental health. Both can be valuable, and they complement each other.</p>
+                <p>No, reFrame is not therapy and doesn't replace professional mental health support. Think of it as a communication coach—we help you express yourself better in specific moments through R³ and teach you patterns to avoid through RFD™. Therapy addresses deeper patterns, trauma, and mental health. Both can be valuable, and they complement each other.</p>
             </div>
         </div>
 
@@ -325,17 +420,22 @@
 
             <div class="faq-item">
                 <h3>What AI does this use?</h3>
-                <p>reFrame is powered by Claude Sonnet 4, developed by Anthropic. We've specifically trained our prompts around the R³ Framework to ensure every reframe embodies REGULATED, RESPECTFUL, REPAIRABLE communication.</p>
+                <p>reFrame is powered by Claude Sonnet 4, developed by Anthropic. We've specifically trained our prompts around the R³ Framework to ensure every reframe embodies REGULATED, RESPECTFUL, REPAIRABLE communication, and around RFD™ to accurately detect toxic patterns.</p>
             </div>
 
             <div class="faq-item">
                 <h3>Can I save my conversations?</h3>
-                <p>Currently, messages are not saved automatically (to protect your privacy). We're building features to let users optionally save their reframes and track their progress over time. This will be opt-in—you'll always control your data.</p>
+                <p>Currently, messages are not saved automatically (to protect your privacy). We're building features to let users optionally save their reframes and track their progress over time, including RFD™ pattern reduction. This will be opt-in—you'll always control your data.</p>
             </div>
 
             <div class="faq-item">
                 <h3>Is there a limit to how much I can use it?</h3>
-                <p>While we're in beta, reFrame is free with no usage limits. When we launch paid tiers, there will be a free version with reasonable limits and a premium version with unlimited use.</p>
+                <p>While we're in beta, reFrame is free with no usage limits. When we launch paid tiers, there will be a free version with reasonable limits and a premium version with unlimited use and advanced RFD™ insights.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does RFD™ work in languages other than English?</h3>
+                <p>Currently, RFD™ is optimized for English. We're working on multi-language support for 2026. Toxic patterns exist across cultures, but they may manifest differently, so we're taking time to ensure accuracy.</p>
             </div>
         </div>
 
