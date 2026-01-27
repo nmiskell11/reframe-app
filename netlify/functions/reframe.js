@@ -1,5 +1,5 @@
-// netlify/functions/reframe.js
-// Enhanced with RFD™ (Red Flag Detection) Technology
+// reFrame Netlify Function with TWO-WAY RFD™ Protection
+// Detects toxic patterns in BOTH user's message AND context (what they received)
 
 const Anthropic = require('@anthropic-ai/sdk');
 
@@ -7,213 +7,145 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-// Relationship-specific tone adjustments
-const RELATIONSHIP_CONTEXTS = {
-  romantic_partner: {
-    tone: "intimate and vulnerable",
-    formality: "casual",
-    notes: "emphasize emotional connection and long-term relationship health. Use 'we' language where appropriate."
-  },
-  parent: {
-    tone: "respectful but clear",
-    formality: "moderate",
-    notes: "balance honoring the parent-child relationship with adult autonomy. Acknowledge their perspective while maintaining boundaries."
-  },
-  family: {
-    tone: "caring but clear",
-    formality: "casual to moderate",
-    notes: "balance family bonds with healthy boundaries. Recognize shared history while addressing current issues."
-  },
-  friend: {
-    tone: "honest and supportive",
-    formality: "casual",
-    notes: "preserve friendship while addressing issues directly. Friends can handle honesty delivered with care."
-  },
-  manager: {
-    tone: "professional and respectful",
-    formality: "formal",
-    notes: "maintain professionalism while being clear about needs and concerns. Focus on solutions and collaboration."
-  },
-  direct_report: {
-    tone: "supportive and constructive",
-    formality: "professional but approachable",
-    notes: "balance authority with empathy and growth mindset. Create psychological safety while addressing performance."
-  },
-  colleague: {
-    tone: "collaborative and respectful",
-    formality: "professional",
-    notes: "maintain working relationship while addressing concerns. Focus on team success and mutual respect."
-  },
-  client: {
-    tone: "professional and solution-oriented",
-    formality: "formal",
-    notes: "prioritize customer satisfaction while setting appropriate boundaries. Be responsive and solution-focused."
-  },
-  neighbor: {
-    tone: "friendly but firm",
-    formality: "casual to moderate",
-    notes: "maintain community harmony while addressing issues. Balance friendliness with clear boundaries."
-  },
-  child: {
-    tone: "patient and teaching-oriented",
-    formality: "simple and clear",
-    notes: "model healthy communication and emotional regulation for learning. Explain feelings and needs age-appropriately."
-  },
-  general: {
-    tone: "respectful and clear",
-    formality: "moderate",
-    notes: "standard dignity-first communication that works in most contexts."
-  }
+// Gottman's Four Horsemen + Extended Patterns
+const TOXIC_PATTERNS = {
+  CRITICISM: 'Attacking character instead of addressing behavior',
+  CONTEMPT: 'Disrespect, mockery, superiority (most destructive pattern)',
+  DEFENSIVENESS: 'Playing victim, making excuses, counter-attacking',
+  STONEWALLING: 'Withdrawal, silent treatment, shutting down',
+  GASLIGHTING: 'Denying reality, questioning sanity, invalidating perception',
+  MANIPULATION: 'Guilt-tripping, emotional blackmail, conditional love',
+  THREATS: 'Ultimatums, abandonment threats, controlling behavior'
 };
 
-// RFD™ DETECTION SYSTEM
-// Based on Gottman Institute's research on relationship-damaging communication patterns
+// TWO-WAY RFD™ DETECTION
+async function detectRedFlags(message, context = null) {
+  const detectionPrompt = `You are RFD™ (Red Flag Detection), an AI system built on 40+ years of Gottman Institute research.
 
-async function detectRedFlags(message, context) {
-  const detectionPrompt = `You are RFD™ (Red Flag Detection), a system that identifies potentially harmful communication patterns based on the Gottman Institute's research.
+CRITICAL: Analyze BOTH the user's message AND the context (if provided) SEPARATELY.
 
-Analyze the following message for these toxic patterns:
+**CONTEXT (what they received):**
+${context || 'No context provided'}
 
-THE FOUR HORSEMEN (Gottman Institute):
-1. CRITICISM - Attacking character/personality rather than specific behavior
-   Examples: "You're so selfish", "You never think of anyone but yourself", "You're a terrible person"
-   vs. Healthy: "I felt hurt when you didn't call" (behavior-specific)
-
-2. CONTEMPT - The most destructive. Disrespect, mockery, sarcasm, name-calling, eye-rolling, sneering
-   Examples: "You're pathetic", "Are you stupid?", mockery, insults, superiority
-   
-3. DEFENSIVENESS - Playing victim, making excuses, cross-complaining, whining
-   Examples: "It's not my fault", "Well YOU do it too", "I wouldn't do that if you didn't..."
-   
-4. STONEWALLING - Withdrawal, silent treatment, shutting down communication
-   Examples: "I'm done talking", "Whatever", refusing to engage, cold shoulder
-
-ADDITIONAL TOXIC PATTERNS:
-5. GASLIGHTING - Denying reality, questioning sanity, rewriting history
-   Examples: "That never happened", "You're crazy", "You're too sensitive", "You're imagining things"
-   
-6. MANIPULATION - Guilt-tripping, emotional blackmail, conditional love/approval
-   Examples: "If you loved me you would...", "After all I've done for you...", "You're making me do this"
-   
-7. THREATS & ULTIMATUMS - Abandonment threats, consequences, controlling behavior
-   Examples: "If you don't... then I'll...", "I'm leaving", "You'll regret this"
-
-${context ? `CONTEXT (what they said):
-${context}
-
-This context may help understand if the message is a response to harmful behavior. Even so, responding with toxic patterns continues the cycle.
-` : ''}
-
-MESSAGE TO ANALYZE:
+**USER'S MESSAGE (what they want to send):**
 ${message}
 
-Respond in this EXACT JSON format (no other text):
+**Your task:**
+1. Analyze the CONTEXT for toxic patterns (gaslighting, manipulation, contempt, etc.)
+2. Analyze the USER'S MESSAGE for toxic patterns
+3. Return SEPARATE detections for each
+
+**Toxic Patterns to Detect:**
+- CRITICISM: Attacking character ("you're selfish") vs behavior ("you were late")
+- CONTEMPT: Disrespect, mockery, eye-rolling, superiority, name-calling
+- DEFENSIVENESS: "Yes, but...", making excuses, playing victim
+- STONEWALLING: Refusing to engage, silent treatment, shutting down
+- GASLIGHTING: "That never happened", "you're crazy", denying their reality
+- MANIPULATION: Guilt trips, "if you loved me...", emotional blackmail
+- THREATS: "I'm leaving", ultimatums, controlling behavior
+
+**Return JSON:**
 {
-  "hasRedFlags": true/false,
-  "severity": "none/low/medium/high",
-  "patterns": [list of pattern names detected],
-  "explanation": "Brief explanation of what was detected and why it's harmful (2-3 sentences max)",
-  "suggestion": "One sentence suggesting a healthier approach"
+  "inboundDetection": {
+    "hasRedFlags": true/false,
+    "patterns": ["GASLIGHTING", "MANIPULATION"],
+    "severity": "low"/"medium"/"high",
+    "explanation": "Why these patterns are harmful to the USER",
+    "validation": "Message validating user's perception",
+    "suggestion": "How to respond to this toxic behavior"
+  },
+  "outboundDetection": {
+    "hasRedFlags": true/false,
+    "patterns": ["CRITICISM"],
+    "severity": "low"/"medium"/"high",
+    "explanation": "Why these patterns are harmful",
+    "suggestion": "Healthier way to express the same feeling"
+  }
 }
 
-If NO red flags detected, return:
-{
-  "hasRedFlags": false,
-  "severity": "none",
-  "patterns": [],
-  "explanation": "",
-  "suggestion": ""
-}`;
+**IMPORTANT:**
+- If context shows gaslighting, VALIDATE the user's reality
+- Inbound = patterns in what THEY said (context)
+- Outbound = patterns in what USER wants to send
+- Both can be true simultaneously
+- Always return both objects even if one has no red flags`;
 
   try {
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 500,
+      max_tokens: 2000,
+      temperature: 0.3,
       messages: [
         {
           role: 'user',
           content: detectionPrompt
         }
-      ],
+      ]
     });
 
-    const resultText = response.content[0].text.trim();
-    
-    // Clean up JSON (remove markdown code blocks if present)
-    const cleanedText = resultText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    
-    return JSON.parse(cleanedText);
-    
+    const textContent = response.content.find(block => block.type === 'text');
+    if (!textContent) {
+      return { inboundDetection: { hasRedFlags: false }, outboundDetection: { hasRedFlags: false } };
+    }
+
+    // Parse JSON response
+    const cleanedText = textContent.text
+      .replace(/```json\n?/g, '')
+      .replace(/```\n?/g, '')
+      .trim();
+
+    const detection = JSON.parse(cleanedText);
+    return detection;
+
   } catch (error) {
     console.error('RFD Detection Error:', error);
-    // Fail open - don't block reframing if detection fails
-    return {
-      hasRedFlags: false,
-      severity: "none",
-      patterns: [],
-      explanation: "",
-      suggestion: ""
-    };
+    return { inboundDetection: { hasRedFlags: false }, outboundDetection: { hasRedFlags: false } };
   }
 }
 
-function buildEnhancedPrompt(message, context, relationshipType, rfdResult) {
-  const relContext = RELATIONSHIP_CONTEXTS[relationshipType] || RELATIONSHIP_CONTEXTS.general;
+// Enhanced reframing with context awareness
+async function enhancedReframe(message, context, relationshipType, rfdResults) {
+  const inboundFlags = rfdResults.inboundDetection?.hasRedFlags;
+  const outboundFlags = rfdResults.outboundDetection?.hasRedFlags;
+
+  let systemContext = '';
   
-  let prompt = `You are reFrame, an AI communication coach built on the R³ Framework: REGULATED, RESPECTFUL, REPAIRABLE.
-
-Your mission: Transform emotionally charged messages into dignity-first communication that strengthens relationships instead of damaging them.
-
-RELATIONSHIP CONTEXT:
-- Speaking to: ${relationshipType.replace('_', ' ')}
-- Appropriate tone: ${relContext.tone}
-- Formality level: ${relContext.formality}
-- Key consideration: ${relContext.notes}
-
-`;
-
-  // Include RFD context if red flags were detected
-  if (rfdResult && rfdResult.hasRedFlags) {
-    prompt += `⚠️ RFD™ DETECTED HARMFUL PATTERNS: ${rfdResult.patterns.join(', ')}
-The user has chosen to proceed with reframing despite these patterns. Your reframe should be ESPECIALLY careful to:
-- Remove all traces of the harmful patterns detected
-- Model healthy communication that addresses the underlying need
-- Show how to express the valid feelings WITHOUT the toxic delivery
-
-`;
+  if (inboundFlags) {
+    systemContext = `CRITICAL CONTEXT: The user is responding to toxic communication patterns (${rfdResults.inboundDetection.patterns.join(', ')}). 
+Your reframe should:
+1. Help them set boundaries
+2. Validate their perception
+3. Protect their dignity
+4. NOT engage with the toxicity directly
+5. Model healthy communication despite what they received`;
   }
 
-  if (context) {
-    prompt += `CONVERSATION CONTEXT (what they said or the situation):
-${context}
-
-`;
+  if (outboundFlags) {
+    systemContext += `\nThe user's draft contains patterns: ${rfdResults.outboundDetection.patterns.join(', ')}. Remove these while preserving their authentic feelings.`;
   }
 
-  prompt += `ORIGINAL MESSAGE (what the user wants to say):
-${message}
+  const prompt = `${systemContext}
 
-R³ FRAMEWORK PRINCIPLES:
-1. REGULATED - Pause before reacting. Process emotions before responding. Strong feelings are signals, not commands.
-2. RESPECTFUL - Protect human dignity even in disagreement. Separate person from position. No attacking worth.
-3. REPAIRABLE - Communicate in ways that leave room for reconnection. Own impact, apologize when needed, prioritize relationship over being right.
+Reframe this message using R³ Framework:
+- REGULATED: Calm, not reactive
+- RESPECTFUL: Protects dignity
+- REPAIRABLE: Leaves room for connection
 
-REFRAMING GUIDELINES:
-- Keep the user's authentic feelings and needs
-- Use "I" statements ("I feel..." not "You always...")
-- Describe impact without attributing intent
-- Express what you need clearly without demands
-- Show vulnerability appropriately for the relationship type
-- Maintain dignity for both parties
-- Create openings for dialogue
-- Match the ${relContext.formality} formality level
-- Use a ${relContext.tone} tone
+**Relationship:** ${relationshipType}
+**Context:** ${context || 'None provided'}
+**Message:** ${message}
 
-${context ? "Consider the conversation context provided when crafting your response. Address what they said directly while reframing the user's reaction constructively." : ""}
+Return ONLY the reframed message. No explanation. Keep it authentic to their voice.`;
 
-Provide ONLY the reframed message - no preamble, no explanation, no quotation marks. Write it ready to send.`;
+  const response = await anthropic.messages.create({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1000,
+    temperature: 0.7,
+    messages: [{ role: 'user', content: prompt }]
+  });
 
-  return prompt;
+  const textContent = response.content.find(block => block.type === 'text');
+  return textContent ? textContent.text.trim() : message;
 }
 
 exports.handler = async (event) => {
@@ -222,9 +154,9 @@ exports.handler = async (event) => {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
   };
 
-  // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
@@ -233,111 +165,106 @@ exports.handler = async (event) => {
     return {
       statusCode: 405,
       headers,
-      body: JSON.stringify({ error: 'Method not allowed' }),
+      body: JSON.stringify({ error: 'Method not allowed' })
     };
   }
 
   try {
-    const { 
-      message, 
-      context, 
-      relationshipType = 'general', 
-      sessionId,
-      skipRFD = false // Allow bypassing RFD if user already saw warning
-    } = JSON.parse(event.body);
+    const { message, context, relationshipType = 'general', skipRFD = false } = JSON.parse(event.body);
 
     if (!message || message.trim().length === 0) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Message is required' }),
+        body: JSON.stringify({ error: 'Message is required' })
       };
     }
 
-    // RUN RFD™ DETECTION (unless user is re-submitting after seeing warning)
-    let rfdResult = null;
+    // TWO-WAY RFD™ DETECTION (unless skipped)
     if (!skipRFD) {
-      rfdResult = await detectRedFlags(message, context);
-      
-      // If red flags detected, return warning BEFORE reframing
-      if (rfdResult.hasRedFlags) {
-        console.log('RFD Alert:', {
-          sessionId,
-          severity: rfdResult.severity,
-          patterns: rfdResult.patterns,
-          timestamp: new Date().toISOString()
-        });
+      const rfdResults = await detectRedFlags(message, context);
 
+      // Priority: Show INBOUND detection first (more critical for user safety)
+      if (rfdResults.inboundDetection?.hasRedFlags) {
         return {
           statusCode: 200,
           headers,
           body: JSON.stringify({
             rfdAlert: true,
-            rfdResult: rfdResult,
-            message: 'Red flags detected - user must acknowledge before proceeding'
-          }),
+            rfdResult: {
+              source: 'inbound',
+              detectedIn: 'context',
+              hasRedFlags: true,
+              severity: rfdResults.inboundDetection.severity,
+              patterns: rfdResults.inboundDetection.patterns,
+              explanation: rfdResults.inboundDetection.explanation,
+              validation: rfdResults.inboundDetection.validation,
+              suggestion: rfdResults.inboundDetection.suggestion
+            }
+          })
         };
       }
+
+      // If no inbound issues, check OUTBOUND
+      if (rfdResults.outboundDetection?.hasRedFlags) {
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            rfdAlert: true,
+            rfdResult: {
+              source: 'outbound',
+              detectedIn: 'message',
+              hasRedFlags: true,
+              severity: rfdResults.outboundDetection.severity,
+              patterns: rfdResults.outboundDetection.patterns,
+              explanation: rfdResults.outboundDetection.explanation,
+              suggestion: rfdResults.outboundDetection.suggestion
+            }
+          })
+        };
+      }
+
+      // No red flags detected, proceed with enhanced reframing
+      const reframed = await enhancedReframe(message, context, relationshipType, rfdResults);
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          reframed,
+          relationshipType,
+          usedContext: !!context,
+          rfdResult: null
+        })
+      };
+
+    } else {
+      // RFD skipped (user chose to proceed after warning)
+      const rfdResults = { inboundDetection: { hasRedFlags: false }, outboundDetection: { hasRedFlags: false } };
+      const reframed = await enhancedReframe(message, context, relationshipType, rfdResults);
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          reframed,
+          relationshipType,
+          usedContext: !!context,
+          rfdSkipped: true
+        })
+      };
     }
 
-    // Build enhanced prompt with context
-    const systemPrompt = buildEnhancedPrompt(message, context, relationshipType, rfdResult);
-
-    // Call Claude API for reframing
-    const startTime = Date.now();
-    const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [
-        {
-          role: 'user',
-          content: systemPrompt
-        }
-      ],
-    });
-
-    const reframedMessage = response.content[0].text;
-    const apiResponseTime = Date.now() - startTime;
-
-    // Log analytics data
-    console.log('Analytics:', {
-      sessionId,
-      relationshipType,
-      hasContext: !!context,
-      rfdTriggered: !!rfdResult?.hasRedFlags,
-      rfdPatterns: rfdResult?.patterns || [],
-      inputLength: message.length,
-      outputLength: reframedMessage.length,
-      apiResponseTime,
-      timestamp: new Date().toISOString()
-    });
-
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({
-        reframed: reframedMessage,
-        relationshipType: relationshipType,
-        usedContext: !!context,
-        rfdResult: rfdResult,
-        metadata: {
-          apiResponseTime: apiResponseTime,
-          inputLength: message.length,
-          outputLength: reframedMessage.length
-        }
-      }),
-    };
-
   } catch (error) {
-    console.error('Error:', error);
-    
+    console.error('Function Error:', error);
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Failed to reframe message',
-        details: error.message,
-      }),
+        error: 'Internal server error',
+        details: error.message
+      })
     };
   }
 };
