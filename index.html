@@ -691,6 +691,56 @@
         .rfd-learn-more a:hover {
             text-decoration: underline;
         }
+
+        /* Two-Way RFD™ - Source Indicator */
+        .rfd-source {
+            background: #fff7ed;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #92400e;
+        }
+
+        .rfd-source.inbound {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+            color: #7f1d1d;
+        }
+
+        .rfd-source strong {
+            display: block;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        /* Validation section for inbound detection */
+        .rfd-validation {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .rfd-validation h4 {
+            color: #1e40af;
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rfd-validation p {
+            color: #1e3a8a;
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
         @media (max-width: 768px) {
             ...existing styles...
             .feedback-btn {
@@ -769,7 +819,7 @@
             <a href="manifesto.html">Manifesto</a>
             <a href="about.html">About</a>
             <a href="faq.html">FAQ</a>
-            <a href="mailto:hello@wereframe.com" class="cta">Contact</a>
+            <a href="/cdn-cgi/l/email-protection#b0d8d5dcdcdff0c7d5c2d5d6c2d1ddd59ed3dfdd" class="cta">Contact</a>
         </div>
     </nav>
 
@@ -919,15 +969,18 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         <div class="rfd-modal">
             <div class="rfd-header">
                 <div class="flag-icon">🚩</div>
-                <h2>RFD™ Alert</h2>
-                <p class="tagline">Red Flag Detection Technology</p>
+                <h2 id="rfdTitle">RFD™ Alert</h2>
+                <p class="tagline" id="rfdTagline">Red Flag Detection Technology</p>
             </div>
             
             <div class="rfd-body">
                 <span id="rfdSeverity" class="rfd-severity"></span>
                 
+                <!-- Detection Source Indicator -->
+                <div id="rfdSource" class="rfd-source" style="display: none;"></div>
+                
                 <div class="rfd-patterns">
-                    <h4>Patterns Detected</h4>
+                    <h4 id="rfdPatternsTitle">Patterns Detected</h4>
                     <ul id="rfdPatternsList"></ul>
                 </div>
                 
@@ -938,6 +991,12 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 <div class="rfd-suggestion">
                     <h4>💡 Healthier Approach</h4>
                     <p id="rfdSuggestion"></p>
+                </div>
+
+                <!-- Validation section (only for inbound detection) -->
+                <div id="rfdValidation" class="rfd-validation" style="display: none;">
+                    <h4>🛡️ Remember</h4>
+                    <p id="rfdValidationText"></p>
                 </div>
 
                 <div class="rfd-learn-more">
@@ -1106,13 +1165,49 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 loading.style.display = 'none';
             }
         }
-        // RFD™ Modal Functions
+        // RFD™ Modal Functions - TWO-WAY PROTECTION
         function showRFDModal(rfdResult) {
             const modal = document.getElementById('rfdModal');
+            const title = document.getElementById('rfdTitle');
+            const tagline = document.getElementById('rfdTagline');
+            const source = document.getElementById('rfdSource');
             const severity = document.getElementById('rfdSeverity');
+            const patternsTitle = document.getElementById('rfdPatternsTitle');
             const patternsList = document.getElementById('rfdPatternsList');
             const explanation = document.getElementById('rfdExplanation');
             const suggestion = document.getElementById('rfdSuggestion');
+            const validation = document.getElementById('rfdValidation');
+            const validationText = document.getElementById('rfdValidationText');
+
+            // Determine if this is inbound (context) or outbound (user message) detection
+            const isInbound = rfdResult.source === 'inbound' || rfdResult.detectedIn === 'context';
+            
+            // Update modal title and styling based on source
+            if (isInbound) {
+                title.textContent = '🛡️ RFD™ Inbound Alert';
+                tagline.textContent = 'Pattern detected in their message';
+                source.className = 'rfd-source inbound';
+                source.innerHTML = '<strong>⚠️ Detected in their message (context)</strong>This pattern appears in what they said to you, not in your response.';
+                source.style.display = 'block';
+                
+                patternsTitle.textContent = 'Patterns Detected in Their Message';
+                
+                // Show validation section for inbound
+                validation.style.display = 'block';
+                validationText.textContent = rfdResult.validation || 
+                    "Your perception is valid. These patterns are real. Trust yourself.";
+            } else {
+                title.textContent = 'RFD™ Alert';
+                tagline.textContent = 'Pattern detected in your message';
+                source.className = 'rfd-source';
+                source.innerHTML = '<strong>⚠️ Detected in your message</strong>These patterns may harm the relationship. Consider the healthier alternative below.';
+                source.style.display = 'block';
+                
+                patternsTitle.textContent = 'Patterns Detected in Your Message';
+                
+                // Hide validation section for outbound
+                validation.style.display = 'none';
+            }
 
             // Set severity badge
             severity.textContent = `${rfdResult.severity} severity`;
@@ -1247,13 +1342,7 @@ document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
 
         console.log('✅ Core functionality loaded');
 
-        // ============================================
-        // OPTIONAL ANALYTICS (Loaded last, can fail safely)
-        // ============================================
-
-        // Analytics will be added here later when ready
-        // For now, the site works perfectly without it
-
+        // ========================================
     </script>
 </body>
 </html>
