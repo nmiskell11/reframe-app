@@ -1137,33 +1137,42 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 combinedContext = `SITUATION: ${situationContext}`;
             }
             
-            // Determine which RFD checks to skip based on skipRFD parameter
+            // Determine which RFD checks to skip based on state
             let skipInbound = false;
             let skipOutbound = false;
             
+            console.log('[BEFORE CALC] skipRFD param:', skipRFD, 'lastRFDSource:', lastRFDSource);
+            
             if (skipRFD === true) {
-                // Skip both checks (final reframe)
-                skipInbound = true;
-                skipOutbound = true;
-            } else if (lastRFDSource === 'inbound') {
-                // Already showed inbound, skip it this time
-                skipInbound = true;
-                skipOutbound = false;
-            } else if (lastRFDSource === 'outbound') {
-                // Already showed outbound, skip both (shouldn't happen, but safe)
+                // Explicit skip requested - skip both
+                console.log('[SKIP LOGIC] skipRFD===true, skipping BOTH checks');
                 skipInbound = true;
                 skipOutbound = true;
             } else {
-                // First check, don't skip anything
-                skipInbound = false;
-                skipOutbound = false;
+                // skipRFD is false, check state
+                if (lastRFDSource === 'inbound') {
+                    // Already showed inbound, skip it this time, check outbound
+                    console.log('[SKIP LOGIC] lastRFDSource===inbound, skip inbound, check outbound');
+                    skipInbound = true;
+                    skipOutbound = false;
+                } else if (lastRFDSource === 'outbound') {
+                    // Already showed outbound - this shouldn't happen if modal logic is correct
+                    console.log('[SKIP LOGIC] lastRFDSource===outbound, skip BOTH (failsafe)');
+                    skipInbound = true;
+                    skipOutbound = true;
+                } else {
+                    // First check, check both
+                    console.log('[SKIP LOGIC] lastRFDSource===null, check BOTH');
+                    skipInbound = false;
+                    skipOutbound = false;
+                }
             }
             
-            console.log('RFD State:', { 
+            console.log('[AFTER CALC] Sending to backend:', { 
                 skipRFD, 
-                lastRFDSource, 
                 skipInbound, 
                 skipOutbound,
+                lastRFDSource,
                 hasContext: !!combinedContext
             });
             
@@ -1324,13 +1333,17 @@ console.log('API Response:', JSON.stringify(data, null, 2));
             } else if (lastRFDSource === 'outbound') {
                 // Just showed outbound, now skip all checks and reframe
                 skipRFD = true;
-                lastRFDSource = null; // Reset for next time
             } else {
                 // First check, don't skip
                 skipRFD = false;
             }
             
             console.log('Proceeding with skipRFD:', skipRFD, 'lastSource:', lastRFDSource);
+            
+            // Reset state AFTER if we're doing final reframe
+            if (skipRFD) {
+                lastRFDSource = null; // Reset for next use
+            }
             
             // Reframe with appropriate skip flag
             reframeMessage(skipRFD);
