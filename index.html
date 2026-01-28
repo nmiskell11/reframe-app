@@ -1271,12 +1271,6 @@ console.log('API Response:', JSON.stringify(data, null, 2));
 
             // Show modal
             modal.classList.add('visible');
-            
-            // Scroll the modal content itself to top (not the background page)
-            const modalBox = modal.querySelector('.rfd-modal');
-            if (modalBox) {
-                modalBox.scrollTop = 0;
-            }
         }
 
         function hideRFDModal() {
