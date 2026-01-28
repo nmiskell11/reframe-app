@@ -1212,6 +1212,10 @@ console.log('API Response:', JSON.stringify(data, null, 2));
             const validation = document.getElementById('rfdValidation');
             const validationText = document.getElementById('rfdValidationText');
 
+            // Store the source for state tracking
+            lastRFDSource = rfdResult.source || rfdResult.detectedIn === 'context' ? 'inbound' : 'outbound';
+            console.log('RFD Alert shown for:', lastRFDSource);
+
             // Determine if this is inbound (context) or outbound (user message) detection
             const isInbound = rfdResult.source === 'inbound' || rfdResult.detectedIn === 'context';
             
@@ -1266,16 +1270,38 @@ console.log('API Response:', JSON.stringify(data, null, 2));
             document.getElementById('rfdModal').classList.remove('visible');
         }
 
+        // RFD State Tracking
+        let lastRFDSource = null; // Track last alert: 'inbound' or 'outbound'
+
         // RFD Modal Event Listeners
         document.getElementById('rfdEdit').addEventListener('click', function() {
             hideRFDModal();
+            lastRFDSource = null; // Reset state
             document.getElementById('inputText').focus();
         });
 
         document.getElementById('rfdProceed').addEventListener('click', function() {
             hideRFDModal();
-            // Reframe with RFD bypass
-            reframeMessage(true);
+            
+            // Determine if we should skip RFD checks
+            let skipRFD = false;
+            
+            if (lastRFDSource === 'inbound') {
+                // Just showed inbound, now check outbound
+                skipRFD = false;
+            } else if (lastRFDSource === 'outbound') {
+                // Just showed outbound, now skip all checks and reframe
+                skipRFD = true;
+                lastRFDSource = null; // Reset for next time
+            } else {
+                // First check, don't skip
+                skipRFD = false;
+            }
+            
+            console.log('Proceeding with skipRFD:', skipRFD, 'lastSource:', lastRFDSource);
+            
+            // Reframe with appropriate skip flag
+            reframeMessage(skipRFD);
         });
 
         // Close modal if clicking outside
