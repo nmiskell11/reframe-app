@@ -232,8 +232,10 @@ exports.handler = async (event) => {
     }
 
     console.log('Request:', { 
-      hasMessage: true, 
+      hasMessage: true,
+      messageLength: message.length,
       hasContext: !!context,
+      contextPreview: context ? context.substring(0, 100) : 'none',
       relationshipType,
       skipRFD,
       checkedInbound
@@ -241,15 +243,20 @@ exports.handler = async (event) => {
 
     // STEP 1: Check INBOUND (their message) - only if we haven't already
     if (!skipRFD && !checkedInbound && context) {
+      console.log('STEP 1: Attempting inbound check...');
       let theirMessage = '';
       const theirMessageMatch = context.match(/THEIR MESSAGE:\s*"?([^"]*)"?(?:\n|$)/i);
+      console.log('Regex match result:', theirMessageMatch ? 'FOUND' : 'NOT FOUND');
+      
       if (theirMessageMatch) {
         theirMessage = theirMessageMatch[1].trim();
+        console.log('Their message extracted:', theirMessage.substring(0, 50) + '...');
       }
       
       if (theirMessage && theirMessage.length > 10) {
-        console.log('Checking inbound RFD...');
+        console.log('Checking inbound RFD on message length:', theirMessage.length);
         const inboundRFD = await detectRedFlags(theirMessage, 'inbound');
+        console.log('Inbound RFD result:', inboundRFD);
         
         if (inboundRFD.hasRedFlags) {
           console.log('Inbound alert:', inboundRFD.patterns);
@@ -265,13 +272,19 @@ exports.handler = async (event) => {
         } else {
           console.log('No inbound patterns found');
         }
+      } else {
+        console.log('Their message too short or missing:', theirMessage ? theirMessage.length : 'null');
       }
+    } else {
+      console.log('STEP 1 skipped:', { skipRFD, checkedInbound, hasContext: !!context });
     }
 
     // STEP 2: Check OUTBOUND (user's message) - only if not skipping
     if (!skipRFD) {
-      console.log('Checking outbound RFD...');
+      console.log('STEP 2: Checking outbound RFD on user message...');
+      console.log('User message preview:', message.substring(0, 50) + '...');
       const outboundRFD = await detectRedFlags(message, 'outbound');
+      console.log('Outbound RFD result:', outboundRFD);
       
       if (outboundRFD.hasRedFlags) {
         console.log('Outbound alert:', outboundRFD.patterns);
@@ -286,6 +299,8 @@ exports.handler = async (event) => {
       } else {
         console.log('No outbound patterns found');
       }
+    } else {
+      console.log('STEP 2 skipped: skipRFD=true');
     }
 
     // STEP 3: No patterns found (or skipping), do the reframe
