@@ -1,5 +1,5 @@
 // netlify/functions/reframe.js
-// Updated: Two-Way RFD™ Detection with Sequential Processing
+// SIMPLE Two-Way RFD Detection
 
 const Anthropic = require('@anthropic-ai/sdk');
 
@@ -7,7 +7,7 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-// Relationship-specific context for prompting
+// Relationship contexts (unchanged)
 const RELATIONSHIP_CONTEXTS = {
   romantic_partner: {
     tone: "intimate and vulnerable",
@@ -66,7 +66,7 @@ const RELATIONSHIP_CONTEXTS = {
   }
 };
 
-// RFD™ Detection Function - Analyzes a message for toxic patterns
+// RFD Detection Function
 async function detectRedFlags(message, source = 'outbound') {
   const detectionPrompt = `You are a relationship psychology expert analyzing communication patterns based on Dr. John Gottman's "Four Horsemen" research.
 
@@ -74,7 +74,7 @@ Analyze this message for toxic communication patterns:
 
 "${message}"
 
-PATTERNS TO DETECT (Gottman's Four Horsemen + Additional):
+PATTERNS TO DETECT:
 1. CRITICISM - Attacking character/personality rather than specific behavior
 2. CONTEMPT - Disrespect, mockery, sarcasm, superiority, name-calling (MOST destructive)
 3. DEFENSIVENESS - Playing victim, making excuses, counter-attacking, blame-shifting
@@ -90,7 +90,7 @@ Respond ONLY with valid JSON (no markdown, no code blocks):
   "patterns": ["PATTERN1", "PATTERN2"],
   "explanation": "Brief explanation of why these patterns are harmful",
   "suggestion": "Brief suggestion for healthier approach",
-  "validation": "Validation message if this is inbound (optional)"
+  "validation": "Validation message (only for inbound messages)"
 }
 
 If NO toxic patterns detected, return:
@@ -105,7 +105,6 @@ If NO toxic patterns detected, return:
 
     const textContent = response.content.find(block => block.type === 'text')?.text || '';
     
-    // Clean up response - remove markdown code blocks if present
     let cleanedText = textContent.trim();
     if (cleanedText.startsWith('```')) {
       cleanedText = cleanedText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
@@ -115,9 +114,7 @@ If NO toxic patterns detected, return:
     
     if (result.hasRedFlags) {
       result.source = source;
-      result.detectedIn = source === 'inbound' ? 'context' : 'message';
       
-      // Add validation for inbound messages
       if (source === 'inbound' && !result.validation) {
         result.validation = "Your perception is valid. These patterns are real. Trust yourself.";
       }
@@ -130,16 +127,14 @@ If NO toxic patterns detected, return:
   }
 }
 
-// Main reframing function
-async function reframeMessage(message, context, relationshipType, skipRFD) {
+// Reframing function
+async function reframeMessage(message, context, relationshipType) {
   const relationshipContext = RELATIONSHIP_CONTEXTS[relationshipType] || RELATIONSHIP_CONTEXTS.general;
   
-  // Parse context to check for inbound message
   let theirMessage = '';
   let situationContext = '';
   
   if (context) {
-    // Check if context has structured format
     const theirMessageMatch = context.match(/THEIR MESSAGE:\s*"?([^"]*)"?(?:\n|$)/i);
     const situationMatch = context.match(/SITUATION:\s*(.+)/is);
     
@@ -150,7 +145,6 @@ async function reframeMessage(message, context, relationshipType, skipRFD) {
       situationContext = situationMatch[1].trim();
     }
     
-    // If no structured format, treat entire context as situation
     if (!theirMessage && !situationContext) {
       situationContext = context;
     }
@@ -202,14 +196,12 @@ Respond with ONLY the reframed message (no preamble, no explanation).`;
 
 // Main handler
 exports.handler = async (event) => {
-  // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
 
-  // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
@@ -228,8 +220,7 @@ exports.handler = async (event) => {
       context, 
       relationshipType = 'general', 
       skipRFD = false,
-      skipInbound = false,
-      skipOutbound = false
+      checkedInbound = false  // NEW: Track if we already checked inbound
     } = JSON.parse(event.body);
 
     if (!message || message.trim() === '') {
@@ -240,52 +231,50 @@ exports.handler = async (event) => {
       };
     }
 
-    console.log('Processing request:', { 
-      messageLength: message.length, 
+    console.log('Request:', { 
+      hasMessage: true, 
       hasContext: !!context,
       relationshipType,
       skipRFD,
-      skipInbound,
-      skipOutbound
+      checkedInbound
     });
 
-    // STEP 1: Check for INBOUND red flags (in their message - from context)
-    if (!skipRFD && !skipInbound && context) {
-      // Parse to extract their actual message
+    // STEP 1: Check INBOUND (their message) - only if we haven't already
+    if (!skipRFD && !checkedInbound && context) {
       let theirMessage = '';
       const theirMessageMatch = context.match(/THEIR MESSAGE:\s*"?([^"]*)"?(?:\n|$)/i);
       if (theirMessageMatch) {
         theirMessage = theirMessageMatch[1].trim();
       }
       
-      // Only check inbound if we have their actual message
       if (theirMessage && theirMessage.length > 10) {
-        console.log('Checking inbound RFD on their message...');
+        console.log('Checking inbound RFD...');
         const inboundRFD = await detectRedFlags(theirMessage, 'inbound');
         
         if (inboundRFD.hasRedFlags) {
-          console.log('Inbound RFD alert triggered:', inboundRFD.patterns);
+          console.log('Inbound alert:', inboundRFD.patterns);
           return {
             statusCode: 200,
             headers,
             body: JSON.stringify({
               rfdAlert: true,
               rfdResult: inboundRFD,
+              checkedInbound: true  // Tell frontend we checked this
             }),
           };
+        } else {
+          console.log('No inbound patterns found');
         }
       }
     }
 
-    // STEP 2: Check for OUTBOUND red flags (in user's message)
-    // This runs AFTER inbound check (if user clicked "Continue to reFrame")
-    // OR if skipRFD=false and no inbound patterns found
-    if (!skipRFD && !skipOutbound) {
-      console.log('Checking outbound RFD on user message...');
+    // STEP 2: Check OUTBOUND (user's message) - only if not skipping
+    if (!skipRFD) {
+      console.log('Checking outbound RFD...');
       const outboundRFD = await detectRedFlags(message, 'outbound');
       
       if (outboundRFD.hasRedFlags) {
-        console.log('Outbound RFD alert triggered:', outboundRFD.patterns);
+        console.log('Outbound alert:', outboundRFD.patterns);
         return {
           statusCode: 200,
           headers,
@@ -294,12 +283,14 @@ exports.handler = async (event) => {
             rfdResult: outboundRFD,
           }),
         };
+      } else {
+        console.log('No outbound patterns found');
       }
     }
 
-    // STEP 3: No red flags detected (or skipRFD=true), proceed with reframing
-    console.log('No RFD patterns detected, proceeding with reframe...');
-    const reframed = await reframeMessage(message, context, relationshipType, skipRFD);
+    // STEP 3: No patterns found (or skipping), do the reframe
+    console.log('Proceeding with reframe');
+    const reframed = await reframeMessage(message, context, relationshipType);
 
     return {
       statusCode: 200,
@@ -308,7 +299,6 @@ exports.handler = async (event) => {
         reframed,
         relationshipType,
         usedContext: !!context,
-        rfdResult: null,
       }),
     };
 
