@@ -1137,6 +1137,36 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 combinedContext = `SITUATION: ${situationContext}`;
             }
             
+            // Determine which RFD checks to skip based on skipRFD parameter
+            let skipInbound = false;
+            let skipOutbound = false;
+            
+            if (skipRFD === true) {
+                // Skip both checks (final reframe)
+                skipInbound = true;
+                skipOutbound = true;
+            } else if (lastRFDSource === 'inbound') {
+                // Already showed inbound, skip it this time
+                skipInbound = true;
+                skipOutbound = false;
+            } else if (lastRFDSource === 'outbound') {
+                // Already showed outbound, skip both (shouldn't happen, but safe)
+                skipInbound = true;
+                skipOutbound = true;
+            } else {
+                // First check, don't skip anything
+                skipInbound = false;
+                skipOutbound = false;
+            }
+            
+            console.log('RFD State:', { 
+                skipRFD, 
+                lastRFDSource, 
+                skipInbound, 
+                skipOutbound,
+                hasContext: !!combinedContext
+            });
+            
             button.disabled = true;
             loading.style.display = 'block';
             outputSection.classList.remove('visible');
@@ -1153,7 +1183,9 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                         context: combinedContext || null,
                         relationshipType: relationshipType,
                         sessionId: currentSessionId,
-                        skipRFD: skipRFD === true
+                        skipRFD: skipRFD === true,
+                        skipInbound: skipInbound,
+                        skipOutbound: skipOutbound
                     })
                 });
 
