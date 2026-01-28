@@ -1271,6 +1271,9 @@ console.log('API Response:', JSON.stringify(data, null, 2));
 
             // Show modal
             modal.classList.add('visible');
+            
+            // Scroll to top smoothly so user can see the alert
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function hideRFDModal() {
