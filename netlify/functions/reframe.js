@@ -223,7 +223,14 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { message, context, relationshipType = 'general', skipRFD = false } = JSON.parse(event.body);
+    const { 
+      message, 
+      context, 
+      relationshipType = 'general', 
+      skipRFD = false,
+      skipInbound = false,
+      skipOutbound = false
+    } = JSON.parse(event.body);
 
     if (!message || message.trim() === '') {
       return {
@@ -237,11 +244,13 @@ exports.handler = async (event) => {
       messageLength: message.length, 
       hasContext: !!context,
       relationshipType,
-      skipRFD 
+      skipRFD,
+      skipInbound,
+      skipOutbound
     });
 
     // STEP 1: Check for INBOUND red flags (in their message - from context)
-    if (!skipRFD && context) {
+    if (!skipRFD && !skipInbound && context) {
       // Parse to extract their actual message
       let theirMessage = '';
       const theirMessageMatch = context.match(/THEIR MESSAGE:\s*"?([^"]*)"?(?:\n|$)/i);
@@ -271,7 +280,7 @@ exports.handler = async (event) => {
     // STEP 2: Check for OUTBOUND red flags (in user's message)
     // This runs AFTER inbound check (if user clicked "Continue to reFrame")
     // OR if skipRFD=false and no inbound patterns found
-    if (!skipRFD) {
+    if (!skipRFD && !skipOutbound) {
       console.log('Checking outbound RFD on user message...');
       const outboundRFD = await detectRedFlags(message, 'outbound');
       
