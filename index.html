@@ -1103,11 +1103,8 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             }
         }
 
-        // RFD State tracking
-        let checkedInbound = false; // Track if we already showed inbound alert
-
         async function reframeMessage(skipRFD = false) {
-            console.log('reframeMessage called, skipRFD:', skipRFD, 'checkedInbound:', checkedInbound);
+            console.log('reframeMessage called, skipRFD:', skipRFD);
             
             const inputText = document.getElementById('inputText').value.trim();
             
@@ -1156,8 +1153,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                         context: combinedContext || null,
                         relationshipType: relationshipType,
                         sessionId: currentSessionId,
-                        skipRFD: skipRFD === true,
-                        checkedInbound: checkedInbound
+                        skipRFD: skipRFD === true
                     })
                 });
 
@@ -1174,13 +1170,6 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 // CHECK FOR RFD ALERT
                 if (data.rfdAlert && data.rfdResult) {
                     console.log('RFD Alert triggered:', data.rfdResult);
-                    
-                    // Track if this was an inbound alert
-                    if (data.checkedInbound) {
-                        checkedInbound = true;
-                        console.log('Inbound alert shown, setting checkedInbound=true');
-                    }
-                    
                     showRFDModal(data.rfdResult);
                     button.disabled = false;
                     loading.style.display = 'none';
@@ -1285,20 +1274,8 @@ console.log('API Response:', JSON.stringify(data, null, 2));
 
         document.getElementById('rfdProceed').addEventListener('click', function() {
             hideRFDModal();
-            
-            // Determine if we should skip based on what we've shown
-            // If checkedInbound is true, we showed inbound, now show outbound (skipRFD=false)
-            // If checkedInbound is false, we just showed outbound, now skip and reframe (skipRFD=true)
-            const shouldSkip = !checkedInbound; // Skip only if we DIDN'T show inbound (meaning we just showed outbound)
-            
-            console.log('Continue clicked, checkedInbound:', checkedInbound, 'shouldSkip:', shouldSkip);
-            
-            // If we're skipping (final reframe), reset state for next time
-            if (shouldSkip) {
-                checkedInbound = false;
-            }
-            
-            reframeMessage(shouldSkip);
+            // Reframe with RFD bypass
+            reframeMessage(true);
         });
 
         // Close modal if clicking outside
