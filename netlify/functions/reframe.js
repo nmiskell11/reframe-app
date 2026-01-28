@@ -245,11 +245,14 @@ exports.handler = async (event) => {
     if (!skipRFD && !checkedInbound && context) {
       console.log('STEP 1: Attempting inbound check...');
       let theirMessage = '';
-      const theirMessageMatch = context.match(/THEIR MESSAGE:\s*"?([^"]*)"?(?:\n|$)/i);
+      // More flexible regex - handles: THEIR MESSAGE: text OR THEIR MESSAGE: "text" OR THEIR MESSAGE: ""text""
+      const theirMessageMatch = context.match(/THEIR MESSAGE:\s*["']*(.*?)["']*(?:\n\n|$)/is);
       console.log('Regex match result:', theirMessageMatch ? 'FOUND' : 'NOT FOUND');
       
       if (theirMessageMatch) {
         theirMessage = theirMessageMatch[1].trim();
+        // Remove any remaining quotes
+        theirMessage = theirMessage.replace(/^["']+|["']+$/g, '');
         console.log('Their message extracted:', theirMessage.substring(0, 50) + '...');
       }
       
