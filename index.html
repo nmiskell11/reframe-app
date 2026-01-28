@@ -278,11 +278,13 @@
         .collapsible-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0;
         }
 
         .collapsible-content.expanded {
-            max-height: 500px;
+            max-height: 800px;
+            padding-top: 15px;
         }
 
         .button {
@@ -904,15 +906,22 @@
                 </div>
 
                 <div class="section">
-                    <div class="collapsible-header" id="contextHeader">
+                    <div class="collapsible-header" id="contextHeader" style="cursor: pointer;">
                         <span class="arrow">▶</span>
-                        <label style="margin: 0; cursor: pointer;">Add conversation context <span class="optional">(optional but recommended)</span></label>
+                        <span style="margin: 0;">Add conversation context <span class="optional">(optional but recommended)</span></span>
                     </div>
                     <div class="collapsible-content" id="contextSection">
-                        <p class="help-text">Paste what they said or describe the situation. This helps reFrame understand the full picture and provide a more thoughtful response.</p>
-                        <textarea id="contextText" class="small" placeholder="Example: 'They texted: I'm tired of you being late to everything. It's disrespectful and I don't think you care about my time.'
-
-Or describe the situation: 'My boss criticized my presentation in front of the whole team without giving me a chance to explain.'"></textarea>
+                        <p class="help-text" style="margin-bottom: 15px;">Adding context helps reFrame understand the full picture and provide a more thoughtful, tailored response. You can provide one or both:</p>
+                        
+                        <label for="theirMessage" style="font-size: 14px; margin-bottom: 5px;">What did they say? (exact quote or paraphrase)</label>
+                        <textarea id="theirMessage" class="small" rows="3" placeholder="Paste their exact text, email, or what they said:
+'I'm tired of you being late to everything. It's disrespectful and I don't think you care about my time.'"></textarea>
+                        <p class="help-text" style="font-size: 12px; margin: 5px 0 15px 0;">💡 Exact quotes help RFD™ detect manipulation, gaslighting, or toxic patterns in <em>their</em> message</p>
+                        
+                        <label for="situationContext" style="font-size: 14px; margin-bottom: 5px;">Describe the situation (background or what happened)</label>
+                        <textarea id="situationContext" class="small" rows="3" placeholder="Provide background or context:
+'My boss criticized my presentation in front of the whole team without giving me a chance to explain.'"></textarea>
+                        <p class="help-text" style="font-size: 12px; margin: 5px 0 0 0;">💡 Situation details help us understand dynamics and craft a response that fits the circumstances</p>
                     </div>
                 </div>
 
@@ -1041,7 +1050,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             <div class="footer-section">
                 <h3>Get In Touch</h3>
                 <p>Questions? Feedback? Ideas?</p>
-                <a href="mailto:hello@wereframe.com">hello@wereframe.com</a>
+                <a href="/cdn-cgi/l/email-protection#234b464f4f4c63544651464551424e460d404c4e"><span class="__cf_email__" data-cfemail="761e131a1a1936011304131004171b135815191b">[email&#160;protected]</span></a>
                 <p style="margin-top: 15px; font-size: 12px; opacity: 0.7;">We read every message.</p>
             </div>
         </div>
@@ -1064,14 +1073,24 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         // CORE FUNCTIONALITY (Works without analytics)
         // ============================================
 
-        // Toggle context section
-        const contextHeader = document.getElementById('contextHeader');
-        const contextSection = document.getElementById('contextSection');
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, attaching event listeners...');
+            
+            // Toggle context section
+            const contextHeader = document.getElementById('contextHeader');
+            const contextSection = document.getElementById('contextSection');
 
-        contextHeader.addEventListener('click', function() {
-            console.log('Toggling context');
-            contextHeader.classList.toggle('expanded');
-            contextSection.classList.toggle('expanded');
+            if (contextHeader && contextSection) {
+                contextHeader.addEventListener('click', function() {
+                    console.log('Context header clicked!');
+                    contextHeader.classList.toggle('expanded');
+                    contextSection.classList.toggle('expanded');
+                });
+                console.log('Context toggle attached successfully');
+            } else {
+                console.error('Could not find contextHeader or contextSection');
+            }
         });
 
         function showError(message, show = true) {
@@ -1101,8 +1120,22 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             const outputSection = document.getElementById('outputSection');
             const feedbackSection = document.getElementById('feedbackSection');
             
-            const contextText = document.getElementById('contextText').value.trim();
+            const theirMessage = document.getElementById('theirMessage').value.trim();
+            const situationContext = document.getElementById('situationContext').value.trim();
             const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
+            
+            // Construct intelligent combined context for Claude
+            let combinedContext = '';
+            if (theirMessage && situationContext) {
+                // Both provided - structure clearly
+                combinedContext = `THEIR MESSAGE: "${theirMessage}"\n\nSITUATION: ${situationContext}`;
+            } else if (theirMessage) {
+                // Only their message
+                combinedContext = `THEIR MESSAGE: "${theirMessage}"`;
+            } else if (situationContext) {
+                // Only situation description
+                combinedContext = `SITUATION: ${situationContext}`;
+            }
             
             button.disabled = true;
             loading.style.display = 'block';
@@ -1117,7 +1150,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                     },
                     body: JSON.stringify({ 
                         message: inputText,
-                        context: contextText || null,
+                        context: combinedContext || null,
                         relationshipType: relationshipType,
                         sessionId: currentSessionId,
                         skipRFD: skipRFD === true
@@ -1334,15 +1367,12 @@ document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({
-                        behavior: 'smooth'
+                                behavior: 'smooth',
+                        block: 'start'
                     });
                 }
             });
         });
-
-        console.log('✅ Core functionality loaded');
-
-        // ========================================
     </script>
 </body>
 </html>
