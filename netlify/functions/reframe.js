@@ -74,49 +74,14 @@ Analyze this message for toxic communication patterns:
 
 "${message}"
 
-PATTERNS TO DETECT (be precise and avoid false positives):
-
-1. CRITICISM - Attacking character/personality rather than addressing specific behavior
-   - Examples: "You're so selfish", "You never think of anyone", "You always do this"
-   - NOT criticism: Expressing frustration about specific actions
-
-2. CONTEMPT - Disrespect, mockery, superiority, name-calling (MOST destructive)
-   - Examples: "You're pathetic", "You're stupid", "You're useless", mocking tone
-   - Severity: HIGH for direct insults, MEDIUM for dismissive superiority
-
-3. DEFENSIVENESS - Playing victim, making excuses, counter-attacking
-   - Examples: "It's not my fault", "You're the one who...", deflecting blame
-   - Includes BLAME-SHIFTING: Explicitly redirecting fault to others
-   - Must clearly shift blame or refuse responsibility
-
-4. STONEWALLING - Withdrawal, silent treatment, shutting down communication
-   - Examples: "I don't want to talk about it", "Whatever", refusing to engage
-   - Includes passive avoidance of addressing the issue
-
+PATTERNS TO DETECT:
+1. CRITICISM - Attacking character/personality rather than specific behavior
+2. CONTEMPT - Disrespect, mockery, sarcasm, superiority, name-calling (MOST destructive)
+3. DEFENSIVENESS - Playing victim, making excuses, counter-attacking, blame-shifting
+4. STONEWALLING - Withdrawal, silent treatment, shutting down
 5. GASLIGHTING - Denying reality, questioning sanity, rewriting history
-   - Examples: "That never happened", "You're making this up", "You're crazy"
-   - HIGH severity: Must actively deny the other person's reality
-
 6. MANIPULATION - Guilt-tripping, emotional blackmail, conditional love
-   - Examples: "If you loved me, you'd...", "After all I've done for you..."
-   - Must include emotional leverage or conditional affection
-   - NOT manipulation: Simple statements of needs or consequences
-
 7. THREATS - Ultimatums, abandonment threats, "or else" statements
-   - Examples: "I'll leave if you...", "You'll regret this", "I'll find someone else"
-   - Must include actual threat of action or consequence
-   - NOT threats: Statements about personal boundaries or limits
-
-IMPORTANT DISTINCTIONS:
-- Expressing frustration ≠ CRITICISM (unless attacking character)
-- Stating consequences ≠ THREATS (unless coercive or punitive)
-- Explaining one's position ≠ DEFENSIVENESS (unless deflecting blame)
-- Brief responses ≠ STONEWALLING (unless refusing engagement)
-
-SEVERITY GUIDELINES:
-- HIGH: Multiple patterns, direct attacks on character/worth, threats to relationship
-- MEDIUM: Clear pattern present but less severe, single pattern with strong intensity
-- LOW: Borderline pattern, could be misunderstanding, pattern is mild
 
 Respond ONLY with valid JSON (no markdown, no code blocks):
 {
