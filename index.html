@@ -1103,8 +1103,12 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             }
         }
 
+        // RFD State tracking
+        let checkedInbound = false; // Track if we already showed inbound alert
+        let lastAlertSource = null; // Track which alert we just showed: 'inbound' or 'outbound'
+
         async function reframeMessage(skipRFD = false) {
-            console.log('reframeMessage called, skipRFD:', skipRFD);
+            console.log('reframeMessage called, skipRFD:', skipRFD, 'checkedInbound:', checkedInbound, 'lastAlertSource:', lastAlertSource);
             
             const inputText = document.getElementById('inputText').value.trim();
             
@@ -1153,7 +1157,8 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                         context: combinedContext || null,
                         relationshipType: relationshipType,
                         sessionId: currentSessionId,
-                        skipRFD: skipRFD === true
+                        skipRFD: skipRFD === true,
+                        checkedInbound: checkedInbound
                     })
                 });
 
@@ -1170,6 +1175,16 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 // CHECK FOR RFD ALERT
                 if (data.rfdAlert && data.rfdResult) {
                     console.log('RFD Alert triggered:', data.rfdResult);
+                    
+                    // Track which alert we just showed
+                    lastAlertSource = data.rfdResult.source; // 'inbound' or 'outbound'
+                    
+                    // Track if this was an inbound alert
+                    if (data.checkedInbound) {
+                        checkedInbound = true;
+                        console.log('Inbound alert shown, setting checkedInbound=true');
+                    }
+                    
                     showRFDModal(data.rfdResult);
                     button.disabled = false;
                     loading.style.display = 'none';
@@ -1260,6 +1275,12 @@ console.log('API Response:', JSON.stringify(data, null, 2));
 
             // Show modal
             modal.classList.add('visible');
+            
+            // Scroll the modal content itself to top (not the background page)
+            const modalBox = modal.querySelector('.rfd-modal');
+            if (modalBox) {
+                modalBox.scrollTop = 0;
+            }
         }
 
         function hideRFDModal() {
@@ -1269,13 +1290,36 @@ console.log('API Response:', JSON.stringify(data, null, 2));
         // RFD Modal Event Listeners
         document.getElementById('rfdEdit').addEventListener('click', function() {
             hideRFDModal();
+            // Reset state
+            checkedInbound = false;
+            lastAlertSource = null;
             document.getElementById('inputText').focus();
         });
 
         document.getElementById('rfdProceed').addEventListener('click', function() {
             hideRFDModal();
-            // Reframe with RFD bypass
-            reframeMessage(true);
+            
+            // Determine what to do based on which alert we just showed
+            let shouldSkip = false;
+            
+            if (lastAlertSource === 'inbound') {
+                // Just showed inbound alert, now check outbound
+                shouldSkip = false;
+                console.log('Continue clicked after INBOUND, will check outbound');
+            } else if (lastAlertSource === 'outbound') {
+                // Just showed outbound alert, now skip all checks and reframe
+                shouldSkip = true;
+                console.log('Continue clicked after OUTBOUND, will skip and reframe');
+                // Reset state for next time
+                checkedInbound = false;
+                lastAlertSource = null;
+            } else {
+                // Shouldn't happen, but default to not skipping
+                shouldSkip = false;
+                console.log('Continue clicked with unknown lastAlertSource');
+            }
+            
+            reframeMessage(shouldSkip);
         });
 
         // Close modal if clicking outside
