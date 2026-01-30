@@ -1066,6 +1066,33 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
 
         console.log('reFrame initializing...');
 
+        // ============================================
+        // SESSION TOKEN MANAGEMENT (Anonymous User Tracking)
+        // ============================================
+        function getSessionToken() {
+            let token = localStorage.getItem('reframe_session_token');
+            if (!token) {
+                // Generate unique token: anon_[timestamp]_[random]
+                token = 'anon_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('reframe_session_token', token);
+                console.log('New session token created:', token);
+            } else {
+                console.log('Existing session token found:', token);
+            }
+            return token;
+        }
+
+        // Initialize session token on page load
+        const userSessionToken = getSessionToken();
+
+        // Helper function to clear session (for testing/debugging)
+        function clearSessionToken() {
+            localStorage.removeItem('reframe_session_token');
+            console.log('Session token cleared - reload page to create new user');
+        }
+        // Make it available in console for testing
+        window.clearSessionToken = clearSessionToken;
+
         // Session ID for analytics (if enabled later)
         const currentSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
@@ -1146,7 +1173,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             outputSection.classList.remove('visible');
 
             try {
-                console.log('Calling API...');
+                console.log('Calling API with session token:', userSessionToken);
                 const response = await fetch('/.netlify/functions/reframe', {
                     method: 'POST',
                     headers: {
@@ -1158,7 +1185,9 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                         relationshipType: relationshipType,
                         sessionId: currentSessionId,
                         skipRFD: skipRFD === true,
-                        checkedInbound: checkedInbound
+                        checkedInbound: checkedInbound,
+                        sessionToken: userSessionToken,  // NEW: Anonymous user tracking
+                        userId: null  // NEW: Will be populated when you add auth
                     })
                 });
 
@@ -1185,6 +1214,20 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                         console.log('Inbound alert shown, setting checkedInbound=true');
                     }
                     
+                    // ============================================
+                    // GOOGLE ANALYTICS - RFD DETECTION
+                    // ============================================
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'rfd_warning_shown', {
+                            'alert_type': data.rfdResult.source, // inbound or outbound
+                            'severity': data.rfdResult.severity,
+                            'patterns': data.rfdResult.patterns.join(','),
+                            'relationship_type': relationshipType,
+                            'session_token': userSessionToken
+                        });
+                        console.log('GA Event: rfd_warning_shown');
+                    }
+                    
                     showRFDModal(data.rfdResult);
                     button.disabled = false;
                     loading.style.display = 'none';
@@ -1204,6 +1247,20 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 });
 
                 console.log('Reframe successful');
+
+                // ============================================
+                // GOOGLE ANALYTICS EVENT TRACKING
+                // ============================================
+                if (typeof gtag !== 'undefined') {
+                    // Track successful reframe
+                    gtag('event', 'reframe_completed', {
+                        'relationship_type': relationshipType,
+                        'had_context': !!combinedContext,
+                        'message_length': inputText.length,
+                        'session_token': userSessionToken
+                    });
+                    console.log('GA Event: reframe_completed');
+                }
 
             } catch (error) {
                 console.error('Reframe error:', error);
@@ -1339,6 +1396,17 @@ document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
             btn.addEventListener('click', function() {
                 const feedbackType = this.getAttribute('data-feedback');
                 console.log('Feedback:', feedbackType);
+                
+                // ============================================
+                // GOOGLE ANALYTICS - R³ FEEDBACK
+                // ============================================
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'r3_feedback', {
+                        'feedback_type': feedbackType,
+                        'session_token': userSessionToken
+                    });
+                    console.log('GA Event: r3_feedback -', feedbackType);
+                }
                 
                 document.querySelectorAll('.feedback-btn').forEach(b => {
                     b.classList.remove('selected');
