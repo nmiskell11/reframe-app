@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Transform emotionally charged messages into dignity-first communication",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.32.1"
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@supabase/supabase-js": "^2.39.0"
   }
 }
