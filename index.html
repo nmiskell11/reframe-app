@@ -998,7 +998,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 </div>
                 
                 <div class="rfd-suggestion">
-                    <h4>💡 Healthier Approach</h4>
+                    <h4 id="rfdSuggestionHeader">💡 Healthier Approach</h4>
                     <p id="rfdSuggestion"></p>
                 </div>
 
@@ -1223,6 +1223,7 @@ console.log('API Response:', JSON.stringify(data, null, 2));
             const patternsTitle = document.getElementById('rfdPatternsTitle');
             const patternsList = document.getElementById('rfdPatternsList');
             const explanation = document.getElementById('rfdExplanation');
+            const suggestionHeader = document.getElementById('rfdSuggestionHeader');
             const suggestion = document.getElementById('rfdSuggestion');
             const validation = document.getElementById('rfdValidation');
             const validationText = document.getElementById('rfdValidationText');
@@ -1232,26 +1233,28 @@ console.log('API Response:', JSON.stringify(data, null, 2));
             
             // Update modal title and styling based on source
             if (isInbound) {
-                title.textContent = '🛡️ RFD™ Inbound Alert';
-                tagline.textContent = 'Pattern detected in their message';
+                title.textContent = '🛡️ Inbound RFD™ Alert';
+                tagline.textContent = 'Pattern detected in what they said to you';
                 source.className = 'rfd-source inbound';
-                source.innerHTML = '<strong>⚠️ Detected in their message (context)</strong>This pattern appears in what they said to you, not in your response.';
+                source.innerHTML = '<strong>⚠️ Analysis of their message</strong>This pattern appears in what they said to you. Below is how you can respond.';
                 source.style.display = 'block';
                 
-                patternsTitle.textContent = 'Patterns Detected in Their Message';
+                patternsTitle.textContent = 'What They\'re Using';
+                suggestionHeader.textContent = '💬 How You Can Respond';
                 
                 // Show validation section for inbound
                 validation.style.display = 'block';
                 validationText.textContent = rfdResult.validation || 
                     "Your perception is valid. These patterns are real. Trust yourself.";
             } else {
-                title.textContent = 'RFD™ Alert';
-                tagline.textContent = 'Pattern detected in your message';
+                title.textContent = '🚩 Outbound RFD™ Alert';
+                tagline.textContent = 'Pattern detected in what you\'re about to send';
                 source.className = 'rfd-source';
-                source.innerHTML = '<strong>⚠️ Detected in your message</strong>These patterns may harm the relationship. Consider the healthier alternative below.';
+                source.innerHTML = '<strong>⚠️ Analysis of your message</strong>These patterns may harm the relationship. Consider the healthier alternative below.';
                 source.style.display = 'block';
                 
-                patternsTitle.textContent = 'Patterns Detected in Your Message';
+                patternsTitle.textContent = 'What You\'re Using';
+                suggestionHeader.textContent = '💡 Healthier Way to Say It';
                 
                 // Hide validation section for outbound
                 validation.style.display = 'none';
