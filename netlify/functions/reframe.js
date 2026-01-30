@@ -1,11 +1,18 @@
 // netlify/functions/reframe.js
-// SIMPLE Two-Way RFD Detection
+// Two-Way RFD Detection WITH Supabase Tracking
 
 const Anthropic = require('@anthropic-ai/sdk');
+const { createClient } = require('@supabase/supabase-js');
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
+
+// Initialize Supabase (using service role for backend operations)
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY // Service role bypasses RLS, needed for backend
+);
 
 // Relationship contexts (unchanged)
 const RELATIONSHIP_CONTEXTS = {
@@ -66,13 +73,11 @@ const RELATIONSHIP_CONTEXTS = {
   }
 };
 
-// RFD Detection Function
+// RFD Detection Function (unchanged logic)
 async function detectRedFlags(message, source = 'outbound') {
-  // Different prompts for inbound vs outbound
   let detectionPrompt;
   
   if (source === 'inbound') {
-    // INBOUND: Analyzing what THEY said to the USER
     detectionPrompt = `You are a relationship psychology expert analyzing communication patterns based on Dr. John Gottman's "Four Horsemen" research.
 
 CRITICAL CONTEXT: You are analyzing a message that the USER RECEIVED from someone else. Your job is to:
@@ -111,7 +116,6 @@ Example RIGHT: "They're expressing hurt through criticism. You can acknowledge t
 If NO toxic patterns detected, return:
 {"hasRedFlags": false}`;
   } else {
-    // OUTBOUND: Analyzing what the USER is about to send
     detectionPrompt = `You are a relationship psychology expert analyzing communication patterns based on Dr. John Gottman's "Four Horsemen" research.
 
 CRITICAL CONTEXT: You are analyzing a message that the USER is about to SEND. Your job is to:
@@ -176,7 +180,7 @@ If NO toxic patterns detected, return:
   }
 }
 
-// Reframing function
+// Reframing function (unchanged)
 async function reframeMessage(message, context, relationshipType) {
   const relationshipContext = RELATIONSHIP_CONTEXTS[relationshipType] || RELATIONSHIP_CONTEXTS.general;
   
@@ -243,7 +247,7 @@ Respond with ONLY the reframed message (no preamble, no explanation).`;
   }
 }
 
-// Main handler
+// Main handler (UPDATED with Supabase tracking)
 exports.handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -269,7 +273,9 @@ exports.handler = async (event) => {
       context, 
       relationshipType = 'general', 
       skipRFD = false,
-      checkedInbound = false  // NEW: Track if we already checked inbound
+      checkedInbound = false,
+      sessionToken = null,  // NEW: For tracking anonymous users
+      userId = null         // NEW: For authenticated users (future)
     } = JSON.parse(event.body);
 
     if (!message || message.trim() === '') {
@@ -287,20 +293,48 @@ exports.handler = async (event) => {
       contextPreview: context ? context.substring(0, 100) : 'none',
       relationshipType,
       skipRFD,
-      checkedInbound
+      checkedInbound,
+      hasSessionToken: !!sessionToken
     });
 
-    // STEP 1: Check INBOUND (their message) - only if we haven't already
+    // ========================================
+    // NEW: Create session record in Supabase
+    // ========================================
+    let sessionId = null;
+    try {
+      const { data: session, error: sessionError } = await supabase
+        .from('reframe_sessions')
+        .insert({
+          user_id: userId,
+          session_token: sessionToken,
+          relationship_type: relationshipType,
+          had_context: !!context && context.trim().length > 0,
+          context_length: context ? context.length : 0,
+          message_length: message.length
+        })
+        .select()
+        .single();
+
+      if (sessionError) {
+        console.error('Session creation error:', sessionError);
+        // Continue anyway - don't block user if DB fails
+      } else {
+        sessionId = session?.id;
+        console.log('Session created:', sessionId);
+      }
+    } catch (dbError) {
+      console.error('Database error (non-blocking):', dbError);
+    }
+
+    // STEP 1: Check INBOUND (their message)
     if (!skipRFD && !checkedInbound && context) {
       console.log('STEP 1: Attempting inbound check...');
       let theirMessage = '';
-      // More flexible regex - handles: THEIR MESSAGE: text OR THEIR MESSAGE: "text" OR THEIR MESSAGE: ""text""
       const theirMessageMatch = context.match(/THEIR MESSAGE:\s*["']*(.*?)["']*(?:\n\n|$)/is);
       console.log('Regex match result:', theirMessageMatch ? 'FOUND' : 'NOT FOUND');
       
       if (theirMessageMatch) {
         theirMessage = theirMessageMatch[1].trim();
-        // Remove any remaining quotes
         theirMessage = theirMessage.replace(/^["']+|["']+$/g, '');
         console.log('Their message extracted:', theirMessage.substring(0, 50) + '...');
       }
@@ -312,13 +346,41 @@ exports.handler = async (event) => {
         
         if (inboundRFD.hasRedFlags) {
           console.log('Inbound alert:', inboundRFD.patterns);
+
+          // ========================================
+          // NEW: Log inbound RFD detection to DB
+          // ========================================
+          if (sessionId) {
+            try {
+              await supabase.from('reframe_sessions').update({
+                rfd_inbound_triggered: true,
+                rfd_inbound_patterns: inboundRFD.patterns,
+                rfd_inbound_severity: inboundRFD.severity
+              }).eq('id', sessionId);
+
+              await supabase.from('rfd_detections').insert({
+                session_id: sessionId,
+                detection_type: 'inbound',
+                patterns_detected: inboundRFD.patterns,
+                severity: inboundRFD.severity,
+                explanation: inboundRFD.explanation,
+                suggestion: inboundRFD.suggestion,
+                user_saw_warning: true
+              });
+              console.log('Inbound RFD logged to database');
+            } catch (dbError) {
+              console.error('DB logging error (non-blocking):', dbError);
+            }
+          }
+
           return {
             statusCode: 200,
             headers,
             body: JSON.stringify({
               rfdAlert: true,
               rfdResult: inboundRFD,
-              checkedInbound: true  // Tell frontend we checked this
+              checkedInbound: true,
+              sessionId: sessionId  // NEW: Return session ID
             }),
           };
         } else {
@@ -331,7 +393,7 @@ exports.handler = async (event) => {
       console.log('STEP 1 skipped:', { skipRFD, checkedInbound, hasContext: !!context });
     }
 
-    // STEP 2: Check OUTBOUND (user's message) - only if not skipping
+    // STEP 2: Check OUTBOUND (user's message)
     if (!skipRFD) {
       console.log('STEP 2: Checking outbound RFD on user message...');
       console.log('User message preview:', message.substring(0, 50) + '...');
@@ -340,12 +402,40 @@ exports.handler = async (event) => {
       
       if (outboundRFD.hasRedFlags) {
         console.log('Outbound alert:', outboundRFD.patterns);
+
+        // ========================================
+        // NEW: Log outbound RFD detection to DB
+        // ========================================
+        if (sessionId) {
+          try {
+            await supabase.from('reframe_sessions').update({
+              rfd_outbound_triggered: true,
+              rfd_outbound_patterns: outboundRFD.patterns,
+              rfd_outbound_severity: outboundRFD.severity
+            }).eq('id', sessionId);
+
+            await supabase.from('rfd_detections').insert({
+              session_id: sessionId,
+              detection_type: 'outbound',
+              patterns_detected: outboundRFD.patterns,
+              severity: outboundRFD.severity,
+              explanation: outboundRFD.explanation,
+              suggestion: outboundRFD.suggestion,
+              user_saw_warning: true
+            });
+            console.log('Outbound RFD logged to database');
+          } catch (dbError) {
+            console.error('DB logging error (non-blocking):', dbError);
+          }
+        }
+
         return {
           statusCode: 200,
           headers,
           body: JSON.stringify({
             rfdAlert: true,
             rfdResult: outboundRFD,
+            sessionId: sessionId  // NEW: Return session ID
           }),
         };
       } else {
@@ -355,9 +445,22 @@ exports.handler = async (event) => {
       console.log('STEP 2 skipped: skipRFD=true');
     }
 
-    // STEP 3: No patterns found (or skipping), do the reframe
+    // STEP 3: No patterns found, do the reframe
     console.log('Proceeding with reframe');
     const reframed = await reframeMessage(message, context, relationshipType);
+
+    // ========================================
+    // NEW: Update session as completed
+    // ========================================
+    if (sessionId && userId) {
+      try {
+        // Increment user's total reframes (will create function for this)
+        await supabase.rpc('increment_user_reframes', { user_uuid: userId });
+        console.log('User reframe count incremented');
+      } catch (dbError) {
+        console.error('DB update error (non-blocking):', dbError);
+      }
+    }
 
     return {
       statusCode: 200,
@@ -366,6 +469,7 @@ exports.handler = async (event) => {
         reframed,
         relationshipType,
         usedContext: !!context,
+        sessionId: sessionId  // NEW: Return session ID for frontend tracking
       }),
     };
 
