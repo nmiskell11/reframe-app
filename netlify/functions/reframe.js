@@ -68,9 +68,20 @@ const RELATIONSHIP_CONTEXTS = {
 
 // RFD Detection Function
 async function detectRedFlags(message, source = 'outbound') {
-  const detectionPrompt = `You are a relationship psychology expert analyzing communication patterns based on Dr. John Gottman's "Four Horsemen" research.
+  // Different prompts for inbound vs outbound
+  let detectionPrompt;
+  
+  if (source === 'inbound') {
+    // INBOUND: Analyzing what THEY said to the USER
+    detectionPrompt = `You are a relationship psychology expert analyzing communication patterns based on Dr. John Gottman's "Four Horsemen" research.
 
-Analyze this message for toxic communication patterns:
+CRITICAL CONTEXT: You are analyzing a message that the USER RECEIVED from someone else. Your job is to:
+1. Identify toxic patterns in THEIR message (the one they received)
+2. Explain what's happening from the USER'S perspective (the recipient)
+3. Validate the user's perception if they're being manipulated/criticized
+4. Suggest how the USER can respond in a healthy way
+
+Analyze this message THE USER RECEIVED:
 
 "${message}"
 
@@ -88,13 +99,55 @@ Respond ONLY with valid JSON (no markdown, no code blocks):
   "hasRedFlags": true/false,
   "severity": "low"/"medium"/"high",
   "patterns": ["PATTERN1", "PATTERN2"],
-  "explanation": "Brief explanation of why these patterns are harmful",
-  "suggestion": "Brief suggestion for healthier approach",
-  "validation": "Validation message (only for inbound messages)"
+  "explanation": "Explain what THEY are doing and why it's harmful (from user's perspective as the RECIPIENT)",
+  "suggestion": "Suggest how the USER can respond to this message in a healthy way",
+  "validation": "Validate the user's perception: 'Your feelings about this are valid. [specific validation]'"
 }
+
+CRITICAL: Write all explanations and suggestions for the RECIPIENT (the user), NOT the sender.
+Example WRONG: "Express your feelings using I-statements" (this is advice for the sender)
+Example RIGHT: "They're expressing hurt through criticism. You can acknowledge their feelings while setting boundaries."
 
 If NO toxic patterns detected, return:
 {"hasRedFlags": false}`;
+  } else {
+    // OUTBOUND: Analyzing what the USER is about to send
+    detectionPrompt = `You are a relationship psychology expert analyzing communication patterns based on Dr. John Gottman's "Four Horsemen" research.
+
+CRITICAL CONTEXT: You are analyzing a message that the USER is about to SEND. Your job is to:
+1. Identify toxic patterns in THEIR message (the one they're about to send)
+2. Explain why these patterns are harmful to the relationship
+3. Suggest how THEY can express the same feelings in a healthier way
+
+Analyze this message THE USER IS ABOUT TO SEND:
+
+"${message}"
+
+PATTERNS TO DETECT:
+1. CRITICISM - Attacking character/personality rather than specific behavior
+2. CONTEMPT - Disrespect, mockery, sarcasm, superiority, name-calling (MOST destructive)
+3. DEFENSIVENESS - Playing victim, making excuses, counter-attacking, blame-shifting
+4. STONEWALLING - Withdrawal, silent treatment, shutting down
+5. GASLIGHTING - Denying reality, questioning sanity, rewriting history
+6. MANIPULATION - Guilt-tripping, emotional blackmail, conditional love
+7. THREATS - Ultimatums, abandonment threats, "or else" statements
+
+Respond ONLY with valid JSON (no markdown, no code blocks):
+{
+  "hasRedFlags": true/false,
+  "severity": "low"/"medium"/"high",
+  "patterns": ["PATTERN1", "PATTERN2"],
+  "explanation": "Explain why the patterns in THEIR message are harmful to the relationship",
+  "suggestion": "Suggest how THEY can express the same feelings/needs in a healthier way"
+}
+
+CRITICAL: Write all explanations and suggestions for the SENDER (the user), NOT the recipient.
+Example RIGHT: "Instead of attacking their character, express how their actions impact you"
+Example WRONG: "They should respond by setting boundaries" (this would be for the recipient)
+
+If NO toxic patterns detected, return:
+{"hasRedFlags": false}`;
+  }
 
   try {
     const response = await anthropic.messages.create({
@@ -114,10 +167,6 @@ If NO toxic patterns detected, return:
     
     if (result.hasRedFlags) {
       result.source = source;
-      
-      if (source === 'inbound' && !result.validation) {
-        result.validation = "Your perception is valid. These patterns are real. Trust yourself.";
-      }
     }
     
     return result;
