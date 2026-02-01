@@ -1388,8 +1388,10 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 hideRFDModal();
             }
         });
-        // Attach button event - NO PARAMETERS, NO PARENTHESES
-document.getElementById('reframeBtn').addEventListener('click', reframeMessage);
+        // Attach button event - Wrap to avoid passing event object as skipRFD
+        document.getElementById('reframeBtn').addEventListener('click', function() {
+            reframeMessage(false);
+        });
         
         // R³™ Feedback System
         document.querySelectorAll('.feedback-btn').forEach(btn => {
