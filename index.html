@@ -1023,6 +1023,34 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             </div>
         </div>
     </div>
+    
+    <!-- RELATIONSHIP HEALTH ALERT MODAL (separate from RFD) -->
+    <div id="healthAlertModal" class="rfd-modal-overlay">
+        <div class="rfd-modal">
+            <div class="rfd-header" style="background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);">
+                <div class="flag-icon" id="healthAlertIcon">⚠️</div>
+                <h2 id="healthAlertTitle">Relationship Health Concern</h2>
+                <p class="tagline">Objective situation assessment</p>
+            </div>
+            
+            <div class="rfd-body">
+                <div class="rfd-explanation" style="font-size: 16px; line-height: 1.7;">
+                    <p id="healthAlertMessage"></p>
+                </div>
+                
+                <div class="rfd-learn-more">
+                    <a href="https://www.loveisrespect.org" target="_blank">Learn more about healthy relationships →</a>
+                </div>
+            </div>
+            
+            <div class="rfd-footer">
+                <button class="rfd-button primary" id="healthAlertContinue" style="width: 100%;">
+                    I Understand, Show Me the Reframe
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -1234,6 +1262,13 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                     return;
                 }
 
+                // CHECK FOR RELATIONSHIP HEALTH ALERT (shows even if no RFD)
+                if (data.healthCheck) {
+                    console.log('Relationship Health Alert:', data.healthCheck);
+                    showHealthAlert(data.healthCheck);
+                    // Don't return - continue to show reframe after user closes alert
+                }
+
                 // Normal reframing path
                 const reframedText = data.reframed;
 
@@ -1346,6 +1381,37 @@ console.log('API Response:', JSON.stringify(data, null, 2));
         function hideRFDModal() {
             document.getElementById('rfdModal').classList.remove('visible');
         }
+
+        // RELATIONSHIP HEALTH ALERT (separate from RFD)
+        function showHealthAlert(healthCheck) {
+            const modal = document.getElementById('healthAlertModal');
+            const icon = document.getElementById('healthAlertIcon');
+            const title = document.getElementById('healthAlertTitle');
+            const message = document.getElementById('healthAlertMessage');
+            
+            // Set content based on alert type
+            icon.textContent = '⚠️';
+            title.textContent = healthCheck.alert;
+            message.textContent = healthCheck.message;
+            
+            // Show modal
+            modal.classList.add('visible');
+            
+            // Scroll to top
+            const modalBox = modal.querySelector('.rfd-modal-box');
+            if (modalBox) modalBox.scrollTop = 0;
+        }
+
+        function hideHealthAlert() {
+            document.getElementById('healthAlertModal').classList.remove('visible');
+        }
+
+        // Health Alert Event Listener
+        document.getElementById('healthAlertContinue').addEventListener('click', function() {
+            hideHealthAlert();
+            // Health alert doesn't block the reframe - it was just informational
+            // The reframe is already shown or will show automatically
+        });
 
         // RFD Modal Event Listeners
         document.getElementById('rfdEdit').addEventListener('click', function() {
