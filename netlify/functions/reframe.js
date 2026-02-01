@@ -78,12 +78,24 @@ async function checkRelationshipHealth(context, message, relationshipType) {
   if (!context && !message) return null;
   
   const combinedText = `${context || ''} ${message || ''}`.toLowerCase();
+  const contextLower = (context || '').toLowerCase();
   
   // Check for "other person" scenario
   const otherPersonKeywords = /girlfriend|boyfriend|married|wife|husband|partner.*has.*girlfriend|partner.*has.*boyfriend|seeing someone|in a relationship|dating someone/i;
   const secretKeywords = /secret|hide|don't tell|can't break up|awkward to break up|waiting to break up/i;
   
   if (otherPersonKeywords.test(combinedText) && secretKeywords.test(combinedText)) {
+    // DON'T show if this is parent → child (relationshipType = 'child')
+    // The parent is already delivering this message, alert would be redundant
+    if (relationshipType === 'child') {
+      // Check if the parent's message already contains warnings/guidance
+      const parentGuidanceKeywords = /deserve better|first choice|respect yourself|healthy relationship|concerned|worried about you/i;
+      if (parentGuidanceKeywords.test(contextLower)) {
+        console.log('Parent already teaching about "other person" - skipping redundant alert');
+        return null;
+      }
+    }
+    
     return {
       type: 'other_person',
       severity: 'high',
@@ -144,6 +156,19 @@ PATTERNS TO DETECT:
 5. GASLIGHTING - Denying reality, questioning sanity, rewriting history
 6. MANIPULATION - Guilt-tripping, emotional blackmail, conditional love
 7. THREATS - Ultimatums, abandonment threats, "or else" statements
+
+${relationshipType === 'romantic_partner' ? `
+SPECIAL CONTEXT - ROMANTIC PARTNER COMMUNICATION:
+This message is from the user's ROMANTIC PARTNER. Pay special attention to:
+
+HIGH-RISK PATTERNS:
+- "I can't break up with [other person] because..." = MANIPULATION + STONEWALLING (keeping you as backup)
+- "It would be awkward/uncomfortable to break up" = MANIPULATION (prioritizing comfort over your feelings)
+- "I'm still with my girlfriend/boyfriend" while pursuing you = MANIPULATION (emotional cheating, making you "the other person")
+- Giving excuses for staying with someone else while wanting relationship with user = HIGH severity MANIPULATION
+
+These are SERIOUS red flags that often lead to long-term emotional harm. Flag them clearly.
+` : ''}
 
 ${relationshipType === 'parent' ? `
 SPECIAL CONTEXT - PARENT TO CHILD COMMUNICATION:
@@ -208,6 +233,24 @@ PATTERNS TO DETECT:
 5. GASLIGHTING - Denying reality, questioning sanity, rewriting history
 6. MANIPULATION - Guilt-tripping, emotional blackmail, conditional love
 7. THREATS - Ultimatums, abandonment threats, "or else" statements
+
+${relationshipType === 'romantic_partner' ? `
+SPECIAL CONTEXT - COMMUNICATING WITH ROMANTIC PARTNER:
+When someone mentions their parent's concerns, family input, or external perspectives, this is NOT automatically manipulation:
+
+DO NOT flag as manipulation when the user:
+- Mentions what their parent/family thinks (this is sharing context, not emotional blackmail)
+- Expresses uncertainty ("I'm not sure what to do") about a genuinely concerning situation
+- Brings up legitimate safety or ethical concerns raised by trusted people
+- Communicates confusion about the partner's conflicting actions (like still being with someone else)
+
+ONLY flag as manipulation if clearly using external pressure maliciously:
+- "My family will hate you if you don't..." (threat)
+- "Everyone thinks you're terrible" (attacking with external validation)
+- Using parent's disapproval as a weapon to control behavior
+
+Remember: Sharing that a parent is concerned about an objectively concerning situation (like partner being in another relationship) is healthy communication, not manipulation. Expressing genuine confusion when receiving mixed messages is valid vulnerability, not emotional blackmail.
+` : ''}
 
 ${relationshipType === 'child' ? `
 SPECIAL CONTEXT - PARENT TO CHILD COMMUNICATION:
