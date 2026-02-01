@@ -85,16 +85,17 @@ async function checkRelationshipHealth(context, message, relationshipType) {
   const secretKeywords = /secret|hide|don't tell|can't break up|awkward to break up|waiting to break up/i;
   
   if (otherPersonKeywords.test(combinedText) && secretKeywords.test(combinedText)) {
-    // DON'T show if this is parent → child (relationshipType = 'child')
-    // The parent is already delivering this message, alert would be redundant
+    // ONLY skip alert if parent→child (relationshipType = 'child')
+    // DO show alert if child→parent (relationshipType = 'parent') - they need objective validation
     if (relationshipType === 'child') {
-      // Check if the parent's message already contains warnings/guidance
+      // Parent talking TO child - check if parent already teaching this
       const parentGuidanceKeywords = /deserve better|first choice|respect yourself|healthy relationship|concerned|worried about you/i;
       if (parentGuidanceKeywords.test(contextLower)) {
-        console.log('Parent already teaching about "other person" - skipping redundant alert');
+        console.log('Parent→child: Parent already teaching - skip alert');
         return null;
       }
     }
+    // If child→parent (relationshipType = 'parent'), SHOW alert - teen needs to see objective truth
     
     return {
       type: 'other_person',
