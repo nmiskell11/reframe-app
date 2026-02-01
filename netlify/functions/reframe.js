@@ -73,8 +73,54 @@ const RELATIONSHIP_CONTEXTS = {
   }
 };
 
-// RFD Detection Function (unchanged logic)
-async function detectRedFlags(message, source = 'outbound') {
+// Relationship Health Check - detects objectively problematic situations
+async function checkRelationshipHealth(context, message, relationshipType) {
+  if (!context && !message) return null;
+  
+  const combinedText = `${context || ''} ${message || ''}`.toLowerCase();
+  
+  // Check for "other person" scenario
+  const otherPersonKeywords = /girlfriend|boyfriend|married|wife|husband|partner.*has.*girlfriend|partner.*has.*boyfriend|seeing someone|in a relationship|dating someone/i;
+  const secretKeywords = /secret|hide|don't tell|can't break up|awkward to break up|waiting to break up/i;
+  
+  if (otherPersonKeywords.test(combinedText) && secretKeywords.test(combinedText)) {
+    return {
+      type: 'other_person',
+      severity: 'high',
+      alert: '⚠️ Relationship Health Concern',
+      message: 'Being romantically involved with someone who is in a committed relationship puts you in a compromised position. Regardless of the reasons given ("awkward," "waiting for the right time"), this situation is unlikely to be healthy for anyone involved. You deserve to be someone\'s first choice, not a secret or a backup plan.'
+    };
+  }
+  
+  // Check for age-inappropriate relationships (if user is teen/child)
+  if (relationshipType === 'child' || relationshipType === 'parent') {
+    const ageGapKeywords = /much older|adult.*relationship|age.*gap|[0-9]{2}.*years.*older/i;
+    if (ageGapKeywords.test(combinedText)) {
+      return {
+        type: 'age_concern',
+        severity: 'high',
+        alert: '⚠️ Safety Concern',
+        message: 'If you\'re in a relationship with someone significantly older, this raises important safety questions. Please talk to a trusted adult about this situation.'
+      };
+    }
+  }
+  
+  // Check for controlling behavior
+  const controlKeywords = /track.*phone|check.*phone|monitor.*location|can't see.*friends|isolate|control.*who.*talk/i;
+  if (controlKeywords.test(combinedText)) {
+    return {
+      type: 'controlling',
+      severity: 'high',
+      alert: '⚠️ Relationship Health Concern',
+      message: 'Controlling behaviors like tracking your phone, monitoring your location, or limiting who you can see are warning signs of an unhealthy relationship. Everyone deserves privacy and autonomy.'
+    };
+  }
+  
+  return null;
+}
+
+// RFD Detection Function with Parent-Child Context Awareness
+async function detectRedFlags(message, source = 'outbound', relationshipType = 'general', context = '') {
   let detectionPrompt;
   
   if (source === 'inbound') {
@@ -98,6 +144,33 @@ PATTERNS TO DETECT:
 5. GASLIGHTING - Denying reality, questioning sanity, rewriting history
 6. MANIPULATION - Guilt-tripping, emotional blackmail, conditional love
 7. THREATS - Ultimatums, abandonment threats, "or else" statements
+
+${relationshipType === 'parent' ? `
+SPECIAL CONTEXT - PARENT TO CHILD COMMUNICATION:
+This message is from the user's PARENT. Parents have a responsibility to guide, protect, and teach their children. Apply different standards:
+
+Before flagging parental communication as toxic, ask:
+1. Is the parent expressing concern for the child's safety/wellbeing?
+2. Is the parent teaching ethical or moral boundaries?
+3. Is the parent's ultimate goal the child's best interest (even if imperfectly expressed)?
+4. Does the situation involve objective safety or ethical concerns (e.g., being "the other person" in a relationship)?
+
+ONLY flag as toxic if the parent:
+- Threatens withdrawal of love or abandonment
+- Shows contempt for the child's inherent worth as a person
+- Prioritizes the parent's control needs over the child's wellbeing
+- Uses fear or shame primarily to manipulate emotions (not to teach consequences)
+
+DO NOT flag as toxic if the parent:
+- Expresses disappointment in a specific behavior (not the child's character)
+- Sets boundaries to protect the child from harm
+- Teaches right from wrong or ethical principles
+- Holds the child accountable for actions with harmful consequences
+- Uses strong language to warn about objective dangers
+- References their parenting to teach values or express concern
+
+Valid parental guidance and protection ≠ manipulation. Parents SHOULD express concern, set boundaries, and teach values.
+` : ''}
 
 Respond ONLY with valid JSON (no markdown, no code blocks):
 {
@@ -135,6 +208,38 @@ PATTERNS TO DETECT:
 5. GASLIGHTING - Denying reality, questioning sanity, rewriting history
 6. MANIPULATION - Guilt-tripping, emotional blackmail, conditional love
 7. THREATS - Ultimatums, abandonment threats, "or else" statements
+
+${relationshipType === 'child' ? `
+SPECIAL CONTEXT - PARENT TO CHILD COMMUNICATION:
+This message is from a PARENT to their CHILD/TEEN. Parents have a responsibility to guide, protect, and teach. Apply different standards:
+
+Parents SHOULD and are EXPECTED to:
+- Express disappointment in harmful or risky behaviors
+- Set clear boundaries to protect the child's safety and wellbeing
+- Teach moral and ethical principles
+- Hold children accountable for their actions
+- Use strong language when warning about genuine dangers
+- Share their values and expectations
+- Reference their parenting efforts in context of teaching values
+
+DO NOT flag as "manipulation" or "criticism" when a parent:
+- Expresses concern about the child's safety or wellbeing
+- References their parenting efforts ("I raised you better") in context of teaching values
+- Uses guilt appropriately to teach consequences of harmful behavior
+- Sets protective boundaries even when the child disagrees
+- Teaches right from wrong with conviction
+- Expresses disappointment in risky or unethical behavior
+- Warns about objective dangers with emotional language
+
+ONLY flag as toxic if the parent:
+- Threatens abandonment or withdrawal of love as punishment
+- Attacks the child's inherent worth or character (not their behavior)
+- Prioritizes the parent's needs over the child's actual safety
+- Shows contempt for the child as a person
+- Uses fear/shame purely for control (not to teach real consequences)
+
+Remember: A parent saying "I raised you better than this" when addressing genuinely harmful behavior (like being "the other person" in a relationship) is appropriate parenting, not manipulation. A parent expressing disappointment about risky choices is protective, not criticism. A parent teaching ethical boundaries with conviction is their duty, not abuse.
+` : ''}
 
 Respond ONLY with valid JSON (no markdown, no code blocks):
 {
@@ -298,6 +403,16 @@ exports.handler = async (event) => {
     });
 
     // ========================================
+    // NEW: Check for objective relationship health concerns
+    // ========================================
+    const healthCheck = await checkRelationshipHealth(context, message, relationshipType);
+    if (healthCheck) {
+      console.log('Relationship health concern detected:', healthCheck.type);
+      // We'll still proceed with RFD, but frontend can show this alert too
+      // or we could return it here to show first
+    }
+
+    // ========================================
     // NEW: Create session record in Supabase
     // ========================================
     let sessionId = null;
@@ -341,7 +456,7 @@ exports.handler = async (event) => {
       
       if (theirMessage && theirMessage.length > 10) {
         console.log('Checking inbound RFD on message length:', theirMessage.length);
-        const inboundRFD = await detectRedFlags(theirMessage, 'inbound');
+        const inboundRFD = await detectRedFlags(theirMessage, 'inbound', relationshipType, context);
         console.log('Inbound RFD result:', inboundRFD);
         
         if (inboundRFD.hasRedFlags) {
@@ -397,7 +512,7 @@ exports.handler = async (event) => {
     if (!skipRFD) {
       console.log('STEP 2: Checking outbound RFD on user message...');
       console.log('User message preview:', message.substring(0, 50) + '...');
-      const outboundRFD = await detectRedFlags(message, 'outbound');
+      const outboundRFD = await detectRedFlags(message, 'outbound', relationshipType, context);
       console.log('Outbound RFD result:', outboundRFD);
       
       if (outboundRFD.hasRedFlags) {
