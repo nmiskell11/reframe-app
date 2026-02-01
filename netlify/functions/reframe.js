@@ -495,6 +495,7 @@ exports.handler = async (event) => {
               rfdAlert: true,
               rfdResult: inboundRFD,
               checkedInbound: true,
+              healthCheck: healthCheck,  // NEW: Include relationship health alert
               sessionId: sessionId  // NEW: Return session ID
             }),
           };
@@ -550,6 +551,7 @@ exports.handler = async (event) => {
           body: JSON.stringify({
             rfdAlert: true,
             rfdResult: outboundRFD,
+            healthCheck: healthCheck,  // NEW: Include relationship health alert
             sessionId: sessionId  // NEW: Return session ID
           }),
         };
@@ -584,6 +586,7 @@ exports.handler = async (event) => {
         reframed,
         relationshipType,
         usedContext: !!context,
+        healthCheck: healthCheck,  // NEW: Include relationship health alert
         sessionId: sessionId  // NEW: Return session ID for frontend tracking
       }),
     };
