@@ -118,6 +118,104 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
+        .hero h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .hero-lead {
+            font-size: 24px;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 650px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+        }
+
+        .hero-divider {
+            width: 80px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            margin: 50px auto;
+        }
+
+        .example-box {
+            max-width: 620px;
+            margin: 0 auto 30px;
+            text-align: left;
+        }
+
+        .example-box .before,
+        .example-box .after {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .example-box .before {
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        .example-box .after {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-cta-text {
+            font-size: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .how-it-works {
+            margin-top: 40px;
+        }
+
+        .how-it-works h3 {
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            max-width: 200px;
+        }
+
+        .step-number {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .step p {
+            font-size: 16px;
+            margin: 0;
+        }
+
         .tool-section {
             padding: 60px 40px;
             background: #fafafa;
@@ -790,6 +888,36 @@
                 font-size: 16px;
             }
 
+            .hero h2 {
+                font-size: 26px;
+            }
+
+            .hero-lead {
+                font-size: 20px;
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+            }
+
+            .hero-divider {
+                margin: 35px auto;
+            }
+
+            .example-box .before,
+            .example-box .after {
+                font-size: 14px;
+                padding: 12px 15px;
+            }
+
+            .steps {
+                gap: 20px;
+            }
+
+            .step {
+                max-width: 160px;
+            }
+
             .tool-section {
                 padding: 40px 20px;
             }
@@ -828,68 +956,65 @@
     <section class="hero">
         <h1>reFrame</h1>
         <div class="tagline">Say it better.</div>
-        
+
         <div class="principles" style="margin-top: 30px;">
             <strong>Built on the R³™ Framework:</strong><br>
             REGULATED · RESPECTFUL · REPAIRABLE
         </div>
-        
+
         <div class="principles" style="font-size: 16px; margin-top: 25px; opacity: 0.9;">
             The only communication coach that protects you from others AND yourself by catching toxic patterns<br>
             before you hit send and shows you healthier alternatives.
         </div>
 
         <a href="#tool" class="cta-button">Try it now - Free</a>
-    </section>
-<!-- HERO SECTION - Add this BEFORE the tool -->
-<section class="hero">
-    <h1>Difficult conversation coming up?</h1>
-    <h2>reFrame helps you say it better.</h2>
-    
-    <p class="hero-subtitle">
-        Type what you really want to say. We'll show you how to express 
-        it with dignity — so you get your point across without damaging 
-        the relationship.
-    </p>
-    
-    <div class="example-box">
-        <div class="before">
-            <strong>❌ What you might say:</strong><br>
-            "You never listen to me. You're so selfish."
+
+        <div class="hero-divider"></div>
+
+        <h2>Difficult conversation coming up?</h2>
+        <p class="hero-lead">reFrame helps you say it better.</p>
+
+        <p class="hero-subtitle">
+            Type what you really want to say. We'll show you how to express
+            it with dignity — so you get your point across without damaging
+            the relationship.
+        </p>
+
+        <div class="example-box">
+            <div class="before">
+                <strong>❌ What you might say:</strong><br>
+                "You never listen to me. You're so selfish."
+            </div>
+            <div class="after">
+                <strong>✅ What reFrame suggests:</strong><br>
+                "I'm feeling unheard lately. Can we talk about how we communicate
+                when things get tense? I want us both to feel valued."
+            </div>
         </div>
-        <div class="after">
-            <strong>✅ What reFrame suggests:</strong><br>
-            "I'm feeling unheard lately. Can we talk about how we communicate 
-            when things get tense? I want us both to feel valued."
-        </div>
-    </div>
-    
-    <p class="cta">👇 Try it yourself below — it's free.</p>
-</section>
+
+        <p class="hero-cta-text">👇 Try it yourself below — it's free.</p>
 
         <div class="how-it-works">
-    <h3>How it works:</h3>
-    <div class="steps">
-        <div class="step">
-            <div class="step-number">1</div>
-            <p>Pick your relationship type</p>
+            <h3>How it works:</h3>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <p>Pick your relationship type</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <p>Type what you want to say</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <p>Get a healthier version instantly</p>
+                </div>
+            </div>
         </div>
-        <div class="step">
-            <div class="step-number">2</div>
-            <p>Type what you want to say</p>
-        </div>
-        <div class="step">
-            <div class="step-number">3</div>
-            <p>Get a healthier version instantly</p>
-        </div>
-    </div>
-</div>
-</section>
+    </section>
     
     <section class="tool-section" id="tool">
         <div class="container">
-            <h2 class="section-title">Transform Your Message</h2>
-            
             <div class="card">
                 <div class="info-box">
                     <h3>📝 How to Use reFrame</h3>
