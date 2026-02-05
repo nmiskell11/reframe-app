@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>reFrame - Say it better</title>
-    <meta name="description" content="Transform emotionally charged messages into dignity-first communication. Break generational cycles. Model what you want to pass on.">
+    <meta name="description" content="AI-powered communication coach that transforms emotionally charged messages into healthy communication. Catch toxic patterns before you hit send.">
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-R3PQF5P29J"></script>
@@ -25,7 +25,7 @@
         }
 
         body {
-            font-family: 'Libre Baskerville', 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
+            font-family: 'Libre+Baskerville', 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
             background: white;
             color: #333;
             line-height: 1.6;
@@ -75,29 +75,50 @@
             font-weight: 600;
         }
 
+        /* HERO SECTION */
         .hero {
             background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
             color: white;
-            padding: 80px 40px;
+            padding: 80px 40px 60px;
             text-align: center;
         }
 
         .hero h1 {
             font-size: 72px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-weight: 700;
             letter-spacing: -2px;
         }
 
         .hero .tagline {
             font-size: 36px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             font-weight: 400;
+            opacity: 0.95;
+        }
+
+        .hero .what-is {
+            font-size: 20px;
+            margin-bottom: 35px;
+            line-height: 1.7;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.98;
+        }
+
+        .hero .framework {
+            font-size: 18px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .hero .principles {
             font-size: 18px;
             line-height: 1.8;
+            opacity: 0.95;
         }
 
         .cta-button {
@@ -118,6 +139,124 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
+        /* HOW IT WORKS SECTION */
+        .how-it-works {
+            padding: 60px 40px;
+            background: #fafafa;
+        }
+
+        .how-it-works .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 42px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .step {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: #FF7F50;
+            color: white;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .step h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .step p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* EXAMPLE SECTION */
+        .example-section {
+            background: white;
+            padding: 60px 40px;
+        }
+
+        .example-section .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .example-box {
+            background: #fafafa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .example-label {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            color: #999;
+        }
+
+        .before-label {
+            color: #dc2626;
+        }
+
+        .after-label {
+            color: #16A34A;
+        }
+
+        .example-text {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #333;
+            font-style: italic;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 36px;
+            color: #FF7F50;
+            margin: 20px 0;
+        }
+
+        /* TOOL SECTION */
         .tool-section {
             padding: 60px 40px;
             background: #fafafa;
@@ -126,13 +265,6 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 42px;
-            color: #333;
-            margin-bottom: 40px;
         }
 
         .card {
@@ -219,10 +351,9 @@
         }
 
         .relationship-option input[type="radio"]:checked + label {
-            background: #FFF5F0;
+            background: #FF7F50;
+            color: white;
             border-color: #FF7F50;
-            color: #FF7F50;
-            font-weight: 600;
         }
 
         .relationship-option label:hover {
@@ -231,12 +362,11 @@
 
         textarea {
             width: 100%;
-            min-height: 140px;
             padding: 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 8px;
             font-family: inherit;
+            font-size: 16px;
             resize: vertical;
             transition: border-color 0.3s;
         }
@@ -246,104 +376,95 @@
             border-color: #FF7F50;
         }
 
-        textarea.small {
-            min-height: 100px;
-        }
-
-        .collapsible-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            padding: 12px 0;
-            border-bottom: 2px solid #f0f0f0;
-            margin-bottom: 15px;
-            user-select: none;
-        }
-
-        .collapsible-header:hover {
-            color: #FF7F50;
-        }
-
-        .collapsible-header .arrow {
-            font-size: 12px;
-            transition: transform 0.3s;
-            display: inline-block;
-        }
-
-        .collapsible-header.expanded .arrow {
-            transform: rotate(90deg);
-        }
-
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            padding: 0;
-        }
-
-        .collapsible-content.expanded {
-            max-height: 800px;
-            padding-top: 15px;
-        }
-
-        .button {
-            width: 100%;
-            padding: 18px;
+        button {
             background: #FF7F50;
             color: white;
+            padding: 15px 35px;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background-color 0.3s, transform 0.2s;
             font-family: inherit;
         }
 
-        .button:hover {
+        button:hover {
+            background: #E66F40;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 127, 80, 0.4);
         }
 
-        .button:active {
-            transform: translateY(0);
-        }
-
-        .button:disabled {
-            opacity: 0.6;
+        button:disabled {
+            background: #ccc;
             cursor: not-allowed;
             transform: none;
         }
 
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #FF7F50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .output-section {
             display: none;
-            animation: fadeIn 0.5s;
+            margin-top: 30px;
         }
 
         .output-section.visible {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .output-box {
+            background: #F0FFF4;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #16A34A;
+            margin-bottom: 20px;
         }
 
-        .output-box {
-            background: #FFF5F0;
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #FF7F50;
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
-            line-height: 1.6;
-            white-space: pre-wrap;
+        }
+
+        .output-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #16A34A;
+        }
+
+        .copy-btn {
+            background: #16A34A;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .copy-btn:hover {
+            background: #15803D;
+        }
+
+        #outputText {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
         }
 
         .feedback-section {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f9f9f9;
+            background: #fafafa;
+            padding: 25px;
             border-radius: 12px;
             text-align: center;
         }
@@ -352,10 +473,10 @@
             display: none;
         }
 
-        .feedback-section h4 {
-            color: #333;
-            margin-bottom: 15px;
+        .feedback-label {
             font-size: 16px;
+            margin-bottom: 15px;
+            color: #666;
         }
 
         .feedback-buttons {
@@ -366,22 +487,17 @@
         }
 
         .feedback-btn {
-            padding: 12px 20px;
-            border: 2px solid #e0e0e0;
             background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: #666;
+            border: 2px solid #e0e0e0;
+            padding: 12px 24px;
+            font-size: 15px;
         }
 
         .feedback-btn:hover {
             border-color: #FF7F50;
-            transform: translateY(-2px);
+            color: #FF7F50;
+            background: white;
         }
 
         .feedback-btn.selected {
@@ -392,132 +508,44 @@
 
         .feedback-thanks {
             display: none;
-            color: #4a9d5f;
-            font-weight: 600;
             margin-top: 15px;
-            animation: fadeIn 0.5s;
+            color: #16A34A;
+            font-weight: 600;
         }
 
         .feedback-thanks.visible {
             display: block;
         }
 
-        .copy-button {
-            padding: 12px 24px;
-            background: white;
-            color: #FF7F50;
-            border: 2px solid #FF7F50;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-
-        .copy-button:hover {
-            background: #FF7F50;
-            color: white;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #FF7F50;
-            font-weight: 600;
-        }
-
-        .error {
-            background: #fee;
-            color: #c33;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border-left: 4px solid #c33;
-        }
-
-        .reminder {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            font-style: italic;
-            margin-top: 20px;
-        }
-
-        footer {
-            background: #333;
-            color: white;
-            padding: 60px 40px 40px;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-section h3 {
-            color: #FF7F50;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        .footer-section p,
-        .footer-section a {
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            display: block;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .footer-section a:hover {
-            color: #FF7F50;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.6);
-            font-size: 14px;
-        }
-/* RFD™ Modal Styles */
+        /* RFD MODAL */
         .rfd-modal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            animation: fadeIn 0.3s;
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 20px;
         }
 
         .rfd-modal-overlay.visible {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
         }
 
         .rfd-modal {
             background: white;
+            max-width: 700px;
+            width: 100%;
             border-radius: 16px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideUp 0.3s;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin: 40px auto;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
         }
 
         .rfd-header {
@@ -528,20 +556,32 @@
             text-align: center;
         }
 
-        .rfd-header .flag-icon {
+        .rfd-header.inbound {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+
+        .rfd-icon {
             font-size: 48px;
             margin-bottom: 10px;
         }
 
-        .rfd-header h2 {
-            font-size: 28px;
-            margin-bottom: 10px;
+        .rfd-tagline {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
 
-        .rfd-header .tagline {
+        .rfd-source {
             font-size: 14px;
-            opacity: 0.9;
-            font-weight: 400;
+            opacity: 0.95;
+            line-height: 1.6;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .rfd-source strong {
+            display: block;
+            margin-bottom: 5px;
         }
 
         .rfd-body {
@@ -553,261 +593,229 @@
             padding: 6px 12px;
             border-radius: 6px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 20px;
         }
 
         .rfd-severity.high {
             background: #fee2e2;
-            color: #991b1b;
+            color: #dc2626;
         }
 
         .rfd-severity.medium {
             background: #fed7aa;
-            color: #9a3412;
+            color: #ea580c;
         }
 
         .rfd-severity.low {
             background: #fef3c7;
-            color: #92400e;
+            color: #ca8a04;
         }
 
-        .rfd-patterns {
-            background: #fef2f2;
-            border-left: 4px solid #dc2626;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .rfd-patterns h4 {
-            color: #dc2626;
-            font-size: 14px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .rfd-patterns ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .rfd-patterns li {
-            padding: 4px 0;
-            color: #7f1d1d;
-            font-size: 15px;
-        }
-
-        .rfd-patterns li:before {
-            content: "⚠️ ";
-            margin-right: 8px;
-        }
-
-        .rfd-explanation {
-            color: #333;
-            line-height: 1.7;
-            margin-bottom: 20px;
-            font-size: 15px;
-        }
-
-        .rfd-suggestion {
-            background: #f0fdf4;
-            border-left: 4px solid #16a34a;
-            padding: 15px;
-            border-radius: 8px;
+        .rfd-section {
             margin-bottom: 25px;
         }
 
-        .rfd-suggestion h4 {
-            color: #16a34a;
-            font-size: 14px;
+        .rfd-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .rfd-patterns {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rfd-patterns li {
+            background: #fef2f2;
+            padding: 10px 15px;
+            border-radius: 6px;
             margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .rfd-suggestion p {
-            color: #14532d;
-            margin: 0;
+            color: #dc2626;
+            font-weight: 600;
             font-size: 15px;
-            line-height: 1.6;
         }
 
-        .rfd-footer {
-            background: #fafafa;
-            padding: 20px 30px;
-            border-radius: 0 0 16px 16px;
+        .rfd-explanation, .rfd-suggestion, .rfd-validation-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .rfd-actions {
             display: flex;
             gap: 15px;
-            flex-wrap: wrap;
+            margin-top: 30px;
         }
 
-        .rfd-button {
+        .rfd-btn {
             flex: 1;
-            min-width: 140px;
-            padding: 14px 20px;
+            padding: 15px;
             border-radius: 8px;
-            font-size: 15px;
             font-weight: 600;
+            font-size: 16px;
             cursor: pointer;
             transition: all 0.3s;
             border: none;
-            font-family: inherit;
         }
 
-        .rfd-button.primary {
-            background: #16a34a;
+        .rfd-btn-edit {
+            background: white;
+            color: #dc2626;
+            border: 2px solid #dc2626;
+        }
+
+        .rfd-btn-edit:hover {
+            background: #fef2f2;
+        }
+
+        .rfd-btn-proceed {
+            background: #dc2626;
             color: white;
         }
 
-        .rfd-button.primary:hover {
-            background: #15803d;
-            transform: translateY(-2px);
+        .rfd-btn-proceed:hover {
+            background: #b91c1c;
         }
 
-        .rfd-button.secondary {
+        /* HEALTH ALERT MODAL (orange, different from RFD) */
+        .health-alert-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10001;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .health-alert-overlay.visible {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .rfd-modal-box {
             background: white;
-            color: #666;
-            border: 2px solid #e0e0e0;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin: 40px auto;
         }
 
-        .rfd-button.secondary:hover {
-            border-color: #999;
-        }
-
-        .rfd-learn-more {
+        .health-alert-header {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 16px 16px 0 0;
             text-align: center;
-            margin-top: 15px;
-            font-size: 13px;
         }
 
-        .rfd-learn-more a {
-            color: #FF7F50;
-            text-decoration: none;
+        .health-alert-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .health-alert-title {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .health-alert-body {
+            padding: 30px;
+        }
+
+        .health-alert-message {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .health-alert-btn {
+            width: 100%;
+            background: #f97316;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
             font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
         }
 
-        .rfd-learn-more a:hover {
+        .health-alert-btn:hover {
+            background: #ea580c;
+        }
+
+        footer {
+            background: #FF7F50;
+            color: white;
+            padding: 40px 20px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+
+        footer a:hover {
+            opacity: 1;
             text-decoration: underline;
         }
 
-        /* Two-Way RFD™ - Source Indicator */
-        .rfd-source {
-            background: #fff7ed;
-            border-left: 4px solid #f59e0b;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #92400e;
-        }
-
-        .rfd-source.inbound {
-            background: #fef2f2;
-            border-left-color: #ef4444;
-            color: #7f1d1d;
-        }
-
-        .rfd-source strong {
-            display: block;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        /* Validation section for inbound detection */
-        .rfd-validation {
-            background: #dbeafe;
-            border-left: 4px solid #3b82f6;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .rfd-validation h4 {
-            color: #1e40af;
-            font-size: 14px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .rfd-validation p {
-            color: #1e3a8a;
-            margin: 0;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
         @media (max-width: 768px) {
-            ...existing styles...
-            .feedback-btn {
-                width: 100%;
-            }
-        .rfd-modal {
-                width: 95%;
-                max-height: 90vh;
-            }
-
-            .rfd-header {
-                padding: 20px;
-            }
-
-            .rfd-header h2 {
-                font-size: 22px;
-            }
-
-            .rfd-body {
-                padding: 20px;
-            }
-
-            .rfd-footer {
-                padding: 15px 20px;
-                flex-direction: column;
-            }
-
-            .rfd-button {
-                width: 100%;
-            }
-            .nav-links {
-                gap: 15px;
-                font-size: 14px;
-            }
-
             .hero h1 {
-                font-size: 42px;
+                font-size: 48px;
             }
 
             .hero .tagline {
-                font-size: 24px;
+                font-size: 28px;
             }
 
-            .hero .principles {
-                font-size: 16px;
+            .hero .what-is {
+                font-size: 18px;
             }
 
-            .tool-section {
-                padding: 40px 20px;
+            .section-title {
+                font-size: 32px;
             }
 
-            .card {
-                padding: 25px;
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
             }
 
             .relationship-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr 1fr;
             }
 
-            .feedback-buttons {
+            .rfd-actions {
                 flex-direction: column;
-            }
-
-            .feedback-btn {
-                width: 100%;
             }
         }
     </style>
@@ -816,569 +824,449 @@
     <nav>
         <div class="nav-logo">reFrame</div>
         <div class="nav-links">
-            <a href="#tool">Try It</a>
-            <a href="r3-framework.html">R³™ Framework</a>
-            <a href="manifesto.html">Manifesto</a>
             <a href="about.html">About</a>
+            <a href="r3-framework.html">R³ Framework</a>
+            <a href="manifesto.html">Manifesto</a>
             <a href="faq.html">FAQ</a>
-            <a href="/cdn-cgi/l/email-protection#b0d8d5dcdcdff0c7d5c2d5d6c2d1ddd59ed3dfdd" class="cta">Contact</a>
+            <a href="#tool" class="cta">Try It Free</a>
         </div>
     </nav>
 
-    <section class="hero">
+    <div class="hero">
         <h1>reFrame</h1>
         <div class="tagline">Say it better.</div>
-        
-        <div class="principles" style="margin-top: 30px;">
-            <strong>Built on the R³™ Framework:</strong><br>
-            REGULATED · RESPECTFUL · REPAIRABLE
+        <div class="what-is">
+            An AI-powered communication coach that catches toxic patterns before you hit send — and shows you healthier alternatives.
         </div>
-        
-        <!-- HERO SECTION - Add this BEFORE the tool -->
-<section class="hero">
-    <h1>Difficult conversation coming up?</h1>
-    <h2>reFrame helps you say it better.</h2>
-    
-    <p class="hero-subtitle">
-        Type what you really want to say. We'll show you how to express 
-        it with dignity — so you get your point across without damaging 
-        the relationship.
-    </p>
-    
-    <div class="example-box">
-        <div class="before">
-            <strong>❌ What you might say:</strong><br>
-            "You never listen to me. You're so selfish."
+        <div class="framework">Built on the R³ Framework</div>
+        <div class="principles">
+            <strong>REGULATED</strong> - Pause before reacting<br>
+            <strong>RESPECTFUL</strong> - Protect dignity, even in disagreement<br>
+            <strong>REPAIRABLE</strong> - Communicate in ways that maintain connection
         </div>
-        <div class="after">
-            <strong>✅ What reFrame suggests:</strong><br>
-            "I'm feeling unheard lately. Can we talk about how we communicate 
-            when things get tense? I want us both to feel valued."
-        </div>
+        <a href="#tool" class="cta-button">Try It Now - Free</a>
     </div>
-    
-    <p class="cta">👇 Try it yourself below — it's free.</p>
-</section>
 
-        <div class="how-it-works">
-    <h3>How it works:</h3>
-    <div class="steps">
-        <div class="step">
-            <div class="step-number">1</div>
-            <p>Pick your relationship type</p>
-        </div>
-        <div class="step">
-            <div class="step-number">2</div>
-            <p>Type what you want to say</p>
-        </div>
-        <div class="step">
-            <div class="step-number">3</div>
-            <p>Get a healthier version instantly</p>
+    <div class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Three simple steps to transform your communication</p>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Type Your Raw Reaction</h3>
+                    <p>Write what you really want to say — unfiltered, emotional, honest. We won't judge.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>We Detect Red Flags</h3>
+                    <p>Our AI analyzes your message for toxic patterns like criticism, contempt, or manipulation — and explains why they're harmful.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Get a Healthier Version</h3>
+                    <p>Receive a reframed message that expresses your feelings clearly while protecting the relationship.</p>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-        
-    <section class="tool-section" id="tool">
+
+    <div class="example-section">
         <div class="container">
-            <h2 class="section-title">Transform Your Message</h2>
+            <h2 class="section-title">See It In Action</h2>
+            
+            <div class="example-box">
+                <div class="example-label before-label">❌ BEFORE (What you might type when angry)</div>
+                <div class="example-text">"You NEVER listen to me. You're so selfish and you only care about yourself. I'm done talking to you."</div>
+            </div>
+            
+            <div class="arrow">↓</div>
+            
+            <div class="example-box">
+                <div class="example-label after-label">✅ AFTER (What reFrame helps you say)</div>
+                <div class="example-text">"I feel unheard when I share my concerns and they're dismissed. I need us to find a way to communicate where we both feel valued. Can we try again?"</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tool-section" id="tool">
+        <div class="container">
+            <h2 class="section-title">Try reFrame Now</h2>
             
             <div class="card">
                 <div class="info-box">
-                    <h3>📝 How to Use reFrame</h3>
-                    <p>Type your raw, honest thoughts below. Whether you're hurt, angry, frustrated, or confused - we'll help you express it in a way that builds connection instead of conflict. For best results, tell us who you're talking to and provide context about what they said.</p>
+                    <h3>🛡️ Two-Way Protection</h3>
+                    <p>We analyze both what you're about to send AND what you received — catching toxic patterns in both directions to protect you and the relationship.</p>
                 </div>
 
-                <div id="errorMessage" style="display: none;" class="error"></div>
-
                 <div class="section">
-                    <label>Who are you talking to? <span class="optional">(helps us personalize tone)</span></label>
+                    <label>Who are you talking to?</label>
                     <div class="relationship-grid">
                         <div class="relationship-option">
-                            <input type="radio" id="rel-partner" name="relationship" value="romantic_partner">
-                            <label for="rel-partner">💑 Partner</label>
+                            <input type="radio" name="relationship" value="romantic_partner" id="rel_partner" checked>
+                            <label for="rel_partner">Partner</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-parent" name="relationship" value="parent">
-                            <label for="rel-parent">👨‍👩 Parent</label>
+                            <input type="radio" name="relationship" value="parent" id="rel_parent">
+                            <label for="rel_parent">Parent</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-family" name="relationship" value="family">
-                            <label for="rel-family">👨‍👩‍👧‍👦 Family</label>
+                            <input type="radio" name="relationship" value="family" id="rel_family">
+                            <label for="rel_family">Family</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-friend" name="relationship" value="friend">
-                            <label for="rel-friend">🤝 Friend</label>
+                            <input type="radio" name="relationship" value="friend" id="rel_friend">
+                            <label for="rel_friend">Friend</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-manager" name="relationship" value="manager">
-                            <label for="rel-manager">👔 Manager</label>
+                            <input type="radio" name="relationship" value="manager" id="rel_manager">
+                            <label for="rel_manager">Manager</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-report" name="relationship" value="direct_report">
-                            <label for="rel-report">📊 Direct Report</label>
+                            <input type="radio" name="relationship" value="direct_report" id="rel_report">
+                            <label for="rel_report">Direct Report</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-colleague" name="relationship" value="colleague">
-                            <label for="rel-colleague">💼 Colleague</label>
+                            <input type="radio" name="relationship" value="colleague" id="rel_colleague">
+                            <label for="rel_colleague">Colleague</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-client" name="relationship" value="client">
-                            <label for="rel-client">🤵 Client</label>
+                            <input type="radio" name="relationship" value="client" id="rel_client">
+                            <label for="rel_client">Client</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-neighbor" name="relationship" value="neighbor">
-                            <label for="rel-neighbor">🏘️ Neighbor</label>
+                            <input type="radio" name="relationship" value="neighbor" id="rel_neighbor">
+                            <label for="rel_neighbor">Neighbor</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-child" name="relationship" value="child">
-                            <label for="rel-child">👶 Child/Teen</label>
+                            <input type="radio" name="relationship" value="child" id="rel_child">
+                            <label for="rel_child">Child/Teen</label>
                         </div>
                         <div class="relationship-option">
-                            <input type="radio" id="rel-general" name="relationship" value="general" checked>
-                            <label for="rel-general">👤 General</label>
+                            <input type="radio" name="relationship" value="general" id="rel_general">
+                            <label for="rel_general">General</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="section">
-                    <div class="collapsible-header" id="contextHeader" style="cursor: pointer;">
-                        <span class="arrow">▶</span>
-                        <span style="margin: 0;">Add conversation context <span class="optional">(optional but recommended)</span></span>
-                    </div>
-                    <div class="collapsible-content" id="contextSection">
-                        <p class="help-text" style="margin-bottom: 15px;">Adding context helps reFrame understand the full picture and provide a more thoughtful, tailored response. You can provide one or both:</p>
-                        
-                        <label for="theirMessage" style="font-size: 14px; margin-bottom: 5px;">What did they say? (exact quote or paraphrase)</label>
-                        <textarea id="theirMessage" class="small" rows="3" placeholder="Paste their exact text, email, or what they said:
-'I'm tired of you being late to everything. It's disrespectful and I don't think you care about my time.'"></textarea>
-                        <p class="help-text" style="font-size: 12px; margin: 5px 0 15px 0;">💡 Exact quotes help RFD™ detect manipulation, gaslighting, or toxic patterns in <em>their</em> message</p>
-                        
-                        <label for="situationContext" style="font-size: 14px; margin-bottom: 5px;">Describe the situation (background or what happened)</label>
-                        <textarea id="situationContext" class="small" rows="3" placeholder="Provide background or context:
-'My boss criticized my presentation in front of the whole team without giving me a chance to explain.'"></textarea>
-                        <p class="help-text" style="font-size: 12px; margin: 5px 0 0 0;">💡 Situation details help us understand dynamics and craft a response that fits the circumstances</p>
-                    </div>
+                    <label for="contextText">What did they say? <span class="optional">(optional but recommended)</span></label>
+                    <textarea id="contextText" rows="3" placeholder="Paste their exact message here. This helps us detect toxic patterns in what YOU received."></textarea>
+                    <div class="help-text">💡 Example: "You're always so dramatic about everything. Get over it."</div>
                 </div>
 
                 <div class="section">
-                    <label>What do you want to say?</label>
-                    <textarea id="inputText" placeholder="Be honest about how you're feeling. Type the message you want to send - we'll help you say it in a way that opens dialogue instead of closing it.
-
-Example: 'You never listen to me and I'm sick of repeating myself. You clearly don't care about what I have to say.'"></textarea>
+                    <label for="inputText">What do you want to say back?</label>
+                    <textarea id="inputText" rows="5" placeholder="Type your honest, unfiltered reaction here..."></textarea>
+                    <div class="help-text">💡 Example: "I can't believe you said that. You're such a jerk and you never understand anything."</div>
                 </div>
 
-                <div class="section">
-                    <button class="button" id="reframeBtn">
-                        reFrame This Message
-                    </button>
-                </div>
+                <button id="reframeBtn">
+                    <span id="btnText">Transform My Message</span>
+                </button>
 
-                <div id="loadingIndicator" class="loading" style="display: none;">
-                    ✨ Reframing your message with dignity and clarity...
-                </div>
+                <div class="spinner" id="spinner"></div>
 
-                <div id="outputSection" class="output-section section">
-                    <label>Your reFramed Message</label>
-                    <div id="outputText" class="output-box"></div>
-                    <button class="copy-button" id="copyBtn">📋 Copy to Clipboard</button>
-                    
+                <div class="output-section" id="outputSection">
+                    <div class="output-box">
+                        <div class="output-header">
+                            <div class="output-title">✨ Your Reframed Message</div>
+                            <button class="copy-btn" id="copyBtn">📋 Copy</button>
+                        </div>
+                        <div id="outputText"></div>
+                    </div>
+
                     <div class="feedback-section" id="feedbackSection">
-                        <h4>How does this reFrame feel?</h4>
+                        <div class="feedback-label">How does this feel?</div>
                         <div class="feedback-buttons">
-                            <button class="feedback-btn" data-feedback="feels_right">
-                                <span>🎯</span>
-                                <span>This feels right</span>
-                            </button>
-                            <button class="feedback-btn" data-feedback="try_again">
-                                <span>✏️</span>
-                                <span>Let me try again</span>
-                            </button>
-                            <button class="feedback-btn" data-feedback="explain">
-                                <span>💡</span>
-                                <span>Show me why this works</span>
-                            </button>
+                            <button class="feedback-btn" data-feedback="feels_right">🎯 This feels right</button>
+                            <button class="feedback-btn" data-feedback="try_again">✏️ Let me try again</button>
+                            <button class="feedback-btn" data-feedback="explain">💡 Show me why this works</button>
                         </div>
-                        <div class="feedback-thanks" id="feedbackThanks">
-                            Thank you! Your feedback helps us improve. ✨
-                        </div>
+                        <div class="feedback-thanks" id="feedbackThanks">Thank you for your feedback! 💚</div>
                     </div>
-
-                    <div class="reminder">Remember: Repair is a responsibility, not a weakness.</div>
                 </div>
-            </div>
-        </div>
-    </section>
-<!-- RFD™ Warning Modal -->
-    <div id="rfdModal" class="rfd-modal-overlay">
-        <div class="rfd-modal">
-            <div class="rfd-header">
-                <div class="flag-icon">🚩</div>
-                <h2 id="rfdTitle">RFD™ Alert</h2>
-                <p class="tagline" id="rfdTagline">Red Flag Detection Technology</p>
-            </div>
-            
-            <div class="rfd-body">
-                <span id="rfdSeverity" class="rfd-severity"></span>
-                
-                <!-- Detection Source Indicator -->
-                <div id="rfdSource" class="rfd-source" style="display: none;"></div>
-                
-                <div class="rfd-patterns">
-                    <h4 id="rfdPatternsTitle">Patterns Detected</h4>
-                    <ul id="rfdPatternsList"></ul>
-                </div>
-                
-                <div class="rfd-explanation">
-                    <p id="rfdExplanation"></p>
-                </div>
-                
-                <div class="rfd-suggestion">
-                    <h4 id="rfdSuggestionHeader">💡 Healthier Approach</h4>
-                    <p id="rfdSuggestion"></p>
-                </div>
-
-                <!-- Validation section (only for inbound detection) -->
-                <div id="rfdValidation" class="rfd-validation" style="display: none;">
-                    <h4>🛡️ Remember</h4>
-                    <p id="rfdValidationText"></p>
-                </div>
-
-                <div class="rfd-learn-more">
-                    <a href="r3-framework.html" target="_blank">Learn more about healthy communication patterns →</a>
-                </div>
-            </div>
-            
-            <div class="rfd-footer">
-                <button class="rfd-button secondary" id="rfdEdit">
-                    ✏️ Edit My Message
-                </button>
-                <button class="rfd-button primary" id="rfdProceed">
-                    Continue to reFrame
-                </button>
             </div>
         </div>
     </div>
-    
-    <!-- RELATIONSHIP HEALTH ALERT MODAL (separate from RFD) -->
-    <div id="healthAlertModal" class="rfd-modal-overlay">
+
+    <!-- RFD MODAL -->
+    <div class="rfd-modal-overlay" id="rfdModal">
         <div class="rfd-modal">
-            <div class="rfd-header" style="background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);">
-                <div class="flag-icon" id="healthAlertIcon">⚠️</div>
-                <h2 id="healthAlertTitle">Relationship Health Concern</h2>
-                <p class="tagline">Objective situation assessment</p>
+            <div class="rfd-header" id="rfdHeader">
+                <div class="rfd-icon" id="rfdIcon">🚩</div>
+                <div class="rfd-tagline" id="rfdTagline">Red Flag Detected</div>
+                <div class="rfd-source" id="rfdSource"></div>
             </div>
-            
             <div class="rfd-body">
-                <div class="rfd-explanation" style="font-size: 16px; line-height: 1.7;">
-                    <p id="healthAlertMessage"></p>
-                </div>
+                <div class="rfd-severity" id="rfdSeverity">HIGH severity</div>
                 
-                <div class="rfd-learn-more">
-                    <a href="https://www.loveisrespect.org" target="_blank">Learn more about healthy relationships →</a>
+                <!-- VALIDATION SECTION (only shows for inbound) -->
+                <div class="rfd-section" id="rfdValidation">
+                    <div class="rfd-section-title">✅ Your Perception is Valid</div>
+                    <div class="rfd-validation-text" id="rfdValidationText"></div>
                 </div>
-            </div>
-            
-            <div class="rfd-footer">
-                <button class="rfd-button primary" id="healthAlertContinue" style="width: 100%;">
-                    I Understand, Show Me the Reframe
-                </button>
+
+                <div class="rfd-section">
+                    <div class="rfd-section-title" id="rfdPatternsTitle">Patterns Detected</div>
+                    <ul class="rfd-patterns" id="rfdPatterns"></ul>
+                </div>
+
+                <div class="rfd-section">
+                    <div class="rfd-section-title">Why This Matters</div>
+                    <div class="rfd-explanation" id="rfdExplanation"></div>
+                </div>
+
+                <div class="rfd-section">
+                    <div class="rfd-section-title" id="rfdSuggestionHeader">💡 Suggestion</div>
+                    <div class="rfd-suggestion" id="rfdSuggestion"></div>
+                </div>
+
+                <div class="rfd-actions">
+                    <button class="rfd-btn rfd-btn-edit" id="rfdEdit">✏️ Edit My Message</button>
+                    <button class="rfd-btn rfd-btn-proceed" id="rfdProceed">Continue Anyway</button>
+                </div>
             </div>
         </div>
     </div>
-    
+
+    <!-- HEALTH ALERT MODAL (separate from RFD) -->
+    <div class="health-alert-overlay" id="healthAlertModal">
+        <div class="rfd-modal-box">
+            <div class="health-alert-header">
+                <div class="health-alert-icon" id="healthAlertIcon">⚠️</div>
+                <div class="health-alert-title" id="healthAlertTitle">Relationship Health Concern</div>
+            </div>
+            <div class="health-alert-body">
+                <div class="health-alert-message" id="healthAlertMessage"></div>
+                <button class="health-alert-btn" id="healthAlertContinue">I Understand - Continue</button>
+            </div>
+        </div>
+    </div>
+
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>reFrame</h3>
-                <p>Breaking generational cycles of dysfunction, one conversation at a time.</p>
-                <p style="margin-top: 20px; font-style: italic;">WE say it better, together.</p>
-                <p style="margin-top: 10px; font-size: 14px;">Life is about relationships.</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Learn More</h3>
-                <a href="manifesto.html">The Manifesto</a>
-                <a href="about.html">About reFrame</a>
-                <a href="#tool">Try the Tool</a>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Core Principles</h3>
-                <p>Regulation over reaction</p>
-                <p>Dignity first</p>
-                <p>Disagreement ≠ hate</p>
-                <p>Repair is responsibility</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Get In Touch</h3>
-                <p>Questions? Feedback? Ideas?</p>
-                <a href="/cdn-cgi/l/email-protection#234b464f4f4c63544651464551424e460d404c4e"><span class="__cf_email__" data-cfemail="761e131a1a1936011304131004171b135815191b">[email&#160;protected]</span></a>
-                <p style="margin-top: 15px; font-size: 12px; opacity: 0.7;">We read every message.</p>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            Made with ❤️ for better conversations | © 2026 reFrame | wereframe.com
-        </div>
+        <p>&copy; 2026 reFrame. Breaking generational cycles through AI-powered communication coaching.</p>
+        <p>
+            <a href="about.html">About</a>
+            <a href="r3-framework.html">R³ Framework</a>
+            <a href="manifesto.html">Manifesto</a>
+            <a href="faq.html">FAQ</a>
+            <a href="privacy.html">Privacy</a>
+        </p>
     </footer>
 
     <script>
-        // CRITICAL: Core functionality FIRST, analytics LAST
-        // This ensures the app works even if analytics fails
-
-        console.log('reFrame initializing...');
-
         // ============================================
-        // SESSION TOKEN MANAGEMENT (Anonymous User Tracking)
+        // SESSION TOKEN GENERATION (Anonymous User ID)
         // ============================================
         function getSessionToken() {
             let token = localStorage.getItem('reframe_session_token');
             if (!token) {
-                // Generate unique token: anon_[timestamp]_[random]
-                token = 'anon_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                token = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 localStorage.setItem('reframe_session_token', token);
                 console.log('New session token created:', token);
             } else {
-                console.log('Existing session token found:', token);
+                console.log('Existing session token loaded:', token);
             }
             return token;
         }
 
-        // Initialize session token on page load
         const userSessionToken = getSessionToken();
-
-        // Helper function to clear session (for testing/debugging)
-        function clearSessionToken() {
-            localStorage.removeItem('reframe_session_token');
-            console.log('Session token cleared - reload page to create new user');
-        }
-        // Make it available in console for testing
-        window.clearSessionToken = clearSessionToken;
-
-        // Session ID for analytics (if enabled later)
-        const currentSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        
+        // ============================================
+        // STATE MANAGEMENT
+        // ============================================
+        let checkedInbound = false;
+        let lastAlertSource = null;
 
         // ============================================
-        // CORE FUNCTIONALITY (Works without analytics)
+        // MAIN REFRAME FUNCTION
         // ============================================
-
-        // Wait for DOM to be ready
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, attaching event listeners...');
-            
-            // Toggle context section
-            const contextHeader = document.getElementById('contextHeader');
-            const contextSection = document.getElementById('contextSection');
-
-            if (contextHeader && contextSection) {
-                contextHeader.addEventListener('click', function() {
-                    console.log('Context header clicked!');
-                    contextHeader.classList.toggle('expanded');
-                    contextSection.classList.toggle('expanded');
-                });
-                console.log('Context toggle attached successfully');
-            } else {
-                console.error('Could not find contextHeader or contextSection');
-            }
-        });
-
-        function showError(message, show = true) {
-            const errorDiv = document.getElementById('errorMessage');
-            if (show) {
-                errorDiv.textContent = message;
-                errorDiv.style.display = 'block';
-            } else {
-                errorDiv.style.display = 'none';
-            }
-        }
-
-        // RFD State tracking
-        let checkedInbound = false; // Track if we already showed inbound alert
-        let lastAlertSource = null; // Track which alert we just showed: 'inbound' or 'outbound'
-
         async function reframeMessage(skipRFD = false) {
-            console.log('reframeMessage called, skipRFD:', skipRFD, 'checkedInbound:', checkedInbound, 'lastAlertSource:', lastAlertSource);
-            
             const inputText = document.getElementById('inputText').value.trim();
+            const contextText = document.getElementById('contextText').value.trim();
+            const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
             
             if (!inputText) {
-                showError('Please enter a message to reframe');
+                alert('Please enter a message to reframe.');
                 return;
             }
 
-            showError('', false);
-            
             const button = document.getElementById('reframeBtn');
-            const loading = document.getElementById('loadingIndicator');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
             const outputSection = document.getElementById('outputSection');
-            const feedbackSection = document.getElementById('feedbackSection');
-            
-            const theirMessage = document.getElementById('theirMessage').value.trim();
-            const situationContext = document.getElementById('situationContext').value.trim();
-            const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
-            
-            // Construct intelligent combined context for Claude
-            let combinedContext = '';
-            if (theirMessage && situationContext) {
-                // Both provided - structure clearly
-                combinedContext = `THEIR MESSAGE: "${theirMessage}"\n\nSITUATION: ${situationContext}`;
-            } else if (theirMessage) {
-                // Only their message
-                combinedContext = `THEIR MESSAGE: "${theirMessage}"`;
-            } else if (situationContext) {
-                // Only situation description
-                combinedContext = `SITUATION: ${situationContext}`;
-            }
-            
+
             button.disabled = true;
-            loading.style.display = 'block';
+            btnText.textContent = 'Analyzing...';
+            spinner.style.display = 'block';
             outputSection.classList.remove('visible');
 
             try {
-                console.log('Calling API with session token:', userSessionToken);
                 const response = await fetch('/.netlify/functions/reframe', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
                         message: inputText,
-                        context: combinedContext || null,
+                        context: contextText,
                         relationshipType: relationshipType,
-                        sessionId: currentSessionId,
-                        skipRFD: skipRFD === true,
-                        checkedInbound: checkedInbound,
-                        sessionToken: userSessionToken,  // NEW: Anonymous user tracking
-                        userId: null  // NEW: Will be populated when you add auth
+                        sessionToken: userSessionToken,
+                        skipRFD: skipRFD
                     })
                 });
 
-                console.log('Response received:', response.status);
-
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to reframe message');
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
                 const data = await response.json();
-console.log('API Response:', JSON.stringify(data, null, 2));
-
-                // CHECK FOR RFD ALERT
-                if (data.rfdAlert && data.rfdResult) {
-                    console.log('RFD Alert triggered:', data.rfdResult);
-                    
-                    // Track which alert we just showed
-                    lastAlertSource = data.rfdResult.source; // 'inbound' or 'outbound'
-                    
-                    // Track if this was an inbound alert
-                    if (data.checkedInbound) {
-                        checkedInbound = true;
-                        console.log('Inbound alert shown, setting checkedInbound=true');
-                    }
-                    
-                    // ============================================
-                    // GOOGLE ANALYTICS - RFD DETECTION
-                    // ============================================
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'rfd_warning_shown', {
-                            'alert_type': data.rfdResult.source, // inbound or outbound
-                            'severity': data.rfdResult.severity,
-                            'patterns': data.rfdResult.patterns.join(','),
-                            'relationship_type': relationshipType,
-                            'session_token': userSessionToken
-                        });
-                        console.log('GA Event: rfd_warning_shown');
-                    }
-                    
-                    showRFDModal(data.rfdResult);
-                    button.disabled = false;
-                    loading.style.display = 'none';
-                    return;
-                }
-
-                // CHECK FOR RELATIONSHIP HEALTH ALERT (shows even if no RFD)
-                if (data.healthCheck) {
-                    console.log('Relationship Health Alert:', data.healthCheck);
-                    showHealthAlert(data.healthCheck);
-                    // Don't return - continue to show reframe after user closes alert
-                }
-
-                // Normal reframing path
-                const reframedText = data.reframed;
-
-                document.getElementById('outputText').textContent = reframedText;
-                outputSection.classList.add('visible');
-
-                feedbackSection.classList.remove('hidden');
-                document.getElementById('feedbackThanks').classList.remove('visible');
-                document.querySelectorAll('.feedback-btn').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-
-                console.log('Reframe successful');
+                console.log('API Response:', data);
 
                 // ============================================
-                // GOOGLE ANALYTICS EVENT TRACKING
+                // HEALTH ALERT CHECK (shows first if present)
+                // ============================================
+                if (data.healthCheck && data.healthCheck.alert) {
+                    console.log('Health alert detected:', data.healthCheck);
+                    showHealthAlert(data.healthCheck);
+                    // Don't return - let RFD check happen next if needed
+                }
+
+                // ============================================
+                // RFD DETECTION - TWO-WAY LOGIC
+                // ============================================
+                if (data.rfdAlert && data.rfdResult && data.rfdResult.hasRedFlags) {
+                    console.log('RFD alert triggered:', data.rfdResult);
+
+                    if (data.rfdResult.source === 'inbound' && !checkedInbound) {
+                        // INBOUND: First time checking
+                        console.log('Showing INBOUND RFD alert (first check)');
+                        showRFDModal(data.rfdResult, 'inbound');
+                        checkedInbound = true;
+                        lastAlertSource = 'inbound';
+                        
+                        // ============================================
+                        // GOOGLE ANALYTICS - RFD WARNING SHOWN (INBOUND)
+                        // ============================================
+                        if (typeof gtag !== 'undefined') {
+                            gtag('event', 'rfd_warning_shown', {
+                                'alert_type': 'inbound',
+                                'severity': data.rfdResult.severity,
+                                'patterns': data.rfdResult.patterns ? data.rfdResult.patterns.join(', ') : 'unknown',
+                                'relationship_type': relationshipType,
+                                'session_token': userSessionToken
+                            });
+                            console.log('GA Event: rfd_warning_shown (inbound) -', data.rfdResult.severity);
+                        }
+                        
+                        return;
+                    } else if (data.rfdResult.source === 'outbound') {
+                        // OUTBOUND: Show alert
+                        console.log('Showing OUTBOUND RFD alert');
+                        showRFDModal(data.rfdResult, 'outbound');
+                        lastAlertSource = 'outbound';
+                        
+                        // ============================================
+                        // GOOGLE ANALYTICS - RFD WARNING SHOWN (OUTBOUND)
+                        // ============================================
+                        if (typeof gtag !== 'undefined') {
+                            gtag('event', 'rfd_warning_shown', {
+                                'alert_type': 'outbound',
+                                'severity': data.rfdResult.severity,
+                                'patterns': data.rfdResult.patterns ? data.rfdResult.patterns.join(', ') : 'unknown',
+                                'relationship_type': relationshipType,
+                                'session_token': userSessionToken
+                            });
+                            console.log('GA Event: rfd_warning_shown (outbound) -', data.rfdResult.severity);
+                        }
+                        
+                        return;
+                    }
+                }
+
+                // ============================================
+                // NO RFD ALERTS - SHOW REFRAME
+                // ============================================
+                console.log('No RFD alerts, showing reframe');
+                document.getElementById('outputText').textContent = data.reframed;
+                outputSection.classList.add('visible');
+                document.getElementById('feedbackSection').classList.remove('hidden');
+                document.getElementById('feedbackThanks').classList.remove('visible');
+                document.querySelectorAll('.feedback-btn').forEach(b => b.classList.remove('selected'));
+
+                // Reset state for next reframe
+                checkedInbound = false;
+                lastAlertSource = null;
+                
+                // ============================================
+                // GOOGLE ANALYTICS - REFRAME COMPLETED
                 // ============================================
                 if (typeof gtag !== 'undefined') {
-                    // Track successful reframe
                     gtag('event', 'reframe_completed', {
                         'relationship_type': relationshipType,
-                        'had_context': !!combinedContext,
+                        'had_context': contextText ? true : false,
                         'message_length': inputText.length,
                         'session_token': userSessionToken
                     });
-                    console.log('GA Event: reframe_completed');
+                    console.log('GA Event: reframe_completed -', relationshipType);
                 }
 
             } catch (error) {
-                console.error('Reframe error:', error);
-                showError(`Error: ${error.message}. Please try again or contact support if the problem persists.`);
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
             } finally {
                 button.disabled = false;
-                loading.style.display = 'none';
+                btnText.textContent = 'Transform My Message';
+                spinner.style.display = 'none';
             }
         }
-        // RFD™ Modal Functions - TWO-WAY PROTECTION
-        function showRFDModal(rfdResult) {
+
+        // ============================================
+        // RFD MODAL DISPLAY
+        // ============================================
+        function showRFDModal(rfdResult, source) {
             const modal = document.getElementById('rfdModal');
-            const title = document.getElementById('rfdTitle');
+            const header = document.getElementById('rfdHeader');
+            const icon = document.getElementById('rfdIcon');
             const tagline = document.getElementById('rfdTagline');
-            const source = document.getElementById('rfdSource');
+            const sourceEl = document.getElementById('rfdSource');
             const severity = document.getElementById('rfdSeverity');
-            const patternsTitle = document.getElementById('rfdPatternsTitle');
-            const patternsList = document.getElementById('rfdPatternsList');
+            const patternsList = document.getElementById('rfdPatterns');
             const explanation = document.getElementById('rfdExplanation');
-            const suggestionHeader = document.getElementById('rfdSuggestionHeader');
             const suggestion = document.getElementById('rfdSuggestion');
             const validation = document.getElementById('rfdValidation');
             const validationText = document.getElementById('rfdValidationText');
+            const patternsTitle = document.getElementById('rfdPatternsTitle');
+            const suggestionHeader = document.getElementById('rfdSuggestionHeader');
 
-            // Determine if this is inbound (context) or outbound (user message) detection
-            const isInbound = rfdResult.source === 'inbound' || rfdResult.detectedIn === 'context';
-            
-            // Update modal title and styling based on source
-            if (isInbound) {
-                title.textContent = '🛡️ Inbound RFD™ Alert';
-                tagline.textContent = 'Pattern detected in what they said to you';
-                source.className = 'rfd-source inbound';
-                source.innerHTML = '<strong>⚠️ Analysis of their message</strong>This pattern appears in what they said to you. Below is how you can respond.';
-                source.style.display = 'block';
+            // Set source-specific content
+            if (source === 'inbound') {
+                header.classList.add('inbound');
+                icon.textContent = '🛡️';
+                tagline.textContent = 'Pattern detected in what you received';
+                sourceEl.className = 'rfd-source';
+                sourceEl.innerHTML = '<strong>🛡️ Analysis of their message</strong>We detected concerning patterns in what they said to you. Here\'s what to watch for.';
+                sourceEl.style.display = 'block';
                 
                 patternsTitle.textContent = 'What They\'re Using';
-                suggestionHeader.textContent = '💬 How You Can Respond';
+                suggestionHeader.textContent = '💡 How You Can Respond';
                 
                 // Show validation section for inbound
-                validation.style.display = 'block';
-                validationText.textContent = rfdResult.validation || 
-                    "Your perception is valid. These patterns are real. Trust yourself.";
+                if (rfdResult.validation) {
+                    validationText.textContent = rfdResult.validation;
+                    validation.style.display = 'block';
+                } else {
+                    validation.style.display = 'none';
+                }
             } else {
-                title.textContent = '🚩 Outbound RFD™ Alert';
+                header.classList.remove('inbound');
+                icon.textContent = '🚩';
                 tagline.textContent = 'Pattern detected in what you\'re about to send';
-                source.className = 'rfd-source';
-                source.innerHTML = '<strong>⚠️ Analysis of your message</strong>These patterns may harm the relationship. Consider the healthier alternative below.';
-                source.style.display = 'block';
+                sourceEl.className = 'rfd-source';
+                sourceEl.innerHTML = '<strong>⚠️ Analysis of your message</strong>These patterns may harm the relationship. Consider the healthier alternative below.';
+                sourceEl.style.display = 'block';
                 
                 patternsTitle.textContent = 'What You\'re Using';
                 suggestionHeader.textContent = '💡 Healthier Way to Say It';
