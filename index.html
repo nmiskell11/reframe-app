@@ -76,7 +76,7 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            background: #FF7F50;
             color: white;
             padding: 80px 40px;
             text-align: center;
@@ -153,7 +153,7 @@
         }
 
         .example-before {
-            background: #fff;
+            background: #fef2f2;
             border-left: 4px solid #e74c3c;
             margin-bottom: 0;
         }
@@ -198,6 +198,12 @@
             font-size: 28px;
             display: block;
             margin-bottom: 0;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
         }
 
         .how-it-works {
@@ -991,14 +997,14 @@
         <h1>reFrame</h1>
         <div class="tagline">Say it better.</div>
 
-        <div class="principles" style="margin-top: 30px;">
-            <strong>Built on the R³™ Framework:</strong><br>
-            REGULATED · RESPECTFUL · REPAIRABLE
+        <div class="principles" style="font-size: 16px; margin-top: 30px; opacity: 0.9;">
+            The only communication coach that catches toxic patterns before you hit send<br>
+            and shows you healthier alternatives.
         </div>
 
-        <div class="principles" style="font-size: 16px; margin-top: 25px; opacity: 0.9;">
-            The only communication coach that protects you from others AND yourself by catching toxic patterns<br>
-            before you hit send and shows you healthier alternatives.
+        <div class="principles" style="margin-top: 25px;">
+            <strong>Built on the R³™ Framework:</strong><br>
+            REGULATED · RESPECTFUL · REPAIRABLE
         </div>
     </section>
 
