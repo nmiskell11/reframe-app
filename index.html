@@ -29,6 +29,7 @@
             background: white;
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         nav {
@@ -76,7 +77,7 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            background: #FF7F50;
             color: white;
             padding: 80px 40px;
             text-align: center;
@@ -116,6 +117,143 @@
         .cta-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 650px;
+            margin: 0 auto 35px;
+            line-height: 1.7;
+        }
+
+        .example-card {
+            max-width: 550px;
+            margin: 0 auto 35px;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            text-align: left;
+            color: #333;
+        }
+
+        .example-before,
+        .example-after {
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .example-before {
+            background: #fef2f2;
+            border-left: 4px solid #e74c3c;
+            margin-bottom: 0;
+        }
+
+        .example-before .example-label {
+            color: #e74c3c;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .example-after {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+        }
+
+        .example-after .example-label {
+            color: #16a34a;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .example-arrow {
+            text-align: center;
+            font-size: 22px;
+            color: #999;
+            padding: 10px 0;
+        }
+
+        .hero-cta-text {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .hero-cta-emoji {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 0;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        .how-it-works {
+            background: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .how-it-works h3 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 35px;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            max-width: 180px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #FF7F50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .step p {
+            font-size: 15px;
+            color: #555;
+            margin: 0;
+            line-height: 1.4;
         }
 
         .tool-section {
@@ -744,11 +882,101 @@
         }
 
         @media (max-width: 768px) {
-            ...existing styles...
+            nav {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-logo {
+                font-size: 22px;
+            }
+
+            .nav-links {
+                gap: 10px;
+                font-size: 13px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links .cta {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 50px 20px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero .tagline {
+                font-size: 24px;
+            }
+
+            .hero .principles {
+                font-size: 14px;
+            }
+
+            .hero h2 {
+                font-size: 26px;
+            }
+
+            .hero-subtitle {
+                font-size: 15px;
+                margin: 0 auto 25px;
+            }
+
+            .example-card {
+                padding: 20px;
+                margin: 0 auto 25px;
+            }
+
+            .example-before,
+            .example-after {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .how-it-works {
+                padding: 35px 20px;
+            }
+
+            .how-it-works h3 {
+                font-size: 22px;
+            }
+
+            .steps {
+                gap: 25px;
+            }
+
+            .step {
+                max-width: 140px;
+            }
+
+            .tool-section {
+                padding: 40px 20px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .relationship-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feedback-buttons {
+                flex-direction: column;
+            }
+
             .feedback-btn {
                 width: 100%;
             }
-        .rfd-modal {
+
+            .rfd-modal {
                 width: 95%;
                 max-height: 90vh;
             }
@@ -773,41 +1001,13 @@
             .rfd-button {
                 width: 100%;
             }
-            .nav-links {
-                gap: 15px;
-                font-size: 14px;
+
+            footer {
+                padding: 40px 20px 30px;
             }
 
-            .hero h1 {
-                font-size: 42px;
-            }
-
-            .hero .tagline {
-                font-size: 24px;
-            }
-
-            .hero .principles {
-                font-size: 16px;
-            }
-
-            .tool-section {
-                padding: 40px 20px;
-            }
-
-            .card {
-                padding: 25px;
-            }
-
-            .relationship-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .feedback-buttons {
-                flex-direction: column;
-            }
-
-            .feedback-btn {
-                width: 100%;
+            .footer-content {
+                gap: 25px;
             }
         }
     </style>
@@ -825,28 +1025,67 @@
         </div>
     </nav>
 
-    <section class="hero">
+    <section class="hero" style="padding-bottom: 40px;">
         <h1>reFrame</h1>
         <div class="tagline">Say it better.</div>
-        
-        <div class="principles" style="margin-top: 30px;">
+
+        <div class="principles" style="font-size: 16px; margin-top: 30px; opacity: 0.9;">
+            The only communication coach that catches toxic patterns before you hit send<br>
+            and shows you healthier alternatives.
+        </div>
+
+        <div class="principles" style="margin-top: 25px;">
             <strong>Built on the R³™ Framework:</strong><br>
             REGULATED · RESPECTFUL · REPAIRABLE
         </div>
-        
-        <div class="principles" style="font-size: 16px; margin-top: 25px; opacity: 0.9;">
-            Pause. Regulate. Protect dignity.<br>
-            Transform conflict into connection.<br>
-            Model what you want to pass on.
-        </div>
-
-        <a href="#tool" class="cta-button">Start reFraming</a>
     </section>
 
+    <section class="hero" style="padding-top: 40px;">
+        <h2>Difficult conversation coming up?</h2>
+
+        <p class="hero-subtitle">
+            Type what you really want to say. We'll show you how to express
+            it with dignity — so you get your point across without damaging
+            the relationship.
+        </p>
+
+        <div class="example-card">
+            <div class="example-before">
+                <div class="example-label">❌ What you might type:</div>
+                "You never listen to me. You're so selfish and only care about yourself."
+            </div>
+            <div class="example-arrow">↓</div>
+            <div class="example-after">
+                <div class="example-label">✅ What reFrame suggests:</div>
+                "I've been feeling unheard lately. Can we talk about how we communicate
+                when things get tense? I want us both to feel valued in this relationship."
+            </div>
+        </div>
+
+        <p class="hero-cta-text">Try it yourself — it's free</p>
+        <span class="hero-cta-emoji">👇</span>
+    </section>
+
+    <div class="how-it-works">
+        <h3>How it works:</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <p>Pick your relationship type</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <p>Type your raw, honest message</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <p>Get a healthier version instantly</p>
+            </div>
+        </div>
+    </div>
+    
     <section class="tool-section" id="tool">
         <div class="container">
-            <h2 class="section-title">Transform Your Message</h2>
-            
             <div class="card">
                 <div class="info-box">
                     <h3>📝 How to Use reFrame</h3>
@@ -897,6 +1136,10 @@
                         <div class="relationship-option">
                             <input type="radio" id="rel-child" name="relationship" value="child">
                             <label for="rel-child">👶 Child/Teen</label>
+                        </div>
+                        <div class="relationship-option">
+                            <input type="radio" id="rel-provider" name="relationship" value="provider">
+                            <label for="rel-provider">🩺 Provider</label>
                         </div>
                         <div class="relationship-option">
                             <input type="radio" id="rel-general" name="relationship" value="general" checked>
@@ -1512,6 +1755,7 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 client: "This reframe prioritizes customer satisfaction while setting appropriate boundaries. It's professional and solution-focused.",
                 neighbor: "This reframe maintains community harmony while being firm about boundaries. It's friendly but clear.",
                 child: "This reframe teaches emotional regulation through modeling. It's patient, clear, and sets an example of healthy communication.",
+                provider: "This reframe balances advocacy for your needs with respect for your provider's expertise. It clearly states concerns while keeping the door open for collaborative care.",
                 general: "This reframe follows the R³™ Framework: REGULATED (calm approach), RESPECTFUL (protects dignity), REPAIRABLE (leaves room for connection)."
             };
 
