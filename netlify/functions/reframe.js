@@ -14,6 +14,27 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY // Service role bypasses RLS, needed for backend
 );
 
+// Allowed relationship types (for input validation)
+const ALLOWED_RELATIONSHIP_TYPES = [
+  'romantic_partner', 'parent', 'family', 'friend', 'manager',
+  'direct_report', 'colleague', 'client', 'neighbor', 'child',
+  'provider', 'general'
+];
+
+// Input length limits
+const MAX_MESSAGE_LENGTH = 5000;
+const MAX_CONTEXT_LENGTH = 5000;
+
+// Sanitize user input before embedding in LLM prompts to mitigate prompt injection.
+// Uses clear delimiters and escapes sequences that could break out of quoted blocks.
+function sanitizeForPrompt(input) {
+  if (!input) return '';
+  return input
+    .replace(/"""/g, "'\"'")   // Escape triple-quote sequences
+    .replace(/```/g, "'''")     // Escape backtick fences
+    .slice(0, MAX_MESSAGE_LENGTH); // Enforce length limit
+}
+
 // Relationship contexts (unchanged)
 const RELATIONSHIP_CONTEXTS = {
   romantic_partner: {
@@ -150,9 +171,11 @@ CRITICAL CONTEXT: You are analyzing a message that the USER RECEIVED from someon
 3. Validate the user's perception if they're being manipulated/criticized
 4. Suggest how the USER can respond in a healthy way
 
-Analyze this message THE USER RECEIVED:
+Analyze this message THE USER RECEIVED (delimited by triple quotes below):
 
-"${message}"
+"""
+${sanitizeForPrompt(message)}
+"""
 
 PATTERNS TO DETECT:
 1. CRITICISM - Attacking character/personality rather than specific behavior
@@ -227,9 +250,11 @@ CRITICAL CONTEXT: You are analyzing a message that the USER is about to SEND. Yo
 2. Explain why these patterns are harmful to the relationship
 3. Suggest how THEY can express the same feelings in a healthier way
 
-Analyze this message THE USER IS ABOUT TO SEND:
+Analyze this message THE USER IS ABOUT TO SEND (delimited by triple quotes below):
 
-"${message}"
+"""
+${sanitizeForPrompt(message)}
+"""
 
 PATTERNS TO DETECT:
 1. CRITICISM - Attacking character/personality rather than specific behavior
@@ -364,11 +389,13 @@ TONE: ${relationshipContext.tone}
 FORMALITY: ${relationshipContext.formality}
 APPROACH: ${relationshipContext.approach}
 
-${theirMessage ? `THEIR MESSAGE TO USER:\n"${theirMessage}"\n\n` : ''}
-${situationContext ? `SITUATION/BACKGROUND:\n${situationContext}\n\n` : ''}
+${theirMessage ? `THEIR MESSAGE TO USER (delimited by triple quotes):\n"""\n${sanitizeForPrompt(theirMessage)}\n"""\n\n` : ''}
+${situationContext ? `SITUATION/BACKGROUND (delimited by triple quotes):\n"""\n${sanitizeForPrompt(situationContext)}\n"""\n\n` : ''}
 
-USER'S RAW MESSAGE (what they want to say):
-"${message}"
+USER'S RAW MESSAGE (what they want to say, delimited by triple quotes):
+"""
+${sanitizeForPrompt(message)}
+"""
 
 TASK: Reframe the user's message using the R³ Framework:
 - REGULATED: Calm, not reactive
@@ -403,8 +430,11 @@ Respond with ONLY the reframed message (no preamble, no explanation).`;
 
 // Main handler (UPDATED with Supabase tracking)
 exports.handler = async (event) => {
+  // Restrict CORS to known origin(s). Set ALLOWED_ORIGIN env var in Netlify dashboard.
+  // Falls back to wildcard only if not configured (dev convenience), but production should set this.
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || '*';
   const headers = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
@@ -421,11 +451,21 @@ exports.handler = async (event) => {
     };
   }
 
+  // Validate Content-Type
+  const contentType = (event.headers || {})['content-type'] || (event.headers || {})['Content-Type'] || '';
+  if (event.httpMethod === 'POST' && !contentType.includes('application/json')) {
+    return {
+      statusCode: 415,
+      headers,
+      body: JSON.stringify({ error: 'Content-Type must be application/json' }),
+    };
+  }
+
   try {
-    const { 
-      message, 
-      context, 
-      relationshipType = 'general', 
+    const {
+      message,
+      context,
+      relationshipType = 'general',
       skipRFD = false,
       checkedInbound = false,
       sessionToken = null,  // NEW: For tracking anonymous users
@@ -440,21 +480,40 @@ exports.handler = async (event) => {
       };
     }
 
-    console.log('Request:', { 
-      hasMessage: true,
+    // Validate input lengths to prevent abuse
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: `Message must be under ${MAX_MESSAGE_LENGTH} characters` }),
+      };
+    }
+
+    if (context && context.length > MAX_CONTEXT_LENGTH) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: `Context must be under ${MAX_CONTEXT_LENGTH} characters` }),
+      };
+    }
+
+    // Validate relationshipType against allowlist
+    const validatedRelationshipType = ALLOWED_RELATIONSHIP_TYPES.includes(relationshipType)
+      ? relationshipType
+      : 'general';
+
+    console.log('Request:', {
       messageLength: message.length,
       hasContext: !!context,
-      contextPreview: context ? context.substring(0, 100) : 'none',
-      relationshipType,
+      relationshipType: validatedRelationshipType,
       skipRFD,
-      checkedInbound,
-      hasSessionToken: !!sessionToken
+      checkedInbound
     });
 
     // ========================================
     // NEW: Check for objective relationship health concerns
     // ========================================
-    const healthCheck = await checkRelationshipHealth(context, message, relationshipType);
+    const healthCheck = await checkRelationshipHealth(context, message, validatedRelationshipType);
     if (healthCheck) {
       console.log('Relationship health concern detected:', healthCheck.type);
       // We'll still proceed with RFD, but frontend can show this alert too
@@ -471,7 +530,7 @@ exports.handler = async (event) => {
         .insert({
           user_id: userId,
           session_token: sessionToken,
-          relationship_type: relationshipType,
+          relationship_type: validatedRelationshipType,
           had_context: !!context && context.trim().length > 0,
           context_length: context ? context.length : 0,
           message_length: message.length
@@ -495,18 +554,14 @@ exports.handler = async (event) => {
       console.log('STEP 1: Attempting inbound check...');
       let theirMessage = '';
       const theirMessageMatch = context.match(/THEIR MESSAGE:\s*["']*(.*?)["']*(?:\n\n|$)/is);
-      console.log('Regex match result:', theirMessageMatch ? 'FOUND' : 'NOT FOUND');
-      
       if (theirMessageMatch) {
         theirMessage = theirMessageMatch[1].trim();
         theirMessage = theirMessage.replace(/^["']+|["']+$/g, '');
-        console.log('Their message extracted:', theirMessage.substring(0, 50) + '...');
       }
-      
+
       if (theirMessage && theirMessage.length > 10) {
-        console.log('Checking inbound RFD on message length:', theirMessage.length);
-        const inboundRFD = await detectRedFlags(theirMessage, 'inbound', relationshipType, context);
-        console.log('Inbound RFD result:', inboundRFD);
+        console.log('Checking inbound RFD, message length:', theirMessage.length);
+        const inboundRFD = await detectRedFlags(theirMessage, 'inbound', validatedRelationshipType, context);
         
         if (inboundRFD.hasRedFlags) {
           console.log('Inbound alert:', inboundRFD.patterns);
@@ -560,10 +615,8 @@ exports.handler = async (event) => {
 
     // STEP 2: Check OUTBOUND (user's message)
     if (!skipRFD) {
-      console.log('STEP 2: Checking outbound RFD on user message...');
-      console.log('User message preview:', message.substring(0, 50) + '...');
-      const outboundRFD = await detectRedFlags(message, 'outbound', relationshipType, context);
-      console.log('Outbound RFD result:', outboundRFD);
+      console.log('STEP 2: Checking outbound RFD...');
+      const outboundRFD = await detectRedFlags(message, 'outbound', validatedRelationshipType, context);
       
       if (outboundRFD.hasRedFlags) {
         console.log('Outbound alert:', outboundRFD.patterns);
@@ -613,7 +666,7 @@ exports.handler = async (event) => {
 
     // STEP 3: No patterns found, do the reframe
     console.log('Proceeding with reframe');
-    const reframed = await reframeMessage(message, context, relationshipType);
+    const reframed = await reframeMessage(message, context, validatedRelationshipType);
 
     // ========================================
     // NEW: Update session as completed
@@ -633,7 +686,7 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         reframed,
-        relationshipType,
+        relationshipType: validatedRelationshipType,
         usedContext: !!context,
         healthCheck: healthCheck,  // NEW: Include relationship health alert
         sessionId: sessionId  // NEW: Return session ID for frontend tracking
@@ -647,7 +700,6 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         error: 'Internal server error',
-        message: error.message,
       }),
     };
   }

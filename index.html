@@ -1409,9 +1409,14 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             console.log('reframeMessage called, skipRFD:', skipRFD, 'checkedInbound:', checkedInbound, 'lastAlertSource:', lastAlertSource);
             
             const inputText = document.getElementById('inputText').value.trim();
-            
+
             if (!inputText) {
                 showError('Please enter a message to reframe');
+                return;
+            }
+
+            if (inputText.length > 5000) {
+                showError('Message must be under 5000 characters');
                 return;
             }
 
@@ -1571,7 +1576,11 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 title.textContent = '🛡️ Inbound RFD™ Alert';
                 tagline.textContent = 'Pattern detected in what they said to you';
                 source.className = 'rfd-source inbound';
-                source.innerHTML = '<strong>⚠️ Analysis of their message</strong>This pattern appears in what they said to you. Below is how you can respond.';
+                source.textContent = '';
+                const sourceStrong = document.createElement('strong');
+                sourceStrong.textContent = '\u26a0\ufe0f Analysis of their message';
+                source.appendChild(sourceStrong);
+                source.appendChild(document.createTextNode('This pattern appears in what they said to you. Below is how you can respond.'));
                 source.style.display = 'block';
                 
                 patternsTitle.textContent = 'What They\'re Using';
@@ -1585,7 +1594,11 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 title.textContent = '🚩 Outbound RFD™ Alert';
                 tagline.textContent = 'Pattern detected in what you\'re about to send';
                 source.className = 'rfd-source';
-                source.innerHTML = '<strong>⚠️ Analysis of your message</strong>These patterns may harm the relationship. Consider the healthier alternative below.';
+                source.textContent = '';
+                const sourceStrongOut = document.createElement('strong');
+                sourceStrongOut.textContent = '\u26a0\ufe0f Analysis of your message';
+                source.appendChild(sourceStrongOut);
+                source.appendChild(document.createTextNode('These patterns may harm the relationship. Consider the healthier alternative below.'));
                 source.style.display = 'block';
                 
                 patternsTitle.textContent = 'What You\'re Using';
@@ -1761,11 +1774,23 @@ console.log('API Response:', JSON.stringify(data, null, 2));
 
             const explanation = explanations[relationshipType] || explanations.general;
             
-            document.getElementById('feedbackThanks').innerHTML = `
-                <strong>Why this works:</strong><br>
-                ${explanation}<br><br>
-                <em>Learn more about the <a href="r3-framework.html" style="color: #FF7F50;">R³ Framework™</a></em>
-            `;
+            const thanksEl = document.getElementById('feedbackThanks');
+            thanksEl.textContent = '';
+            const strong = document.createElement('strong');
+            strong.textContent = 'Why this works:';
+            thanksEl.appendChild(strong);
+            thanksEl.appendChild(document.createElement('br'));
+            thanksEl.appendChild(document.createTextNode(explanation));
+            thanksEl.appendChild(document.createElement('br'));
+            thanksEl.appendChild(document.createElement('br'));
+            const em = document.createElement('em');
+            const link = document.createElement('a');
+            link.href = 'r3-framework.html';
+            link.style.color = '#FF7F50';
+            link.textContent = 'R\u00b3 Framework\u2122';
+            em.appendChild(document.createTextNode('Learn more about the '));
+            em.appendChild(link);
+            thanksEl.appendChild(em);
         }
 
         document.getElementById('copyBtn').addEventListener('click', function() {
