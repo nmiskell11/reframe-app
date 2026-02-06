@@ -1343,12 +1343,12 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         function getSessionToken() {
             let token = localStorage.getItem('reframe_session_token');
             if (!token) {
-                // Generate unique token: anon_[timestamp]_[random]
-                token = 'anon_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                // Generate unique token using crypto-safe random values
+                const randomBytes = new Uint8Array(12);
+                crypto.getRandomValues(randomBytes);
+                const randomPart = Array.from(randomBytes, b => b.toString(16).padStart(2, '0')).join('');
+                token = 'anon_' + Date.now() + '_' + randomPart;
                 localStorage.setItem('reframe_session_token', token);
-                console.log('New session token created:', token);
-            } else {
-                console.log('Existing session token found:', token);
             }
             return token;
         }
@@ -1365,7 +1365,9 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         window.clearSessionToken = clearSessionToken;
 
         // Session ID for analytics (if enabled later)
-        const currentSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const sessRandom = new Uint8Array(12);
+        crypto.getRandomValues(sessRandom);
+        const currentSessionId = 'sess_' + Date.now() + '_' + Array.from(sessRandom, b => b.toString(16).padStart(2, '0')).join('');
 
         // ============================================
         // CORE FUNCTIONALITY (Works without analytics)
@@ -1449,7 +1451,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             outputSection.classList.remove('visible');
 
             try {
-                console.log('Calling API with session token:', userSessionToken);
+                console.log('Calling reframe API...');
                 const response = await fetch('/.netlify/functions/reframe', {
                     method: 'POST',
                     headers: {
@@ -1475,7 +1477,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 }
 
                 const data = await response.json();
-console.log('API Response:', JSON.stringify(data, null, 2));
+console.log('API response received, rfdAlert:', !!data.rfdAlert, 'hasReframed:', !!data.reframed);
 
                 // CHECK FOR RFD ALERT
                 if (data.rfdAlert && data.rfdResult) {

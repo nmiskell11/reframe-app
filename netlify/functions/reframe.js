@@ -346,12 +346,21 @@ If NO toxic patterns detected, return:
       cleanedText = cleanedText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     }
     
-    const result = JSON.parse(cleanedText);
-    
+    const parsed = JSON.parse(cleanedText);
+
+    // Validate and extract only expected fields from LLM response
+    const result = { hasRedFlags: !!parsed.hasRedFlags };
     if (result.hasRedFlags) {
       result.source = source;
+      result.severity = ['low', 'medium', 'high'].includes(parsed.severity) ? parsed.severity : 'medium';
+      result.patterns = Array.isArray(parsed.patterns) ? parsed.patterns.map(String).slice(0, 10) : [];
+      result.explanation = typeof parsed.explanation === 'string' ? parsed.explanation.slice(0, 2000) : '';
+      result.suggestion = typeof parsed.suggestion === 'string' ? parsed.suggestion.slice(0, 2000) : '';
+      if (parsed.validation && typeof parsed.validation === 'string') {
+        result.validation = parsed.validation.slice(0, 2000);
+      }
     }
-    
+
     return result;
   } catch (error) {
     console.error('RFD Detection Error:', error);
@@ -468,8 +477,10 @@ exports.handler = async (event) => {
       relationshipType = 'general',
       skipRFD = false,
       checkedInbound = false,
-      sessionToken = null,  // NEW: For tracking anonymous users
-      userId = null         // NEW: For authenticated users (future)
+      sessionToken = null,  // For tracking anonymous users
+      // SECURITY NOTE: When adding authentication, do NOT trust userId from the client.
+      // Instead, extract it from a verified JWT/session token on the server side.
+      userId = null         // For authenticated users (future)
     } = JSON.parse(event.body);
 
     if (!message || message.trim() === '') {
@@ -599,8 +610,7 @@ exports.handler = async (event) => {
               rfdAlert: true,
               rfdResult: inboundRFD,
               checkedInbound: true,
-              healthCheck: healthCheck,  // NEW: Include relationship health alert
-              sessionId: sessionId  // NEW: Return session ID
+              healthCheck: healthCheck
             }),
           };
         } else {
@@ -653,8 +663,7 @@ exports.handler = async (event) => {
           body: JSON.stringify({
             rfdAlert: true,
             rfdResult: outboundRFD,
-            healthCheck: healthCheck,  // NEW: Include relationship health alert
-            sessionId: sessionId  // NEW: Return session ID
+            healthCheck: healthCheck
           }),
         };
       } else {
@@ -688,8 +697,7 @@ exports.handler = async (event) => {
         reframed,
         relationshipType: validatedRelationshipType,
         usedContext: !!context,
-        healthCheck: healthCheck,  // NEW: Include relationship health alert
-        sessionId: sessionId  // NEW: Return session ID for frontend tracking
+        healthCheck: healthCheck
       }),
     };
 
