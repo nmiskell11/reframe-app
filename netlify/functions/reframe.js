@@ -66,6 +66,11 @@ const RELATIONSHIP_CONTEXTS = {
     formality: "simple and clear",
     approach: "Model healthy communication, teach emotional regulation"
   },
+  provider: {
+    tone: "clear and self-advocating",
+    formality: "professional",
+    approach: "Advocate for your needs while respecting expertise, ask questions, express concerns directly"
+  },
   general: {
     tone: "balanced and thoughtful",
     formality: "moderate",
