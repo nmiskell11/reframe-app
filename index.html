@@ -29,6 +29,7 @@
             background: white;
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         nav {
@@ -881,38 +882,30 @@
         }
 
         @media (max-width: 768px) {
-            ...existing styles...
-            .feedback-btn {
-                width: 100%;
-            }
-        .rfd-modal {
-                width: 95%;
-                max-height: 90vh;
+            nav {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 10px;
             }
 
-            .rfd-header {
-                padding: 20px;
-            }
-
-            .rfd-header h2 {
+            .nav-logo {
                 font-size: 22px;
             }
 
-            .rfd-body {
-                padding: 20px;
-            }
-
-            .rfd-footer {
-                padding: 15px 20px;
-                flex-direction: column;
-            }
-
-            .rfd-button {
-                width: 100%;
-            }
             .nav-links {
-                gap: 15px;
-                font-size: 14px;
+                gap: 10px;
+                font-size: 13px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links .cta {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 50px 20px;
             }
 
             .hero h1 {
@@ -924,15 +917,16 @@
             }
 
             .hero .principles {
-                font-size: 16px;
+                font-size: 14px;
             }
 
             .hero h2 {
-                font-size: 28px;
+                font-size: 26px;
             }
 
             .hero-subtitle {
-                font-size: 16px;
+                font-size: 15px;
+                margin: 0 auto 25px;
             }
 
             .example-card {
@@ -948,6 +942,10 @@
 
             .how-it-works {
                 padding: 35px 20px;
+            }
+
+            .how-it-works h3 {
+                font-size: 22px;
             }
 
             .steps {
@@ -976,6 +974,40 @@
 
             .feedback-btn {
                 width: 100%;
+            }
+
+            .rfd-modal {
+                width: 95%;
+                max-height: 90vh;
+            }
+
+            .rfd-header {
+                padding: 20px;
+            }
+
+            .rfd-header h2 {
+                font-size: 22px;
+            }
+
+            .rfd-body {
+                padding: 20px;
+            }
+
+            .rfd-footer {
+                padding: 15px 20px;
+                flex-direction: column;
+            }
+
+            .rfd-button {
+                width: 100%;
+            }
+
+            footer {
+                padding: 40px 20px 30px;
+            }
+
+            .footer-content {
+                gap: 25px;
             }
         }
     </style>
