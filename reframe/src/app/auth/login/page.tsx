@@ -1,16 +1,24 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  // Show error from OAuth callback redirect
+  useEffect(() => {
+    if (searchParams.get('error') === 'auth_callback_error') {
+      setError('Sign-in failed. Please try again.')
+    }
+  }, [searchParams])
 
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -18,6 +26,7 @@ export default function LoginPage() {
     setIsLoading(true)
 
     const supabase = createClient()
+    if (!supabase) return setError('Auth not configured')
     const { error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
@@ -31,6 +40,7 @@ export default function LoginPage() {
 
   async function handleGoogleLogin() {
     const supabase = createClient()
+    if (!supabase) return setError('Auth not configured')
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -131,14 +141,35 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-neutral-500">
-            Don&apos;t have an account?{' '}
-            <Link href="/auth/signup" className="text-coral font-semibold hover:underline">
-              Sign Up
-            </Link>
-          </p>
+          <div className="text-center space-y-2">
+            <p className="text-sm text-neutral-500">
+              Don&apos;t have an account?{' '}
+              <Link href="/auth/signup" className="text-coral font-semibold hover:underline">
+                Sign Up
+              </Link>
+            </p>
+            <p className="text-sm text-neutral-400">
+              <Link href="/auth/forgot-password" className="hover:underline">
+                Forgot your password?
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-cream flex items-center justify-center">
+          <p className="text-neutral-500 animate-pulse">Loading...</p>
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   )
 }

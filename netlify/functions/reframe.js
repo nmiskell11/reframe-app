@@ -99,6 +99,272 @@ const RELATIONSHIP_CONTEXTS = {
   }
 };
 
+// ============================================
+// QUESTION BANK - Fixed set of clarifying questions
+// Claude selects from these by ID; frontend renders deterministically
+// ============================================
+const QUESTION_BANK = {
+  desired_outcome: {
+    id: 'desired_outcome',
+    text: 'What outcome are you hoping for?',
+    format: 'single_select',
+    options: [
+      { value: 'boundary', label: 'Set a boundary' },
+      { value: 'repair', label: 'Repair the relationship' },
+      { value: 'express', label: 'Express how I feel' },
+      { value: 'deescalate', label: 'De-escalate' },
+      { value: 'inform', label: 'Inform or deliver news' },
+      { value: 'request', label: 'Request a change' }
+    ],
+    allow_other: true,
+    required: true
+  },
+  pattern_duration: {
+    id: 'pattern_duration',
+    text: 'How long has this dynamic been going on?',
+    format: 'single_select',
+    options: [
+      { value: 'new', label: 'This is new' },
+      { value: 'weeks', label: 'Weeks' },
+      { value: 'months', label: 'Months' },
+      { value: 'years', label: 'Years' }
+    ],
+    allow_other: false,
+    required: false
+  },
+  pattern_or_isolated: {
+    id: 'pattern_or_isolated',
+    text: 'Is this a recurring pattern or a one-time situation?',
+    format: 'single_select',
+    options: [
+      { value: 'one_time', label: 'One-time situation' },
+      { value: 'occasional', label: 'Happens occasionally' },
+      { value: 'recurring', label: 'Recurring pattern' },
+      { value: 'constant', label: 'Constant dynamic' }
+    ],
+    allow_other: false,
+    required: false
+  },
+  emotional_state: {
+    id: 'emotional_state',
+    text: 'How are you feeling right now?',
+    format: 'single_select',
+    options: [
+      { value: 'angry', label: 'Angry' },
+      { value: 'hurt', label: 'Hurt' },
+      { value: 'exhausted', label: 'Exhausted' },
+      { value: 'anxious', label: 'Anxious' },
+      { value: 'numb', label: 'Numb' },
+      { value: 'disappointed', label: 'Disappointed' },
+      { value: 'overwhelmed', label: 'Overwhelmed' }
+    ],
+    allow_other: true,
+    required: false
+  },
+  relationship_type: {
+    id: 'relationship_type',
+    text: "What's your relationship with this person?",
+    format: 'single_select',
+    options: [
+      { value: 'romantic_partner', label: 'Romantic Partner' },
+      { value: 'parent', label: 'Parent' },
+      { value: 'child', label: 'Child/Teen' },
+      { value: 'family', label: 'Family Member' },
+      { value: 'friend', label: 'Friend' },
+      { value: 'manager', label: 'Manager' },
+      { value: 'direct_report', label: 'Direct Report' },
+      { value: 'colleague', label: 'Colleague' },
+      { value: 'client', label: 'Client' },
+      { value: 'provider', label: 'Provider' },
+      { value: 'neighbor', label: 'Neighbor' }
+    ],
+    allow_other: false,
+    required: true
+  },
+  audience_intent: {
+    id: 'audience_intent',
+    text: 'Will you send this message directly, or are you processing your thoughts?',
+    format: 'single_select',
+    options: [
+      { value: 'sending', label: "I'm going to send this" },
+      { value: 'processing', label: "I'm processing my thoughts" },
+      { value: 'drafting', label: "I'm drafting — not sure yet" }
+    ],
+    allow_other: false,
+    required: false
+  },
+  safety_check: {
+    id: 'safety_check',
+    text: 'Do you feel safe in this relationship?',
+    format: 'single_select',
+    options: [
+      { value: 'yes', label: 'Yes, I feel safe' },
+      { value: 'mostly', label: 'Mostly, but this dynamic concerns me' },
+      { value: 'unsure', label: "I'm not sure" },
+      { value: 'no', label: "No, I don't always feel safe" }
+    ],
+    allow_other: false,
+    required: true,
+    special_handling: true
+  },
+  boundary_history: {
+    id: 'boundary_history',
+    text: 'Have you tried setting this boundary before?',
+    format: 'single_select',
+    options: [
+      { value: 'first_time', label: 'No, this is the first time' },
+      { value: 'tried_failed', label: "Yes, but it didn't work" },
+      { value: 'tried_partial', label: 'Yes, and it was partially respected' },
+      { value: 'tried_many', label: "I've tried many times" }
+    ],
+    allow_other: false,
+    required: false
+  },
+  desired_tone: {
+    id: 'desired_tone',
+    text: 'How do you want to come across?',
+    format: 'single_select',
+    options: [
+      { value: 'firm', label: 'Firm' },
+      { value: 'gentle', label: 'Gentle' },
+      { value: 'neutral', label: 'Neutral' },
+      { value: 'direct', label: 'Direct' },
+      { value: 'compassionate_clear', label: 'Compassionate but clear' }
+    ],
+    allow_other: false,
+    required: false
+  },
+  stakes: {
+    id: 'stakes',
+    text: 'How important is this conversation to you?',
+    format: 'single_select',
+    options: [
+      { value: 'low', label: "It matters, but it's not make-or-break" },
+      { value: 'medium', label: "It's important — I want to get it right" },
+      { value: 'high', label: 'This could significantly affect the relationship' },
+      { value: 'critical', label: 'This feels like a turning point' }
+    ],
+    allow_other: false,
+    required: false
+  }
+};
+
+// Question selection rules (encoded for prompt and validation)
+const QUESTION_SELECTION_RULES = {
+  max_per_round: 3,
+  max_rounds: 2,
+  mutually_exclusive: [['pattern_duration', 'pattern_or_isolated']],
+  safety_check_max_companions: 1,
+  safety_check_requires_high_severity_inbound: true,
+  relationship_type_only_when_general: true
+};
+
+// Build structured questions response from Claude's assessment
+function buildQuestionsResponse(assessment, questionRound) {
+  const questionIds = Array.isArray(assessment.questions_to_ask)
+    ? assessment.questions_to_ask.filter(id => QUESTION_BANK[id]).slice(0, QUESTION_SELECTION_RULES.max_per_round)
+    : [];
+
+  const questions = questionIds.map(id => ({ ...QUESTION_BANK[id] }));
+
+  // Add wildcard question if provided
+  if (assessment.wildcard_question && typeof assessment.wildcard_question === 'string') {
+    questions.push({
+      id: 'wildcard',
+      text: assessment.wildcard_question.slice(0, 500),
+      format: 'free_text',
+      options: [],
+      allow_other: false,
+      required: false
+    });
+  }
+
+  return {
+    questions,
+    skip_allowed: true,
+    skip_label: "Skip — reframe with what I've given you",
+    question_round: questionRound + 1
+  };
+}
+
+// Build enriched context string from original context + clarifying answers
+function buildEnrichedContext(originalContext, clarifyingAnswers) {
+  if (!clarifyingAnswers || clarifyingAnswers.length === 0) return originalContext;
+
+  let enrichment = '\n\nADDITIONAL CONTEXT FROM USER:';
+  for (const qa of clarifyingAnswers) {
+    const answerDisplay = qa.custom_text
+      ? `${qa.answer_text} — ${qa.custom_text}`
+      : qa.answer_text;
+    enrichment += `\n- ${qa.question_text}: ${answerDisplay}`;
+  }
+
+  return (originalContext || '') + enrichment;
+}
+
+// Lightweight context assessment (used when skipRFD=true, or for round 2)
+async function assessContextSufficiency(message, context, relationshipType, clarifyingAnswers = []) {
+  const hasContext = !!context && context.trim().length > 0;
+  const hasTheirMessage = hasContext && /THEIR MESSAGE:/i.test(context);
+  const hasSituation = hasContext && /SITUATION:/i.test(context);
+  const answeredIds = clarifyingAnswers.map(a => a.id);
+
+  const assessPrompt = `You are assessing whether you have sufficient context to produce a high-quality, intent-preserving message reframe.
+
+INPUT PROVIDED:
+- Message to reframe: "${sanitizeForPrompt(message).slice(0, 500)}"
+- Relationship type: ${relationshipType}
+- Their message provided: ${hasTheirMessage ? 'yes' : 'no'}
+- Situation context provided: ${hasSituation ? 'yes' : 'no'}
+${clarifyingAnswers.length > 0 ? `- Previously answered: ${answeredIds.join(', ')}` : '- No clarifying answers yet'}
+
+Select 0-3 questions from this bank (by ID) if context is insufficient:
+
+Available questions (DO NOT select any already answered):
+- desired_outcome: When user's communicative goal is unclear
+- pattern_duration: When recurring dynamic suspected (MUTUALLY EXCLUSIVE with pattern_or_isolated)
+- pattern_or_isolated: When unclear if recurring (MUTUALLY EXCLUSIVE with pattern_duration)
+- emotional_state: When message tone is ambiguous
+- relationship_type: ONLY when relationship is "${relationshipType}" and that equals "general"
+- audience_intent: When unclear if message will actually be sent
+- boundary_history: When scenario involves setting a boundary
+- desired_tone: When tone preference is unclear
+- stakes: When conversation importance would change reframe approach
+
+Rules:
+- Select 0 questions if context is sufficient (MOST COMMON for detailed messages)
+- Never select questions the user already answered
+- pattern_duration and pattern_or_isolated are mutually exclusive
+- Max 3 questions
+- You may provide ONE custom clarification if the message has genuine semantic ambiguity
+
+Respond with ONLY valid JSON:
+{
+  "sufficient_for_reframe": true/false,
+  "questions_to_ask": [],
+  "wildcard_question": null
+}`;
+
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 300,
+      messages: [{ role: 'user', content: assessPrompt }],
+    });
+
+    const text = response.content.find(b => b.type === 'text')?.text || '';
+    let cleaned = text.trim();
+    if (cleaned.startsWith('```')) {
+      cleaned = cleaned.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    }
+    return JSON.parse(cleaned);
+  } catch (error) {
+    console.error('Context assessment error:', error);
+    // On failure, proceed to reframe (don't block user)
+    return { sufficient_for_reframe: true, questions_to_ask: [], wildcard_question: null };
+  }
+}
+
 // Relationship Health Check - detects objectively problematic situations
 async function checkRelationshipHealth(context, message, relationshipType) {
   if (!context && !message) return null;
@@ -315,13 +581,44 @@ ONLY flag as toxic if the parent:
 Remember: A parent saying "I raised you better than this" when addressing genuinely harmful behavior (like being "the other person" in a relationship) is appropriate parenting, not manipulation. A parent expressing disappointment about risky choices is protective, not criticism. A parent teaching ethical boundaries with conviction is their duty, not abuse.
 ` : ''}
 
+STEP 1 — RED FLAG DETECTION:
+First, complete your forensic analysis of the message for toxic patterns.
+
+STEP 2 — CONTEXT SUFFICIENCY ASSESSMENT:
+After completing RFD analysis, perform a SEPARATE assessment: do you have sufficient context to produce a high-quality, intent-preserving reframe?
+
+Consider what was provided:
+- The message above
+- Relationship type: ${relationshipType}
+- Context about their message: ${context && /THEIR MESSAGE:/i.test(context) ? 'provided' : 'not provided'}
+- Situation background: ${context && /SITUATION:/i.test(context) ? 'provided' : 'not provided'}
+
+Select 0-3 question IDs if context is insufficient for a quality reframe:
+- desired_outcome: When user's communicative goal is unclear (MOST VALUABLE — if asking only one, ask this)
+- pattern_duration: When recurring dynamic suspected (MUTUALLY EXCLUSIVE with pattern_or_isolated)
+- pattern_or_isolated: When unclear if recurring (MUTUALLY EXCLUSIVE with pattern_duration)
+- emotional_state: When message tone is ambiguous between anger/hurt/exhaustion
+- relationship_type: ONLY when relationship type is "general" (user skipped selection)
+- audience_intent: When unclear if message will actually be sent
+- safety_check: ONLY when HIGH severity coercive/threat patterns detected inbound — never with more than 1 other question
+- boundary_history: When scenario involves setting a boundary
+- desired_tone: When tone preference is unclear
+- stakes: When conversation importance would change reframe approach
+
+Select 0 questions if context is sufficient (MOST COMMON for detailed submissions with clear intent).
+
 Respond ONLY with valid JSON (no markdown, no code blocks):
 {
   "hasRedFlags": true/false,
   "severity": "low"/"medium"/"high",
   "patterns": ["PATTERN1", "PATTERN2"],
   "explanation": "Explain why the patterns in THEIR message are harmful to the relationship",
-  "suggestion": "Suggest how THEY can express the same feelings/needs in a healthier way"
+  "suggestion": "Suggest how THEY can express the same feelings/needs in a healthier way",
+  "context_assessment": {
+    "sufficient_for_reframe": true/false,
+    "questions_to_ask": [],
+    "wildcard_question": null
+  }
 }
 
 CRITICAL: Write all explanations and suggestions for the SENDER (the user), NOT the recipient.
@@ -329,13 +626,13 @@ Example RIGHT: "Instead of attacking their character, express how their actions 
 Example WRONG: "They should respond by setting boundaries" (this would be for the recipient)
 
 If NO toxic patterns detected, return:
-{"hasRedFlags": false}`;
+{"hasRedFlags": false, "context_assessment": {"sufficient_for_reframe": true, "questions_to_ask": [], "wildcard_question": null}}`;
   }
 
   try {
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
+      max_tokens: 1200,
       messages: [{ role: 'user', content: detectionPrompt }],
     });
 
@@ -361,6 +658,19 @@ If NO toxic patterns detected, return:
       }
     }
 
+    // Extract context assessment (outbound only)
+    if (parsed.context_assessment && source === 'outbound') {
+      result.context_assessment = {
+        sufficient_for_reframe: !!parsed.context_assessment.sufficient_for_reframe,
+        questions_to_ask: Array.isArray(parsed.context_assessment.questions_to_ask)
+          ? parsed.context_assessment.questions_to_ask.filter(id => typeof id === 'string').slice(0, QUESTION_SELECTION_RULES.max_per_round)
+          : [],
+        wildcard_question: typeof parsed.context_assessment.wildcard_question === 'string'
+          ? parsed.context_assessment.wildcard_question.slice(0, 500)
+          : null
+      };
+    }
+
     return result;
   } catch (error) {
     console.error('RFD Detection Error:', error);
@@ -368,29 +678,47 @@ If NO toxic patterns detected, return:
   }
 }
 
-// Reframing function (unchanged)
-async function reframeMessage(message, context, relationshipType) {
+// Reframing function — now accepts clarifying Q&A for enriched reframes
+async function reframeMessage(message, context, relationshipType, clarifyingAnswers = []) {
   const relationshipContext = RELATIONSHIP_CONTEXTS[relationshipType] || RELATIONSHIP_CONTEXTS.general;
-  
+
   let theirMessage = '';
   let situationContext = '';
-  
+
   if (context) {
     const theirMessageMatch = context.match(/THEIR MESSAGE:\s*"?([^"]*)"?(?:\n|$)/i);
-    const situationMatch = context.match(/SITUATION:\s*(.+)/is);
-    
+    const situationMatch = context.match(/SITUATION:\s*(.+?)(?:\n\nADDITIONAL CONTEXT|$)/is);
+
     if (theirMessageMatch) {
       theirMessage = theirMessageMatch[1].trim();
     }
     if (situationMatch) {
       situationContext = situationMatch[1].trim();
     }
-    
+
     if (!theirMessage && !situationContext) {
-      situationContext = context;
+      // Check if context has the ADDITIONAL CONTEXT section (from enriched context)
+      const additionalMatch = context.match(/ADDITIONAL CONTEXT FROM USER:/i);
+      if (additionalMatch) {
+        situationContext = context.slice(0, additionalMatch.index).trim();
+      } else {
+        situationContext = context;
+      }
     }
   }
-  
+
+  // Build clarifying context section for the prompt
+  let clarifyingSection = '';
+  if (clarifyingAnswers.length > 0) {
+    clarifyingSection = '\nUSER CLARIFICATIONS (use these to calibrate the reframe):\n';
+    for (const qa of clarifyingAnswers) {
+      const answerDisplay = qa.custom_text
+        ? `${qa.answer_text} — ${qa.custom_text}`
+        : qa.answer_text;
+      clarifyingSection += `- ${qa.question_text}: ${answerDisplay}\n`;
+    }
+  }
+
   const reframePrompt = `You are a communication coach using the R³ Framework (REGULATED, RESPECTFUL, REPAIRABLE).
 
 RELATIONSHIP TYPE: ${relationshipType}
@@ -400,7 +728,7 @@ APPROACH: ${relationshipContext.approach}
 
 ${theirMessage ? `THEIR MESSAGE TO USER (delimited by triple quotes):\n"""\n${sanitizeForPrompt(theirMessage)}\n"""\n\n` : ''}
 ${situationContext ? `SITUATION/BACKGROUND (delimited by triple quotes):\n"""\n${sanitizeForPrompt(situationContext)}\n"""\n\n` : ''}
-
+${clarifyingSection}
 USER'S RAW MESSAGE (what they want to say, delimited by triple quotes):
 """
 ${sanitizeForPrompt(message)}
@@ -419,6 +747,9 @@ REQUIREMENTS:
 5. Be direct and honest, not fake or overly nice
 6. If their message has legitimate grievances, acknowledge them
 7. Focus on specific behaviors, not character attacks
+${clarifyingAnswers.some(a => a.id === 'desired_outcome') ? `8. The user's stated goal is "${clarifyingAnswers.find(a => a.id === 'desired_outcome').answer_text}" — optimize the reframe for this outcome` : ''}
+${clarifyingAnswers.some(a => a.id === 'desired_tone') ? `9. The user wants to come across as "${clarifyingAnswers.find(a => a.id === 'desired_tone').answer_text}" — calibrate tone accordingly` : ''}
+${clarifyingAnswers.some(a => a.id === 'audience_intent' && a.answer_value === 'processing') ? `10. The user is processing thoughts, not sending this directly — make the reframe more reflective and less tactical` : ''}
 
 Respond with ONLY the reframed message (no preamble, no explanation).`;
 
@@ -480,7 +811,12 @@ exports.handler = async (event) => {
       sessionToken = null,  // For tracking anonymous users
       // SECURITY NOTE: When adding authentication, do NOT trust userId from the client.
       // Instead, extract it from a verified JWT/session token on the server side.
-      userId = null         // For authenticated users (future)
+      userId = null,        // For authenticated users (future)
+      // AskUserQuestionsTool fields
+      stage = 'initial',    // 'initial' | 'reframe_with_answers'
+      clarifyingAnswers = [],  // Array of { id, question_text, answer_value, answer_text, custom_text }
+      questionRound = 0,    // Which round of questions (0 = none asked yet)
+      skipQuestions = false  // User clicked "skip" on questions
     } = JSON.parse(event.body);
 
     if (!message || message.trim() === '') {
@@ -513,12 +849,21 @@ exports.handler = async (event) => {
       ? relationshipType
       : 'general';
 
+    // Validate clarifyingAnswers is array and sanitize
+    const validatedAnswers = Array.isArray(clarifyingAnswers)
+      ? clarifyingAnswers.filter(a => a && typeof a.id === 'string').slice(0, 10)
+      : [];
+
     console.log('Request:', {
       messageLength: message.length,
       hasContext: !!context,
       relationshipType: validatedRelationshipType,
       skipRFD,
-      checkedInbound
+      checkedInbound,
+      stage,
+      questionRound,
+      answersProvided: validatedAnswers.length,
+      skipQuestions
     });
 
     // ========================================
@@ -560,6 +905,108 @@ exports.handler = async (event) => {
       console.error('Database error (non-blocking):', dbError);
     }
 
+    // ========================================
+    // STAGE ROUTING: reframe_with_answers
+    // User answered clarifying questions — proceed to reframe
+    // ========================================
+    if (stage === 'reframe_with_answers') {
+      console.log('Stage: reframe_with_answers, round:', questionRound, 'answers:', validatedAnswers.length);
+
+      // Check if round 2 questions are needed (only if not skipping and round < max)
+      if (!skipQuestions && questionRound < QUESTION_SELECTION_RULES.max_rounds && validatedAnswers.length > 0) {
+        const assessment = await assessContextSufficiency(message, context, validatedRelationshipType, validatedAnswers);
+        if (!assessment.sufficient_for_reframe && assessment.questions_to_ask.length > 0) {
+          console.log('Round 2 questions needed:', assessment.questions_to_ask);
+          const questionsResponse = buildQuestionsResponse(assessment, questionRound);
+
+          // Log questions offered to DB
+          if (sessionId) {
+            try {
+              await supabase.from('reframe_sessions').update({
+                questions_offered: true,
+                question_rounds: questionRound + 1
+              }).eq('id', sessionId);
+            } catch (dbError) {
+              console.error('DB logging error (non-blocking):', dbError);
+            }
+          }
+
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify({
+              type: 'questions',
+              ...questionsResponse,
+              healthCheck: healthCheck
+            }),
+          };
+        }
+      }
+
+      // Build enriched context and reframe
+      const enrichedContext = buildEnrichedContext(context, validatedAnswers);
+      console.log('Reframing with enriched context, answers:', validatedAnswers.length);
+      const reframed = await reframeMessage(message, enrichedContext, validatedRelationshipType, validatedAnswers);
+
+      // Check for safety_check answer that requires resources
+      const safetyAnswer = validatedAnswers.find(a => a.id === 'safety_check');
+      const includeSafetyResources = safetyAnswer && ['no', 'unsure', 'mostly'].includes(safetyAnswer.answer_value);
+
+      // Log to Supabase
+      if (sessionId) {
+        try {
+          await supabase.from('reframe_sessions').update({
+            reframe_with_context: true,
+            questions_offered: true,
+            questions_skipped: skipQuestions,
+            question_rounds: questionRound,
+            clarifying_qa: validatedAnswers.map(a => ({
+              round: a.round || 1,
+              id: a.id,
+              answer_value: a.answer_value,
+              answer_text: a.answer_text,
+              custom_text: a.custom_text || null
+            }))
+          }).eq('id', sessionId);
+        } catch (dbError) {
+          console.error('DB logging error (non-blocking):', dbError);
+        }
+      }
+
+      if (sessionId && userId) {
+        try {
+          await supabase.rpc('increment_user_reframes', { user_uuid: userId });
+        } catch (dbError) {
+          console.error('DB update error (non-blocking):', dbError);
+        }
+      }
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          type: 'reframe',
+          reframed,
+          relationshipType: validatedRelationshipType,
+          usedContext: true,
+          healthCheck: healthCheck,
+          safetyResources: includeSafetyResources ? {
+            show: true,
+            message: "Your safety matters. If you're in a situation where you don't feel safe, these resources can help:",
+            resources: [
+              { name: 'National Domestic Violence Hotline', contact: '1-800-799-7233', url: 'https://www.thehotline.org' },
+              { name: 'Crisis Text Line', contact: 'Text HOME to 741741', url: 'https://www.crisistextline.org' },
+              { name: 'Love Is Respect', contact: '1-866-331-9474', url: 'https://www.loveisrespect.org' }
+            ]
+          } : null
+        }),
+      };
+    }
+
+    // ========================================
+    // STAGE: initial — Full RFD + context assessment pipeline
+    // ========================================
+
     // STEP 1: Check INBOUND (their message)
     if (!skipRFD && !checkedInbound && context) {
       console.log('STEP 1: Attempting inbound check...');
@@ -573,13 +1020,10 @@ exports.handler = async (event) => {
       if (theirMessage && theirMessage.length > 10) {
         console.log('Checking inbound RFD, message length:', theirMessage.length);
         const inboundRFD = await detectRedFlags(theirMessage, 'inbound', validatedRelationshipType, context);
-        
+
         if (inboundRFD.hasRedFlags) {
           console.log('Inbound alert:', inboundRFD.patterns);
 
-          // ========================================
-          // NEW: Log inbound RFD detection to DB
-          // ========================================
           if (sessionId) {
             try {
               await supabase.from('reframe_sessions').update({
@@ -623,17 +1067,18 @@ exports.handler = async (event) => {
       console.log('STEP 1 skipped:', { skipRFD, checkedInbound, hasContext: !!context });
     }
 
-    // STEP 2: Check OUTBOUND (user's message)
+    // STEP 2: Check OUTBOUND (user's message) — now includes context assessment
+    let contextAssessment = null;
     if (!skipRFD) {
-      console.log('STEP 2: Checking outbound RFD...');
+      console.log('STEP 2: Checking outbound RFD (with context assessment)...');
       const outboundRFD = await detectRedFlags(message, 'outbound', validatedRelationshipType, context);
-      
+
+      // Save context assessment from the outbound call
+      contextAssessment = outboundRFD.context_assessment || null;
+
       if (outboundRFD.hasRedFlags) {
         console.log('Outbound alert:', outboundRFD.patterns);
 
-        // ========================================
-        // NEW: Log outbound RFD detection to DB
-        // ========================================
         if (sessionId) {
           try {
             await supabase.from('reframe_sessions').update({
@@ -671,18 +1116,62 @@ exports.handler = async (event) => {
       }
     } else {
       console.log('STEP 2 skipped: skipRFD=true');
+      // When skipRFD (user continued past outbound alert), do lightweight assessment
+      if (!skipQuestions) {
+        console.log('Running separate context assessment (skipRFD path)...');
+        contextAssessment = await assessContextSufficiency(message, context, validatedRelationshipType);
+      }
     }
 
-    // STEP 3: No patterns found, do the reframe
+    // STEP 3: Check if clarifying questions are needed
+    if (!skipQuestions && contextAssessment && !contextAssessment.sufficient_for_reframe
+        && contextAssessment.questions_to_ask && contextAssessment.questions_to_ask.length > 0) {
+      console.log('Context insufficient, returning questions:', contextAssessment.questions_to_ask);
+      const questionsResponse = buildQuestionsResponse(contextAssessment, 0);
+
+      // Log questions offered
+      if (sessionId) {
+        try {
+          await supabase.from('reframe_sessions').update({
+            context_sufficient: false,
+            questions_offered: true,
+            question_rounds: 1
+          }).eq('id', sessionId);
+        } catch (dbError) {
+          console.error('DB logging error (non-blocking):', dbError);
+        }
+      }
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          type: 'questions',
+          ...questionsResponse,
+          healthCheck: healthCheck
+        }),
+      };
+    }
+
+    // STEP 4: Context sufficient — proceed to reframe
     console.log('Proceeding with reframe');
     const reframed = await reframeMessage(message, context, validatedRelationshipType);
 
-    // ========================================
-    // NEW: Update session as completed
-    // ========================================
+    // Log context sufficiency
+    if (sessionId) {
+      try {
+        await supabase.from('reframe_sessions').update({
+          context_sufficient: true,
+          questions_offered: false,
+          reframe_with_context: false
+        }).eq('id', sessionId);
+      } catch (dbError) {
+        console.error('DB logging error (non-blocking):', dbError);
+      }
+    }
+
     if (sessionId && userId) {
       try {
-        // Increment user's total reframes (will create function for this)
         await supabase.rpc('increment_user_reframes', { user_uuid: userId });
         console.log('User reframe count incremented');
       } catch (dbError) {
@@ -694,6 +1183,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers,
       body: JSON.stringify({
+        type: 'reframe',
         reframed,
         relationshipType: validatedRelationshipType,
         usedContext: !!context,

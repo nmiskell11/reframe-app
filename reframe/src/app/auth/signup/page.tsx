@@ -17,6 +17,7 @@ export default function SignupPage() {
     setIsLoading(true)
 
     const supabase = createClient()
+    if (!supabase) return setError('Auth not configured')
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -35,6 +36,7 @@ export default function SignupPage() {
 
   async function handleGoogleLogin() {
     const supabase = createClient()
+    if (!supabase) return setError('Auth not configured')
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -49,7 +51,7 @@ export default function SignupPage() {
       <div className="min-h-screen bg-cream flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
           <div className="bg-white rounded-2xl shadow-lg p-8">
-            <div className="text-4xl mb-4">{'\\u2709\\uFE0F'}</div>
+            <div className="text-4xl mb-4">{'\u2709\uFE0F'}</div>
             <h2 className="text-xl font-bold text-neutral-800 mb-2">Check your email</h2>
             <p className="text-sm text-neutral-600">
               We sent a confirmation link to <strong>{email}</strong>. Click it to
