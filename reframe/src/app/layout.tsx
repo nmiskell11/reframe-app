@@ -1,16 +1,8 @@
 import type { Metadata } from 'next'
-import { Libre_Baskerville } from 'next/font/google'
 import Script from 'next/script'
 
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import './globals.css'
-
-const libreBaskerville = Libre_Baskerville({
-  variable: '--font-libre-baskerville',
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
-})
 
 export const metadata: Metadata = {
   title: 'reFrame\u2122 \u2014 Say it better.',
@@ -26,6 +18,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+          rel="stylesheet"
+        />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-R3PQF5P29J"
           strategy="afterInteractive"
@@ -39,7 +44,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${libreBaskerville.variable} font-serif antialiased`}>
+      <body className="font-serif antialiased">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

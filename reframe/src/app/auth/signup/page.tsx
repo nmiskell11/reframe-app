@@ -17,6 +17,7 @@ export default function SignupPage() {
     setIsLoading(true)
 
     const supabase = createClient()
+    if (!supabase) return setError('Auth not configured')
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -35,6 +36,7 @@ export default function SignupPage() {
 
   async function handleGoogleLogin() {
     const supabase = createClient()
+    if (!supabase) return setError('Auth not configured')
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {

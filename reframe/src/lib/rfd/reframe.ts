@@ -1,5 +1,5 @@
 import type { RelationshipType } from '@/lib/constants'
-import { anthropic, MODEL } from '@/lib/anthropic/client'
+import { getAnthropic, MODEL } from '@/lib/anthropic/client'
 import { RELATIONSHIP_CONTEXTS } from './relationships'
 import { sanitizeForPrompt } from './sanitize'
 
@@ -86,7 +86,7 @@ export async function reframeMessage(
 ): Promise<string> {
   const prompt = buildReframePrompt(message, context, relationshipType)
 
-  const response = await anthropic.messages.create({
+  const response = await getAnthropic().messages.create({
     model: MODEL,
     max_tokens: 2000,
     messages: [{ role: 'user', content: prompt }],

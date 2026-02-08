@@ -41,7 +41,7 @@
   --color-surface: #F5F5F5;
 
   /* Font */
-  --font-serif: var(--font-libre-baskerville), 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
+  --font-serif: 'Libre Baskerville', 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
 }
 
 body {

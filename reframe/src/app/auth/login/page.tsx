@@ -18,6 +18,7 @@ export default function LoginPage() {
     setIsLoading(true)
 
     const supabase = createClient()
+    if (!supabase) return setError('Auth not configured')
     const { error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
@@ -31,6 +32,7 @@ export default function LoginPage() {
 
   async function handleGoogleLogin() {
     const supabase = createClient()
+    if (!supabase) return setError('Auth not configured')
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {

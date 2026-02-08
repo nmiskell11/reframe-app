@@ -7,7 +7,7 @@ import {
 import type { RelationshipType } from '@/lib/constants'
 import type { ReframeRequest, ReframeResponse } from '@/types/reframe'
 import { detectRedFlags, reframeMessage, checkRelationshipHealth } from '@/lib/rfd'
-import { supabaseAdmin } from '@/lib/supabase/admin'
+import { getSupabaseAdmin } from '@/lib/supabase/admin'
 
 export async function POST(request: NextRequest) {
   let body: ReframeRequest
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
 
   let sessionId: string | null = null
   try {
-    const { data: session } = await supabaseAdmin
+    const { data: session } = await getSupabaseAdmin()
       .from('reframe_sessions')
       .insert({
         session_token: sessionToken || null,
@@ -159,7 +159,7 @@ async function logRFD(
 ) {
   const updateField = type === 'inbound' ? 'rfd_inbound' : 'rfd_outbound'
   await Promise.all([
-    supabaseAdmin
+    getSupabaseAdmin()
       .from('reframe_sessions')
       .update({
         [`${updateField}_triggered`]: true,
@@ -167,7 +167,7 @@ async function logRFD(
         [`${updateField}_severity`]: rfd.severity,
       })
       .eq('id', sessionId),
-    supabaseAdmin.from('rfd_detections').insert({
+    getSupabaseAdmin().from('rfd_detections').insert({
       session_id: sessionId,
       detection_type: type,
       patterns_detected: rfd.patterns,

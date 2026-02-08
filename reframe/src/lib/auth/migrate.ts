@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase/admin'
+import { getSupabaseAdmin } from '@/lib/supabase/admin'
 
 /**
  * Migrate anonymous session data to an authenticated user.
@@ -9,7 +9,7 @@ export async function migrateAnonymousToUser(
   sessionToken: string,
   userId: string
 ): Promise<{ migrated: number }> {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await getSupabaseAdmin()
     .from('reframe_sessions')
     .update({ user_id: userId })
     .eq('session_token', sessionToken)

@@ -1,6 +1,6 @@
 import type { RelationshipType } from '@/lib/constants'
 import type { DetectionDirection, RFDResult, Severity } from '@/types/rfd'
-import { anthropic, MODEL } from '@/lib/anthropic/client'
+import { getAnthropic, MODEL } from '@/lib/anthropic/client'
 import { sanitizeForPrompt } from './sanitize'
 
 // --- Prompt Builders ---
@@ -229,7 +229,7 @@ export async function detectRedFlags(
       : buildOutboundPrompt(message, relationshipType)
 
   try {
-    const response = await anthropic.messages.create({
+    const response = await getAnthropic().messages.create({
       model: MODEL,
       max_tokens: 1000,
       messages: [{ role: 'user', content: prompt }],
