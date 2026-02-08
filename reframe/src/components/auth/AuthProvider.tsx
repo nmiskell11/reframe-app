@@ -6,9 +6,11 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import type { User, Session, AuthChangeEvent } from '@supabase/supabase-js'
+import { useRouter } from 'next/navigation'
 
 import { createClient } from '@/lib/supabase/client'
 
@@ -36,12 +38,33 @@ function getOrCreateSessionToken(): string {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [sessionToken] = useState(getOrCreateSessionToken)
+  const migrationAttempted = useRef(false)
 
   const supabase = useMemo(() => createClient(), [])
+
+  // Migrate anonymous sessions to authenticated user on first sign-in
+  const migrateAnonymousSessions = useCallback(async () => {
+    if (migrationAttempted.current) return
+    migrationAttempted.current = true
+
+    const token = localStorage.getItem('reframe_session_token')
+    if (!token) return
+
+    try {
+      await fetch('/api/auth/migrate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionToken: token }),
+      })
+    } catch {
+      // Non-blocking — migration failure shouldn't break the app
+    }
+  }, [])
 
   useEffect(() => {
     if (!supabase) {
@@ -57,20 +80,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, s: Session | null) => {
+    } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, s: Session | null) => {
       setSession(s)
       setUser(s?.user ?? null)
+
+      // Trigger anonymous-to-authenticated migration on first login
+      if (event === 'SIGNED_IN' && s?.user) {
+        migrateAnonymousSessions()
+      }
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase])
+  }, [supabase, migrateAnonymousSessions])
 
   const signOut = useCallback(async () => {
     if (!supabase) return
     await supabase.auth.signOut()
     setUser(null)
     setSession(null)
-  }, [supabase])
+    router.push('/')
+    router.refresh()
+  }, [supabase, router])
 
   const value = useMemo(
     () => ({

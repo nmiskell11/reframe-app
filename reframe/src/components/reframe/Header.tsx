@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useAuth } from '@/components/auth/AuthProvider'
 
 export function Header() {
-  const { isAuthenticated, signOut } = useAuth()
+  const { user, isAuthenticated, isLoading, signOut } = useAuth()
 
   return (
     <nav className="bg-coral px-5 py-4 flex justify-between items-center shadow-md sticky top-0 z-50 md:px-10">
@@ -20,13 +20,20 @@ export function Header() {
           Try It
         </Link>
 
-        {isAuthenticated ? (
-          <button
-            onClick={signOut}
-            className="bg-white text-coral px-4 py-2 rounded-lg text-sm font-semibold hover:shadow-lg transition-shadow"
-          >
-            Sign Out
-          </button>
+        {isLoading ? (
+          <div className="w-20 h-9 bg-white/20 rounded-lg animate-pulse" />
+        ) : isAuthenticated ? (
+          <div className="flex items-center gap-3">
+            <span className="text-white/80 text-sm hidden sm:inline">
+              {user?.email}
+            </span>
+            <button
+              onClick={signOut}
+              className="bg-white text-coral px-4 py-2 rounded-lg text-sm font-semibold hover:shadow-lg transition-shadow"
+            >
+              Sign Out
+            </button>
+          </div>
         ) : (
           <Link
             href="/auth/login"

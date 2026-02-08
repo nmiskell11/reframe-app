@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 import {
   ALLOWED_RELATIONSHIP_TYPES,
   MAX_MESSAGE_LENGTH,
@@ -8,6 +10,30 @@ import type { RelationshipType } from '@/lib/constants'
 import type { ReframeRequest, ReframeResponse } from '@/types/reframe'
 import { detectRedFlags, reframeMessage, checkRelationshipHealth } from '@/lib/rfd'
 import { getSupabaseAdmin } from '@/lib/supabase/admin'
+
+async function getAuthUserId(): Promise<string | null> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!url || !key) return null
+
+  try {
+    const cookieStore = await cookies()
+    const supabase = createServerClient(url, key, {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll() {
+          // Read-only in route handlers
+        },
+      },
+    })
+    const { data: { user } } = await supabase.auth.getUser()
+    return user?.id ?? null
+  } catch {
+    return null
+  }
+}
 
 export async function POST(request: NextRequest) {
   let body: ReframeRequest
@@ -55,6 +81,10 @@ export async function POST(request: NextRequest) {
 
   const healthCheck = checkRelationshipHealth(context, message, relationshipType)
 
+  // --- Extract authenticated user (server-side, from cookie) ---
+
+  const userId = await getAuthUserId()
+
   // --- Supabase session (fire-and-forget) ---
 
   let sessionId: string | null = null
@@ -62,6 +92,7 @@ export async function POST(request: NextRequest) {
     const { data: session } = await getSupabaseAdmin()
       .from('reframe_sessions')
       .insert({
+        user_id: userId,
         session_token: sessionToken || null,
         relationship_type: relationshipType,
         had_context: !!context && context.trim().length > 0,
@@ -136,6 +167,13 @@ export async function POST(request: NextRequest) {
 
   try {
     const reframed = await reframeMessage(message, context, relationshipType)
+
+    // Increment user reframe count (fire-and-forget)
+    if (sessionId && userId) {
+      Promise.resolve(
+        getSupabaseAdmin().rpc('increment_user_reframes', { user_uuid: userId })
+      ).catch(() => {})
+    }
 
     const response: ReframeResponse = {
       reframed,
