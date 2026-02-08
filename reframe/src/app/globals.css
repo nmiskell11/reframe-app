@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* reFrame Brand Colors */
+  --color-coral: #FF7F50;
+  --color-coral-light: #FFB090;
+  --color-coral-dark: #FF6347;
+  --color-navy: #2F3C7E;
+  --color-navy-light: #4A5BA0;
+  --color-cream: #FAFAFA;
+
+  /* RFD Alert Colors */
+  --color-rfd-red: #DC2626;
+  --color-rfd-red-dark: #B91C1C;
+  --color-rfd-red-bg: #FEF2F2;
+  --color-rfd-red-text: #7F1D1D;
+
+  /* Severity Colors */
+  --color-severity-high-bg: #FEE2E2;
+  --color-severity-high-text: #991B1B;
+  --color-severity-medium-bg: #FED7AA;
+  --color-severity-medium-text: #9A3412;
+  --color-severity-low-bg: #FEF3C7;
+  --color-severity-low-text: #92400E;
+
+  /* Success / Positive */
+  --color-success: #16A34A;
+  --color-success-bg: #F0FDF4;
+  --color-success-text: #14532D;
+
+  /* Validation (inbound) */
+  --color-validation-bg: #DBEAFE;
+  --color-validation-border: #3B82F6;
+  --color-validation-text: #1E3A8A;
+
+  /* Neutral */
+  --color-background: #FFFFFF;
+  --color-foreground: #333333;
+  --color-muted: #666666;
+  --color-border: #E0E0E0;
+  --color-surface: #F5F5F5;
+
+  /* Font */
+  --font-serif: 'Libre Baskerville', 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-serif);
+  line-height: 1.6;
+}
