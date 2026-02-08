@@ -29,6 +29,7 @@
             background: white;
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         nav {
@@ -76,7 +77,7 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #FF7F50 0%, #E66F40 100%);
+            background: #FF7F50;
             color: white;
             padding: 80px 40px;
             text-align: center;
@@ -116,6 +117,143 @@
         .cta-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 650px;
+            margin: 0 auto 35px;
+            line-height: 1.7;
+        }
+
+        .example-card {
+            max-width: 550px;
+            margin: 0 auto 35px;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            text-align: left;
+            color: #333;
+        }
+
+        .example-before,
+        .example-after {
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .example-before {
+            background: #fef2f2;
+            border-left: 4px solid #e74c3c;
+            margin-bottom: 0;
+        }
+
+        .example-before .example-label {
+            color: #e74c3c;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .example-after {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+        }
+
+        .example-after .example-label {
+            color: #16a34a;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .example-arrow {
+            text-align: center;
+            font-size: 22px;
+            color: #999;
+            padding: 10px 0;
+        }
+
+        .hero-cta-text {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .hero-cta-emoji {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 0;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        .how-it-works {
+            background: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .how-it-works h3 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 35px;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            max-width: 180px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #FF7F50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .step p {
+            font-size: 15px;
+            color: #555;
+            margin: 0;
+            line-height: 1.4;
         }
 
         .tool-section {
@@ -743,12 +881,388 @@
             line-height: 1.6;
         }
 
+        /* ============================================ */
+        /* AskUserQuestionsTool - Question Card Styles  */
+        /* ============================================ */
+        .question-card-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .question-card-container.visible {
+            display: block;
+        }
+
+        .question-card {
+            background: white;
+            border: 2px solid #FF7F50;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .question-card-header {
+            background: linear-gradient(135deg, #FF7F50 0%, #FF6347 100%);
+            color: white;
+            padding: 20px 25px;
+            text-align: center;
+        }
+
+        .question-card-header h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .question-card-header p {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .question-card-progress {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background: #FFF5F0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .question-card-progress .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+
+        .question-card-progress .step-dot.active {
+            background: #FF7F50;
+        }
+
+        .question-card-progress .step-dot.completed {
+            background: #16a34a;
+        }
+
+        .question-card-body {
+            padding: 25px;
+        }
+
+        .question-item {
+            margin-bottom: 25px;
+        }
+
+        .question-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .question-item label.question-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .question-item label.question-label .required-star {
+            color: #dc2626;
+            margin-left: 4px;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .question-option {
+            position: relative;
+        }
+
+        .question-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .question-option label {
+            display: block;
+            padding: 12px 16px;
+            background: #f9f9f9;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 15px;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .question-option input[type="radio"]:checked + label {
+            background: #FFF5F0;
+            border-color: #FF7F50;
+            color: #FF7F50;
+            font-weight: 600;
+        }
+
+        .question-option label:hover {
+            border-color: #FFB090;
+            background: #fffaf8;
+        }
+
+        .question-other-input {
+            display: none;
+            margin-top: 8px;
+        }
+
+        .question-other-input.visible {
+            display: block;
+        }
+
+        .question-other-input input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .question-other-input input:focus {
+            outline: none;
+            border-color: #FF7F50;
+        }
+
+        .question-free-text textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .question-free-text textarea:focus {
+            outline: none;
+            border-color: #FF7F50;
+        }
+
+        .question-card-footer {
+            padding: 20px 25px;
+            background: #fafafa;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .question-card-footer .btn-submit-answers {
+            flex: 1;
+            min-width: 160px;
+            padding: 14px 20px;
+            background: #FF7F50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .question-card-footer .btn-submit-answers:hover {
+            background: #FF6347;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 127, 80, 0.3);
+        }
+
+        .question-card-footer .btn-submit-answers:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .question-card-footer .btn-skip-questions {
+            padding: 14px 20px;
+            background: white;
+            color: #666;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .question-card-footer .btn-skip-questions:hover {
+            border-color: #999;
+            color: #333;
+        }
+
+        /* Safety Resources Section */
+        .safety-resources {
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .safety-resources h4 {
+            color: #991b1b;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .safety-resources p {
+            color: #7f1d1d;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .safety-resources .resource-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .safety-resources .resource-list li {
+            padding: 10px 14px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .safety-resources .resource-list li .resource-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .safety-resources .resource-list li .resource-contact {
+            color: #dc2626;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .safety-resources .resource-list li a {
+            color: #FF7F50;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .safety-resources .resource-list li a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
-            ...existing styles...
+            nav {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-logo {
+                font-size: 22px;
+            }
+
+            .nav-links {
+                gap: 10px;
+                font-size: 13px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links .cta {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 50px 20px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero .tagline {
+                font-size: 24px;
+            }
+
+            .hero .principles {
+                font-size: 14px;
+            }
+
+            .hero h2 {
+                font-size: 26px;
+            }
+
+            .hero-subtitle {
+                font-size: 15px;
+                margin: 0 auto 25px;
+            }
+
+            .example-card {
+                padding: 20px;
+                margin: 0 auto 25px;
+            }
+
+            .example-before,
+            .example-after {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .how-it-works {
+                padding: 35px 20px;
+            }
+
+            .how-it-works h3 {
+                font-size: 22px;
+            }
+
+            .steps {
+                gap: 25px;
+            }
+
+            .step {
+                max-width: 140px;
+            }
+
+            .tool-section {
+                padding: 40px 20px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .relationship-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feedback-buttons {
+                flex-direction: column;
+            }
+
             .feedback-btn {
                 width: 100%;
             }
-        .rfd-modal {
+
+            .rfd-modal {
                 width: 95%;
                 max-height: 90vh;
             }
@@ -773,126 +1287,113 @@
             .rfd-button {
                 width: 100%;
             }
-            .nav-links {
-                gap: 15px;
-                font-size: 14px;
+
+            .question-card-header {
+                padding: 15px 20px;
             }
 
-            .hero h1 {
-                font-size: 42px;
+            .question-card-body {
+                padding: 20px;
             }
 
-            .hero .tagline {
-                font-size: 24px;
-            }
-
-            .hero .principles {
-                font-size: 16px;
-            }
-
-            .tool-section {
-                padding: 40px 20px;
-            }
-
-            .card {
-                padding: 25px;
-            }
-
-            .relationship-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .feedback-buttons {
+            .question-card-footer {
+                padding: 15px 20px;
                 flex-direction: column;
             }
 
-            .feedback-btn {
+            .question-card-footer .btn-submit-answers,
+            .question-card-footer .btn-skip-questions {
                 width: 100%;
+                text-align: center;
+            }
+
+            footer {
+                padding: 40px 20px 30px;
+            }
+
+            .footer-content {
+                gap: 25px;
             }
         }
     </style>
 </head>
 <body>
     <nav>
-        <div class="nav-logo">reFrame</div>
+        <div class="nav-logo">reFrame™</div>
         <div class="nav-links">
             <a href="#tool">Try It</a>
-            <a href="r3-framework.html">R³™ Framework</a>
+            <a href="r3-framework.html">R³ Framework™</a>
             <a href="manifesto.html">Manifesto</a>
             <a href="about.html">About</a>
             <a href="faq.html">FAQ</a>
-            <a href="/cdn-cgi/l/email-protection#b0d8d5dcdcdff0c7d5c2d5d6c2d1ddd59ed3dfdd" class="cta">Contact</a>
+            <a href="mailto:info@wereframe.com" class="cta">Contact</a>
         </div>
     </nav>
 
-    <section class="hero">
-        <h1>reFrame</h1>
+    <section class="hero" style="padding-bottom: 40px;">
+        <h1>reFrame™</h1>
         <div class="tagline">Say it better.</div>
-        
-        <div class="principles" style="margin-top: 30px;">
-            <strong>Built on the R³™ Framework:</strong><br>
+
+        <div class="principles" style="font-size: 16px; margin-top: 30px; opacity: 0.9;">
+            Our only communication ally that catches toxic patterns before we hit send<br>
+            and shows us healthier alternatives.
+        </div>
+
+        <div class="principles" style="margin-top: 25px;">
+            <strong>Built on the R³ Framework™:</strong><br>
             REGULATED · RESPECTFUL · REPAIRABLE
         </div>
-        
-        <div class="principles" style="font-size: 16px; margin-top: 25px; opacity: 0.9;">
-            The only communication coach that protects you from others AND yourself by catching toxic patterns<br>
-            before you hit send and shows you healthier alternatives.
-        </div>
-
-        <a href="#tool" class="cta-button">Try it now - Free</a>
     </section>
-<!-- HERO SECTION - Add this BEFORE the tool -->
-<section class="hero">
-    <h1>Difficult conversation coming up?</h1>
-    <h2>reFrame helps you say it better.</h2>
-    
-    <p class="hero-subtitle">
-        Type what you really want to say. We'll show you how to express 
-        it with dignity — so you get your point across without damaging 
-        the relationship.
-    </p>
-    
-    <div class="example-box">
-        <div class="before">
-            <strong>❌ What you might say:</strong><br>
-            "You never listen to me. You're so selfish."
-        </div>
-        <div class="after">
-            <strong>✅ What reFrame suggests:</strong><br>
-            "I'm feeling unheard lately. Can we talk about how we communicate 
-            when things get tense? I want us both to feel valued."
-        </div>
-    </div>
-    
-    <p class="cta">👇 Try it yourself below — it's free.</p>
-</section>
 
-        <div class="how-it-works">
-    <h3>How it works:</h3>
-    <div class="steps">
-        <div class="step">
-            <div class="step-number">1</div>
-            <p>Pick your relationship type</p>
+    <section class="hero" style="padding-top: 40px;">
+        <h2>Difficult conversation coming up?</h2>
+
+        <p class="hero-subtitle">
+            Type what you really want to say. We'll show you how to express
+            it with dignity — so you get your point across without damaging
+            the relationship.
+        </p>
+
+        <div class="example-card">
+            <div class="example-before">
+                <div class="example-label">❌ What you might type:</div>
+                "You never listen to me. You're so selfish and only care about yourself."
+            </div>
+            <div class="example-arrow">↓</div>
+            <div class="example-after">
+                <div class="example-label">✅ What reFrame™ suggests:</div>
+                "I've been feeling unheard lately. Can we talk about how we communicate
+                when things get tense? I want us both to feel valued in this relationship."
+            </div>
         </div>
-        <div class="step">
-            <div class="step-number">2</div>
-            <p>Type what you want to say</p>
-        </div>
-        <div class="step">
-            <div class="step-number">3</div>
-            <p>Get a healthier version instantly</p>
+
+        <p class="hero-cta-text">Try it yourself — it's free</p>
+        <span class="hero-cta-emoji">👇</span>
+    </section>
+
+    <div class="how-it-works">
+        <h3>How it works:</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <p>Pick your relationship type</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <p>Type your raw, honest message</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <p>Get a healthier version instantly</p>
+            </div>
         </div>
     </div>
-</div>
-</section>
     
     <section class="tool-section" id="tool">
         <div class="container">
-            <h2 class="section-title">Transform Your Message</h2>
-            
             <div class="card">
                 <div class="info-box">
-                    <h3>📝 How to Use reFrame</h3>
+                    <h3>📝 How to Use reFrame™</h3>
                     <p>Type your raw, honest thoughts below. Whether you're hurt, angry, frustrated, or confused - we'll help you express it in a way that builds connection instead of conflict. For best results, tell us who you're talking to and provide context about what they said.</p>
                 </div>
 
@@ -942,6 +1443,10 @@
                             <label for="rel-child">👶 Child/Teen</label>
                         </div>
                         <div class="relationship-option">
+                            <input type="radio" id="rel-provider" name="relationship" value="provider">
+                            <label for="rel-provider">🩺 Provider</label>
+                        </div>
+                        <div class="relationship-option">
                             <input type="radio" id="rel-general" name="relationship" value="general" checked>
                             <label for="rel-general">👤 General</label>
                         </div>
@@ -954,7 +1459,7 @@
                         <span style="margin: 0;">Add conversation context <span class="optional">(optional but recommended)</span></span>
                     </div>
                     <div class="collapsible-content" id="contextSection">
-                        <p class="help-text" style="margin-bottom: 15px;">Adding context helps reFrame understand the full picture and provide a more thoughtful, tailored response. You can provide one or both:</p>
+                        <p class="help-text" style="margin-bottom: 15px;">Adding context helps reFrame™ understand the full picture and provide a more thoughtful, tailored response. You can provide one or both:</p>
                         
                         <label for="theirMessage" style="font-size: 14px; margin-bottom: 5px;">What did they say? (exact quote or paraphrase)</label>
                         <textarea id="theirMessage" class="small" rows="3" placeholder="Paste their exact text, email, or what they said:
@@ -977,12 +1482,17 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
 
                 <div class="section">
                     <button class="button" id="reframeBtn">
-                        reFrame This Message
+                        reFrame™ This Message
                     </button>
                 </div>
 
                 <div id="loadingIndicator" class="loading" style="display: none;">
                     ✨ Reframing your message with dignity and clarity...
+                </div>
+
+                <!-- AskUserQuestionsTool: Question Card (rendered dynamically) -->
+                <div id="questionCardContainer" class="question-card-container section">
+                    <!-- Populated by renderQuestionCard() -->
                 </div>
 
                 <div id="outputSection" class="output-section section">
@@ -991,7 +1501,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                     <button class="copy-button" id="copyBtn">📋 Copy to Clipboard</button>
                     
                     <div class="feedback-section" id="feedbackSection">
-                        <h4>How does this reFrame feel?</h4>
+                        <h4>How does this reFrame™ feel?</h4>
                         <div class="feedback-buttons">
                             <button class="feedback-btn" data-feedback="feels_right">
                                 <span>🎯</span>
@@ -1061,7 +1571,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                     ✏️ Edit My Message
                 </button>
                 <button class="rfd-button primary" id="rfdProceed">
-                    Continue to reFrame
+                    Continue to reFrame™
                 </button>
             </div>
         </div>
@@ -1097,7 +1607,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h3>reFrame</h3>
+                <h3>reFrame™</h3>
                 <p>Breaking generational cycles of dysfunction, one conversation at a time.</p>
                 <p style="margin-top: 20px; font-style: italic;">WE say it better, together.</p>
                 <p style="margin-top: 10px; font-size: 14px;">Life is about relationships.</p>
@@ -1106,7 +1616,7 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             <div class="footer-section">
                 <h3>Learn More</h3>
                 <a href="manifesto.html">The Manifesto</a>
-                <a href="about.html">About reFrame</a>
+                <a href="about.html">About reFrame™</a>
                 <a href="#tool">Try the Tool</a>
             </div>
             
@@ -1121,13 +1631,13 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
             <div class="footer-section">
                 <h3>Get In Touch</h3>
                 <p>Questions? Feedback? Ideas?</p>
-                <a href="/cdn-cgi/l/email-protection#234b464f4f4c63544651464551424e460d404c4e"><span class="__cf_email__" data-cfemail="761e131a1a1936011304131004171b135815191b">[email&#160;protected]</span></a>
+                <a href="mailto:info@wereframe.com">info@wereframe.com</a>
                 <p style="margin-top: 15px; font-size: 12px; opacity: 0.7;">We read every message.</p>
             </div>
         </div>
         
         <div class="footer-bottom">
-            Made with ❤️ for better conversations | © 2026 reFrame | wereframe.com
+            © 2026 wereFrame LLC. Patent Pending.
         </div>
     </footer>
 
@@ -1143,12 +1653,12 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         function getSessionToken() {
             let token = localStorage.getItem('reframe_session_token');
             if (!token) {
-                // Generate unique token: anon_[timestamp]_[random]
-                token = 'anon_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                // Generate unique token using crypto-safe random values
+                const randomBytes = new Uint8Array(12);
+                crypto.getRandomValues(randomBytes);
+                const randomPart = Array.from(randomBytes, b => b.toString(16).padStart(2, '0')).join('');
+                token = 'anon_' + Date.now() + '_' + randomPart;
                 localStorage.setItem('reframe_session_token', token);
-                console.log('New session token created:', token);
-            } else {
-                console.log('Existing session token found:', token);
             }
             return token;
         }
@@ -1165,11 +1675,395 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
         window.clearSessionToken = clearSessionToken;
 
         // Session ID for analytics (if enabled later)
-        const currentSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const sessRandom = new Uint8Array(12);
+        crypto.getRandomValues(sessRandom);
+        const currentSessionId = 'sess_' + Date.now() + '_' + Array.from(sessRandom, b => b.toString(16).padStart(2, '0')).join('');
 
         // ============================================
         // CORE FUNCTIONALITY (Works without analytics)
         // ============================================
+
+        // ============================================
+        // AskUserQuestionsTool: Client-side state machine
+        // ============================================
+        const reframeSession = {
+            originalInput: null,   // { message, context, relationshipType }
+            rfdResults: null,
+            healthCheck: null,
+            clarifyingQA: [],      // Array of all Q&A across rounds
+            questionRound: 0,
+            stage: 'initial'
+        };
+
+        function resetReframeSession() {
+            reframeSession.originalInput = null;
+            reframeSession.rfdResults = null;
+            reframeSession.healthCheck = null;
+            reframeSession.clarifyingQA = [];
+            reframeSession.questionRound = 0;
+            reframeSession.stage = 'initial';
+        }
+
+        // Render the question card from structured question data
+        function renderQuestionCard(questionsData) {
+            const container = document.getElementById('questionCardContainer');
+            const questions = questionsData.questions || [];
+            const skipAllowed = questionsData.skip_allowed !== false;
+            const skipLabel = questionsData.skip_label || "Skip — reframe with what I've given you";
+            const round = questionsData.question_round || 1;
+
+            // Build progress dots
+            const maxRounds = 2;
+            let progressDots = '';
+            for (let i = 1; i <= maxRounds; i++) {
+                if (i < round) progressDots += '<span class="step-dot completed"></span>';
+                else if (i === round) progressDots += '<span class="step-dot active"></span>';
+                else progressDots += '<span class="step-dot"></span>';
+            }
+
+            let questionsHTML = '';
+            questions.forEach((q, idx) => {
+                const fieldName = `q_${q.id}`;
+
+                if (q.format === 'free_text') {
+                    // Wildcard / free-text question
+                    questionsHTML += `
+                        <div class="question-item" data-question-id="${q.id}">
+                            <label class="question-label">${q.text}</label>
+                            <div class="question-free-text">
+                                <textarea name="${fieldName}" placeholder="Type your answer..." rows="3"></textarea>
+                            </div>
+                        </div>`;
+                } else {
+                    // Single-select with radio buttons
+                    let optionsHTML = '';
+                    (q.options || []).forEach((opt, optIdx) => {
+                        const radioId = `${fieldName}_${optIdx}`;
+                        optionsHTML += `
+                            <div class="question-option">
+                                <input type="radio" id="${radioId}" name="${fieldName}" value="${opt.value}" data-label="${opt.label.replace(/"/g, '&quot;')}">
+                                <label for="${radioId}">${opt.label}</label>
+                            </div>`;
+                    });
+
+                    // "Other" free-text option
+                    if (q.allow_other) {
+                        const otherId = `${fieldName}_other`;
+                        optionsHTML += `
+                            <div class="question-option">
+                                <input type="radio" id="${otherId}" name="${fieldName}" value="other" data-label="Other">
+                                <label for="${otherId}">Other</label>
+                            </div>
+                            <div class="question-other-input" id="${fieldName}_other_input">
+                                <input type="text" placeholder="Please specify..." name="${fieldName}_custom">
+                            </div>`;
+                    }
+
+                    questionsHTML += `
+                        <div class="question-item" data-question-id="${q.id}" data-required="${q.required || false}">
+                            <label class="question-label">
+                                ${q.text}${q.required ? '<span class="required-star">*</span>' : ''}
+                            </label>
+                            <div class="question-options">${optionsHTML}</div>
+                        </div>`;
+                }
+            });
+
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-card-header">
+                        <h3>To give you the best reframe...</h3>
+                        <p>These quick questions help us understand your situation better.</p>
+                    </div>
+                    ${round > 1 ? `<div class="question-card-progress">${progressDots} <span>Round ${round} of ${maxRounds}</span></div>` : ''}
+                    <div class="question-card-body">
+                        ${questionsHTML}
+                    </div>
+                    <div class="question-card-footer">
+                        <button class="btn-submit-answers" id="submitAnswersBtn">Continue</button>
+                        ${skipAllowed ? `<button class="btn-skip-questions" id="skipQuestionsBtn">${skipLabel}</button>` : ''}
+                    </div>
+                </div>`;
+
+            // Show the container
+            container.classList.add('visible');
+
+            // Scroll question card into view
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Attach event listeners
+            document.getElementById('submitAnswersBtn').addEventListener('click', submitAnswers);
+            const skipBtn = document.getElementById('skipQuestionsBtn');
+            if (skipBtn) skipBtn.addEventListener('click', skipQuestions);
+
+            // "Other" toggle listeners
+            questions.forEach(q => {
+                if (q.allow_other) {
+                    const radios = document.querySelectorAll(`input[name="q_${q.id}"]`);
+                    const otherInput = document.getElementById(`q_${q.id}_other_input`);
+                    radios.forEach(radio => {
+                        radio.addEventListener('change', function() {
+                            if (this.value === 'other') {
+                                otherInput.classList.add('visible');
+                                otherInput.querySelector('input').focus();
+                            } else {
+                                otherInput.classList.remove('visible');
+                            }
+                        });
+                    });
+                }
+            });
+        }
+
+        function hideQuestionCard() {
+            const container = document.getElementById('questionCardContainer');
+            container.classList.remove('visible');
+            container.innerHTML = '';
+        }
+
+        // Collect answers from the rendered question card
+        function collectAnswers() {
+            const answers = [];
+            const questionItems = document.querySelectorAll('.question-item');
+
+            questionItems.forEach(item => {
+                const qId = item.dataset.questionId;
+                const isRequired = item.dataset.required === 'true';
+                const fieldName = `q_${qId}`;
+
+                // Check for free-text (wildcard)
+                const freeTextArea = item.querySelector('.question-free-text textarea');
+                if (freeTextArea) {
+                    const text = freeTextArea.value.trim();
+                    if (text) {
+                        const questionLabel = item.querySelector('.question-label');
+                        answers.push({
+                            id: qId,
+                            question_text: questionLabel ? questionLabel.textContent.trim() : qId,
+                            answer_value: 'custom',
+                            answer_text: text,
+                            custom_text: null,
+                            round: reframeSession.questionRound + 1
+                        });
+                    }
+                    return;
+                }
+
+                // Check for radio selection
+                const selected = document.querySelector(`input[name="${fieldName}"]:checked`);
+                if (selected) {
+                    const questionLabel = item.querySelector('.question-label');
+                    const questionText = questionLabel ? questionLabel.textContent.trim().replace(/\*$/, '').trim() : qId;
+                    let customText = null;
+
+                    if (selected.value === 'other') {
+                        const customInput = document.querySelector(`input[name="${fieldName}_custom"]`);
+                        customText = customInput ? customInput.value.trim() : null;
+                    }
+
+                    answers.push({
+                        id: qId,
+                        question_text: questionText,
+                        answer_value: selected.value,
+                        answer_text: selected.dataset.label || selected.value,
+                        custom_text: customText,
+                        round: reframeSession.questionRound + 1
+                    });
+                }
+            });
+
+            return answers;
+        }
+
+        // Submit answers and continue the reframe flow
+        async function submitAnswers() {
+            const answers = collectAnswers();
+
+            // Validate required questions
+            const requiredItems = document.querySelectorAll('.question-item[data-required="true"]');
+            for (const item of requiredItems) {
+                const qId = item.dataset.questionId;
+                if (!answers.find(a => a.id === qId)) {
+                    const label = item.querySelector('.question-label');
+                    const qText = label ? label.textContent.trim().replace(/\*$/, '').trim() : 'a required question';
+                    showError(`Please answer: ${qText}`);
+                    return;
+                }
+            }
+
+            showError('', false);
+
+            // Accumulate answers across rounds
+            reframeSession.clarifyingQA = [...reframeSession.clarifyingQA, ...answers];
+            reframeSession.questionRound++;
+            reframeSession.stage = 'reframe_with_answers';
+
+            // Hide question card, show loading
+            hideQuestionCard();
+            const loading = document.getElementById('loadingIndicator');
+            const button = document.getElementById('reframeBtn');
+            loading.style.display = 'block';
+            button.disabled = true;
+
+            try {
+                const response = await fetch('/.netlify/functions/reframe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: reframeSession.originalInput.message,
+                        context: reframeSession.originalInput.context,
+                        relationshipType: reframeSession.originalInput.relationshipType,
+                        skipRFD: true,
+                        checkedInbound: true,
+                        sessionToken: userSessionToken,
+                        userId: null,
+                        stage: 'reframe_with_answers',
+                        clarifyingAnswers: reframeSession.clarifyingQA,
+                        questionRound: reframeSession.questionRound,
+                        skipQuestions: false
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to process answers');
+                }
+
+                const data = await response.json();
+                handleApiResponse(data);
+            } catch (error) {
+                console.error('Submit answers error:', error);
+                showError(`Error: ${error.message}. Please try again.`);
+            } finally {
+                loading.style.display = 'none';
+                button.disabled = false;
+            }
+        }
+
+        // Skip questions and reframe with original context
+        async function skipQuestions() {
+            reframeSession.stage = 'reframe_with_answers';
+
+            hideQuestionCard();
+            const loading = document.getElementById('loadingIndicator');
+            const button = document.getElementById('reframeBtn');
+            loading.style.display = 'block';
+            button.disabled = true;
+
+            try {
+                const response = await fetch('/.netlify/functions/reframe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: reframeSession.originalInput.message,
+                        context: reframeSession.originalInput.context,
+                        relationshipType: reframeSession.originalInput.relationshipType,
+                        skipRFD: true,
+                        checkedInbound: true,
+                        sessionToken: userSessionToken,
+                        userId: null,
+                        stage: 'reframe_with_answers',
+                        clarifyingAnswers: [],
+                        questionRound: 2, // Force reframe (skip round 2 assessment)
+                        skipQuestions: true
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to reframe');
+                }
+
+                const data = await response.json();
+                handleApiResponse(data);
+            } catch (error) {
+                console.error('Skip questions error:', error);
+                showError(`Error: ${error.message}. Please try again.`);
+            } finally {
+                loading.style.display = 'none';
+                button.disabled = false;
+            }
+        }
+
+        // Central response handler — routes to questions, reframe, or alerts
+        function handleApiResponse(data) {
+            const outputSection = document.getElementById('outputSection');
+            const feedbackSection = document.getElementById('feedbackSection');
+
+            // Handle questions response
+            if (data.type === 'questions' && data.questions) {
+                console.log('Questions received:', data.questions.length, 'round:', data.question_round);
+                renderQuestionCard(data);
+                return;
+            }
+
+            // Handle reframe response
+            if (data.reframed || data.type === 'reframe') {
+                const reframedText = data.reframed;
+                document.getElementById('outputText').textContent = reframedText;
+                outputSection.classList.add('visible');
+
+                feedbackSection.classList.remove('hidden');
+                document.getElementById('feedbackThanks').classList.remove('visible');
+                document.querySelectorAll('.feedback-btn').forEach(btn => btn.classList.remove('selected'));
+
+                // Show safety resources if applicable
+                if (data.safetyResources && data.safetyResources.show) {
+                    showSafetyResources(data.safetyResources);
+                }
+
+                // Google Analytics
+                if (typeof gtag !== 'undefined') {
+                    const relType = reframeSession.originalInput ? reframeSession.originalInput.relationshipType : 'unknown';
+                    gtag('event', 'reframe_completed', {
+                        'relationship_type': relType,
+                        'had_context': !!(reframeSession.originalInput && reframeSession.originalInput.context),
+                        'message_length': reframeSession.originalInput ? reframeSession.originalInput.message.length : 0,
+                        'had_clarifying_questions': reframeSession.clarifyingQA.length > 0,
+                        'question_rounds': reframeSession.questionRound,
+                        'session_token': userSessionToken
+                    });
+                    console.log('GA Event: reframe_completed (with question tracking)');
+                }
+
+                console.log('Reframe successful (questions answered:', reframeSession.clarifyingQA.length, ')');
+
+                // Reset session for next use
+                resetReframeSession();
+                return;
+            }
+
+            // Handle health check (informational, non-blocking)
+            if (data.healthCheck) {
+                showHealthAlert(data.healthCheck);
+            }
+        }
+
+        // Show safety resources section below the reframed message
+        function showSafetyResources(safetyData) {
+            // Remove any existing safety resources
+            const existing = document.querySelector('.safety-resources');
+            if (existing) existing.remove();
+
+            const outputSection = document.getElementById('outputSection');
+            const resourcesDiv = document.createElement('div');
+            resourcesDiv.className = 'safety-resources';
+
+            let resourcesHTML = `<h4>Your Safety Matters</h4><p>${safetyData.message}</p><ul class="resource-list">`;
+            for (const r of safetyData.resources) {
+                resourcesHTML += `<li>
+                    <span class="resource-name">${r.name}</span>
+                    <span class="resource-contact">${r.contact}</span>
+                    <a href="${r.url}" target="_blank" rel="noopener">Visit website</a>
+                </li>`;
+            }
+            resourcesHTML += '</ul>';
+            resourcesDiv.innerHTML = resourcesHTML;
+
+            // Insert after the output box
+            const outputBox = document.getElementById('outputText');
+            outputBox.parentNode.insertBefore(resourcesDiv, outputBox.nextSibling);
+        }
 
         // Wait for DOM to be ready
         document.addEventListener('DOMContentLoaded', function() {
@@ -1207,58 +2101,76 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
 
         async function reframeMessage(skipRFD = false) {
             console.log('reframeMessage called, skipRFD:', skipRFD, 'checkedInbound:', checkedInbound, 'lastAlertSource:', lastAlertSource);
-            
+
             const inputText = document.getElementById('inputText').value.trim();
-            
+
             if (!inputText) {
                 showError('Please enter a message to reframe');
                 return;
             }
 
+            if (inputText.length > 5000) {
+                showError('Message must be under 5000 characters');
+                return;
+            }
+
             showError('', false);
-            
+
             const button = document.getElementById('reframeBtn');
             const loading = document.getElementById('loadingIndicator');
             const outputSection = document.getElementById('outputSection');
             const feedbackSection = document.getElementById('feedbackSection');
-            
+
             const theirMessage = document.getElementById('theirMessage').value.trim();
             const situationContext = document.getElementById('situationContext').value.trim();
             const relationshipType = document.querySelector('input[name="relationship"]:checked').value;
-            
+
             // Construct intelligent combined context for Claude
             let combinedContext = '';
             if (theirMessage && situationContext) {
-                // Both provided - structure clearly
                 combinedContext = `THEIR MESSAGE: "${theirMessage}"\n\nSITUATION: ${situationContext}`;
             } else if (theirMessage) {
-                // Only their message
                 combinedContext = `THEIR MESSAGE: "${theirMessage}"`;
             } else if (situationContext) {
-                // Only situation description
                 combinedContext = `SITUATION: ${situationContext}`;
             }
-            
+
+            // Store original input in session (for question flow)
+            reframeSession.originalInput = {
+                message: inputText,
+                context: combinedContext || null,
+                relationshipType: relationshipType
+            };
+
+            // Hide any previous question card
+            hideQuestionCard();
+
+            // Remove any previous safety resources
+            const existingSafety = document.querySelector('.safety-resources');
+            if (existingSafety) existingSafety.remove();
+
             button.disabled = true;
             loading.style.display = 'block';
             outputSection.classList.remove('visible');
 
             try {
-                console.log('Calling API with session token:', userSessionToken);
+                console.log('Calling reframe API (stage: initial)...');
                 const response = await fetch('/.netlify/functions/reframe', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
                         message: inputText,
                         context: combinedContext || null,
                         relationshipType: relationshipType,
                         sessionId: currentSessionId,
                         skipRFD: skipRFD === true,
                         checkedInbound: checkedInbound,
-                        sessionToken: userSessionToken,  // NEW: Anonymous user tracking
-                        userId: null  // NEW: Will be populated when you add auth
+                        sessionToken: userSessionToken,
+                        userId: null,
+                        stage: 'initial',
+                        clarifyingAnswers: [],
+                        questionRound: 0,
+                        skipQuestions: false
                     })
                 });
 
@@ -1270,75 +2182,58 @@ Example: 'You never listen to me and I'm sick of repeating myself. You clearly d
                 }
 
                 const data = await response.json();
-console.log('API Response:', JSON.stringify(data, null, 2));
+                console.log('API response:', { type: data.type, rfdAlert: !!data.rfdAlert, hasReframed: !!data.reframed, hasQuestions: !!(data.type === 'questions') });
 
-                // CHECK FOR RFD ALERT
+                // CHECK FOR RFD ALERT (unchanged — RFD always takes priority)
                 if (data.rfdAlert && data.rfdResult) {
                     console.log('RFD Alert triggered:', data.rfdResult);
-                    
-                    // Track which alert we just showed
-                    lastAlertSource = data.rfdResult.source; // 'inbound' or 'outbound'
-                    
-                    // Track if this was an inbound alert
+
+                    lastAlertSource = data.rfdResult.source;
+
                     if (data.checkedInbound) {
                         checkedInbound = true;
                         console.log('Inbound alert shown, setting checkedInbound=true');
                     }
-                    
-                    // ============================================
-                    // GOOGLE ANALYTICS - RFD DETECTION
-                    // ============================================
+
                     if (typeof gtag !== 'undefined') {
                         gtag('event', 'rfd_warning_shown', {
-                            'alert_type': data.rfdResult.source, // inbound or outbound
+                            'alert_type': data.rfdResult.source,
                             'severity': data.rfdResult.severity,
                             'patterns': data.rfdResult.patterns.join(','),
                             'relationship_type': relationshipType,
                             'session_token': userSessionToken
                         });
-                        console.log('GA Event: rfd_warning_shown');
                     }
-                    
+
                     showRFDModal(data.rfdResult);
                     button.disabled = false;
                     loading.style.display = 'none';
                     return;
                 }
 
-                // CHECK FOR RELATIONSHIP HEALTH ALERT (shows even if no RFD)
+                // CHECK FOR QUESTIONS (new — AskUserQuestionsTool)
+                if (data.type === 'questions' && data.questions && data.questions.length > 0) {
+                    console.log('Questions returned:', data.questions.length, 'round:', data.question_round);
+
+                    // Show health check alongside questions if present
+                    if (data.healthCheck) {
+                        showHealthAlert(data.healthCheck);
+                    }
+
+                    button.disabled = false;
+                    loading.style.display = 'none';
+                    renderQuestionCard(data);
+                    return;
+                }
+
+                // CHECK FOR RELATIONSHIP HEALTH ALERT
                 if (data.healthCheck) {
                     console.log('Relationship Health Alert:', data.healthCheck);
                     showHealthAlert(data.healthCheck);
-                    // Don't return - continue to show reframe after user closes alert
                 }
 
-                // Normal reframing path
-                const reframedText = data.reframed;
-
-                document.getElementById('outputText').textContent = reframedText;
-                outputSection.classList.add('visible');
-
-                feedbackSection.classList.remove('hidden');
-                document.getElementById('feedbackThanks').classList.remove('visible');
-                document.querySelectorAll('.feedback-btn').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-
-                console.log('Reframe successful');
-
-                // ============================================
-                // GOOGLE ANALYTICS EVENT TRACKING
-                // ============================================
-                if (typeof gtag !== 'undefined') {
-                    // Track successful reframe
-                    gtag('event', 'reframe_completed', {
-                        'relationship_type': relationshipType,
-                        'had_context': !!combinedContext,
-                        'message_length': inputText.length,
-                        'session_token': userSessionToken
-                    });
-                    console.log('GA Event: reframe_completed');
-                }
+                // REFRAME RESPONSE (direct or via handleApiResponse)
+                handleApiResponse(data);
 
             } catch (error) {
                 console.error('Reframe error:', error);
@@ -1371,7 +2266,11 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 title.textContent = '🛡️ Inbound RFD™ Alert';
                 tagline.textContent = 'Pattern detected in what they said to you';
                 source.className = 'rfd-source inbound';
-                source.innerHTML = '<strong>⚠️ Analysis of their message</strong>This pattern appears in what they said to you. Below is how you can respond.';
+                source.textContent = '';
+                const sourceStrong = document.createElement('strong');
+                sourceStrong.textContent = '\u26a0\ufe0f Analysis of their message';
+                source.appendChild(sourceStrong);
+                source.appendChild(document.createTextNode('This pattern appears in what they said to you. Below is how you can respond.'));
                 source.style.display = 'block';
                 
                 patternsTitle.textContent = 'What They\'re Using';
@@ -1385,7 +2284,11 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 title.textContent = '🚩 Outbound RFD™ Alert';
                 tagline.textContent = 'Pattern detected in what you\'re about to send';
                 source.className = 'rfd-source';
-                source.innerHTML = '<strong>⚠️ Analysis of your message</strong>These patterns may harm the relationship. Consider the healthier alternative below.';
+                source.textContent = '';
+                const sourceStrongOut = document.createElement('strong');
+                sourceStrongOut.textContent = '\u26a0\ufe0f Analysis of your message';
+                source.appendChild(sourceStrongOut);
+                source.appendChild(document.createTextNode('These patterns may harm the relationship. Consider the healthier alternative below.'));
                 source.style.display = 'block';
                 
                 patternsTitle.textContent = 'What You\'re Using';
@@ -1462,6 +2365,8 @@ console.log('API Response:', JSON.stringify(data, null, 2));
             // Reset state
             checkedInbound = false;
             lastAlertSource = null;
+            resetReframeSession();
+            hideQuestionCard();
             document.getElementById('inputText').focus();
         });
 
@@ -1499,6 +2404,9 @@ console.log('API Response:', JSON.stringify(data, null, 2));
         });
         // Attach button event - Wrap to avoid passing event object as skipRFD
         document.getElementById('reframeBtn').addEventListener('click', function() {
+            // Reset question state on fresh submission
+            resetReframeSession();
+            hideQuestionCard();
             reframeMessage(false);
         });
         
@@ -1555,16 +2463,29 @@ console.log('API Response:', JSON.stringify(data, null, 2));
                 client: "This reframe prioritizes customer satisfaction while setting appropriate boundaries. It's professional and solution-focused.",
                 neighbor: "This reframe maintains community harmony while being firm about boundaries. It's friendly but clear.",
                 child: "This reframe teaches emotional regulation through modeling. It's patient, clear, and sets an example of healthy communication.",
-                general: "This reframe follows the R³™ Framework: REGULATED (calm approach), RESPECTFUL (protects dignity), REPAIRABLE (leaves room for connection)."
+                provider: "This reframe balances advocacy for your needs with respect for your provider's expertise. It clearly states concerns while keeping the door open for collaborative care.",
+                general: "This reframe follows the R³ Framework™: REGULATED (calm approach), RESPECTFUL (protects dignity), REPAIRABLE (leaves room for connection)."
             };
 
             const explanation = explanations[relationshipType] || explanations.general;
             
-            document.getElementById('feedbackThanks').innerHTML = `
-                <strong>Why this works:</strong><br>
-                ${explanation}<br><br>
-                <em>Learn more about the <a href="r3-framework.html" style="color: #FF7F50;">R³™ Framework</a></em>
-            `;
+            const thanksEl = document.getElementById('feedbackThanks');
+            thanksEl.textContent = '';
+            const strong = document.createElement('strong');
+            strong.textContent = 'Why this works:';
+            thanksEl.appendChild(strong);
+            thanksEl.appendChild(document.createElement('br'));
+            thanksEl.appendChild(document.createTextNode(explanation));
+            thanksEl.appendChild(document.createElement('br'));
+            thanksEl.appendChild(document.createElement('br'));
+            const em = document.createElement('em');
+            const link = document.createElement('a');
+            link.href = 'r3-framework.html';
+            link.style.color = '#FF7F50';
+            link.textContent = 'R\u00b3 Framework\u2122';
+            em.appendChild(document.createTextNode('Learn more about the '));
+            em.appendChild(link);
+            thanksEl.appendChild(em);
         }
 
         document.getElementById('copyBtn').addEventListener('click', function() {
