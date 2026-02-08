@@ -5,10 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
+type ConfirmStatus = 'verifying' | 'success' | 'error' | 'no_params'
+
 function ConfirmContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying')
+  const [status, setStatus] = useState<ConfirmStatus>('verifying')
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
@@ -16,7 +18,7 @@ function ConfirmContent() {
     const type = searchParams.get('type')
 
     if (!token_hash || !type) {
-      setStatus('success')
+      setStatus('no_params')
       return
     }
 
@@ -28,7 +30,7 @@ function ConfirmContent() {
     }
 
     supabase.auth
-      .verifyOtp({ token_hash, type: type as 'email' })
+      .verifyOtp({ token_hash, type: type as 'signup' | 'invite' | 'magiclink' | 'recovery' | 'email_change' | 'email' })
       .then(({ error }) => {
         if (error) {
           setStatus('error')
@@ -51,6 +53,22 @@ function ConfirmContent() {
               <div className="text-4xl mb-4 animate-pulse">{'\u2728'}</div>
               <h2 className="text-xl font-bold text-neutral-800 mb-2">Verifying your email...</h2>
               <p className="text-sm text-neutral-600">Just a moment.</p>
+            </>
+          )}
+
+          {status === 'no_params' && (
+            <>
+              <div className="text-4xl mb-4">{'\u2709\uFE0F'}</div>
+              <h2 className="text-xl font-bold text-neutral-800 mb-2">Check your email</h2>
+              <p className="text-sm text-neutral-600 mb-4">
+                Click the confirmation link in your email to verify your account.
+              </p>
+              <Link
+                href="/auth/login"
+                className="inline-block text-coral font-semibold text-sm hover:underline"
+              >
+                Back to Sign In
+              </Link>
             </>
           )}
 
